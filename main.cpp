@@ -27,6 +27,14 @@ struct Memory
     {
         return Data[address];
     }
+
+    /* Read 1 word (2 bytes) from memory */
+    void WriteWord(uint32_t address, Word value, uint32_t& cycles)
+    {
+        Data[address]   = value & 0xFF;
+        Data[address+1] = (value >> 8);
+        cycles -= 2;
+    }
 };
 
 struct CPU
@@ -47,9 +55,10 @@ struct CPU
 
     /* Opcodes */
     static constexpr Byte
-        INS_LDA_IM = 0xA9,
-        INS_LDA_ZP = 0xA5,
-        INS_LDA_ZPX = 0xB5;
+        INS_LDA_IM = 0xA9,  // 2 cycles: Load To RegA Imediate value
+        INS_LDA_ZP = 0xA5,  // 3 cyles: Load to RegA value from memory
+        INS_LDA_ZPX = 0xB5, // 4 cyles: Load to RegA value from memory + offset from RegX
+        INS_JSR = 0x20;     // 6 cyles: Branch to subroutine
 
     /* Functions */
     void Reset(Memory& memory)
@@ -101,24 +110,31 @@ struct CPU
         for(cycles; cycles > 0;)
         {
             Byte instruction = FetchByte(cycles, memory);
-            Byte value = 0;
+            Byte byte_Value = 0;
+            Word word_Value = 0;
             switch (instruction)
             {
             case INS_LDA_IM:
-                value = FetchByte(cycles, memory);
-                RegA = value;
+                byte_Value = FetchByte(cycles, memory);
+                RegA = byte_Value;
                 LDA_SetStatus();
                 break;
             case INS_LDA_ZP:
-                value = FetchByte(cycles, memory);
-                RegA = ReadByte(cycles, value, memory);
+                byte_Value = FetchByte(cycles, memory);
+                RegA = ReadByte(cycles, byte_Value, memory);
                 LDA_SetStatus();
                 break;
             case INS_LDA_ZPX:
-                value = FetchByte(cycles, memory);
-                value += RegX, cycles--;
-                RegA = ReadByte(cycles, value, memory);
+                byte_Value = FetchByte(cycles, memory);
+                byte_Value += RegX, cycles--;
+                RegA = ReadByte(cycles, byte_Value, memory);
                 LDA_SetStatus();
+                break;
+            case INS_JSR:
+                word_Value = FetchWord(cycles, memory);
+                memory.WriteWord(StackPointer, ProgramCounter-1, cycles);
+                ProgramCounter = word_Value;
+                cycles--, StackPointer++;
                 break;
             default:
                 printf("Unknow instruction \"%#x\" ", instruction);
@@ -135,12 +151,13 @@ int main(int argc, char ** argv)
     processor.Reset(memory);
     
     // start - Hacked code
-    processor.RegX = 0x08;
-    memory[0xFFFC] = CPU::INS_LDA_ZPX;
-    memory[0xFFFD] = 0x0F;
-    memory[0x000F + 0x08] = 0xFF;
+    memory[0xFFFC] = CPU::INS_JSR;
+    memory[0xFFFD] = 0xAA;
+    memory[0xFFFE] = 0xAA;
+    memory[0xAAAA] = CPU::INS_LDA_IM;
+    memory[0xAAAB] = 0xA;
     // end - Hacked code
 
-    processor.Execute(4, memory);
+    processor.Execute(8, memory);
     return 0;
 }
