@@ -33,7 +33,7 @@ struct CPU
 {
 
     Word ProgramCounter;
-    Word StackPointer;
+    Byte StackPointer;
 
     Byte RegA, RegX, RegY;
 
@@ -54,7 +54,7 @@ struct CPU
     void Reset(Memory& memory)
     {
         ProgramCounter = 0xFFFC;
-        StackPointer = 0x0100;
+        StackPointer = 0x00FF;
         F_Carry = F_Decimal = F_Zero = F_Interupt = F_Break = F_OverFlow = F_Negative = 0;
         RegA = RegY = RegX = 0;
         memory.Initialise();
