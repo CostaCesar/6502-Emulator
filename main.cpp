@@ -73,6 +73,22 @@ struct CPU
         ProgramCounter++;
         return data;
     }
+    Word ReadWord(uint32_t& cycles, Word address, Memory& memory)
+    {
+        // My platform is little endian
+        Word data = memory[address];
+        data |= (memory[++address] << 8);
+        cycles -= 2;
+        return data;
+    }
+    Word FetchWord(uint32_t& cycles, Memory& memory)
+    {
+        // 6502 is little endian
+        Word data = ReadWord(cycles, ProgramCounter, memory);
+        ProgramCounter += 2;
+        return data;
+    }
+
 
     void LDA_SetStatus()
     {
