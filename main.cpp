@@ -21,6 +21,12 @@ struct Memory
     {
         return Data[address];
     }
+
+    /* Read 1 byte from memory */ 
+    Byte& operator[] (uint32_t address)
+    {
+        return Data[address];
+    }
 };
 
 struct CPU
@@ -39,6 +45,11 @@ struct CPU
     Byte F_OverFlow : 1; 
     Byte F_Negative : 1; 
 
+    /* Opcodes */
+    static constexpr Byte
+        INS_LDA_IM = 0xA9;
+
+    /* Functions */
     void Reset(Memory& memory)
     {
         ProgramCounter = 0xFFFC;
@@ -57,9 +68,22 @@ struct CPU
 
     void Execute(uint32_t cycles, Memory& memory)
     {
-        for(cycles; cycles > 0; --cycles)
+        for(cycles; cycles > 0;)
         {
             Byte instruction = FetchByte(cycles, memory);
+            Byte value = 0;
+            switch (instruction)
+            {
+            case INS_LDA_IM:
+                value = FetchByte(cycles, memory);
+                RegA = value;
+                F_Zero = (RegA == 0);
+                F_Negative = (RegA & 0b10000000) > 0;
+                break;
+            default:
+                printf("Unknow instruction \"%#x\" ", instruction);
+                break;
+            }
         }
     }
 };
@@ -69,6 +93,13 @@ int main(int argc, char ** argv)
     Memory memory;
     CPU processor;
     processor.Reset(memory);
-    processor.Execute( 2,memory);
+    
+    // start - Hacked code
+    int cycles = 2;
+    memory[0xFFFC] = CPU::INS_LDA_IM;
+    memory[0xFFFD] = 0xF;
+    // end - Hacked code
+
+    processor.Execute(cycles, memory);
     return 0;
 }
