@@ -47,7 +47,8 @@ struct CPU
 
     /* Opcodes */
     static constexpr Byte
-        INS_LDA_IM = 0xA9;
+        INS_LDA_IM = 0xA9,
+        INS_LDA_ZP = 0xA5;
 
     /* Functions */
     void Reset(Memory& memory)
@@ -59,11 +60,23 @@ struct CPU
         memory.Initialise();
     }
 
+    Byte ReadByte(uint32_t& cycles, Word address, Memory& memory)
+    {
+        Byte data = memory[address];
+        cycles--;
+        return data;
+    }
     Byte FetchByte(uint32_t& cycles, Memory& memory)
     {
-        Byte data = memory[ProgramCounter];
-        ProgramCounter++, cycles--;
+        Byte data = ReadByte(cycles, ProgramCounter, memory);
+        ProgramCounter++;
         return data;
+    }
+
+    void LDA_SetStatus()
+    {
+        F_Zero = (RegA == 0);
+        F_Negative = (RegA & 0b10000000) > 0;
     }
 
     void Execute(uint32_t cycles, Memory& memory)
@@ -77,8 +90,12 @@ struct CPU
             case INS_LDA_IM:
                 value = FetchByte(cycles, memory);
                 RegA = value;
-                F_Zero = (RegA == 0);
-                F_Negative = (RegA & 0b10000000) > 0;
+                LDA_SetStatus();
+                break;
+            case INS_LDA_ZP:
+                value = FetchByte(cycles, memory);
+                RegA = ReadByte(cycles, value, memory);
+                LDA_SetStatus();
                 break;
             default:
                 printf("Unknow instruction \"%#x\" ", instruction);
@@ -95,11 +112,11 @@ int main(int argc, char ** argv)
     processor.Reset(memory);
     
     // start - Hacked code
-    int cycles = 2;
-    memory[0xFFFC] = CPU::INS_LDA_IM;
-    memory[0xFFFD] = 0xF;
+    memory[0xFFFC] = CPU::INS_LDA_ZP;
+    memory[0xFFFD] = 0x0F;
+    memory[0x000F] = 0xFF;
     // end - Hacked code
 
-    processor.Execute(cycles, memory);
+    processor.Execute(3, memory);
     return 0;
 }
