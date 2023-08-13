@@ -48,7 +48,8 @@ struct CPU
     /* Opcodes */
     static constexpr Byte
         INS_LDA_IM = 0xA9,
-        INS_LDA_ZP = 0xA5;
+        INS_LDA_ZP = 0xA5,
+        INS_LDA_ZPX = 0xB5;
 
     /* Functions */
     void Reset(Memory& memory)
@@ -97,6 +98,12 @@ struct CPU
                 RegA = ReadByte(cycles, value, memory);
                 LDA_SetStatus();
                 break;
+            case INS_LDA_ZPX:
+                value = FetchByte(cycles, memory);
+                value += RegX, cycles--;
+                RegA = ReadByte(cycles, value, memory);
+                LDA_SetStatus();
+                break;
             default:
                 printf("Unknow instruction \"%#x\" ", instruction);
                 break;
@@ -112,11 +119,12 @@ int main(int argc, char ** argv)
     processor.Reset(memory);
     
     // start - Hacked code
-    memory[0xFFFC] = CPU::INS_LDA_ZP;
+    processor.RegX = 0x08;
+    memory[0xFFFC] = CPU::INS_LDA_ZPX;
     memory[0xFFFD] = 0x0F;
-    memory[0x000F] = 0xFF;
+    memory[0x000F + 0x08] = 0xFF;
     // end - Hacked code
 
-    processor.Execute(3, memory);
+    processor.Execute(4, memory);
     return 0;
 }
