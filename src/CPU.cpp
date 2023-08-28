@@ -24,6 +24,13 @@ Byte CPU::FetchByte(uint32_t& cycles, Memory& memory)
     ProgramCounter++;
     return data;
 }
+/* Read instruction from memory AND increment program counter */
+Instruction CPU::FetchInstruction(uint32_t& cycles, Memory& memory)
+{
+    Byte data = ReadByte(cycles, ProgramCounter, memory);
+    ProgramCounter++;
+    return (Instruction) data;
+}
 
 /* Read 1 word (2 bytes) from memory */
 /* NOTE: Both my platform (x86) and 6502 are little-endian */
@@ -57,7 +64,7 @@ void CPU::Execute(uint32_t cycles, Memory& memory)
 {
     for(cycles; cycles > 0;)
     {
-        Byte instruction = FetchByte(cycles, memory);
+        Instruction instruction = FetchInstruction(cycles, memory);
         Byte byte_Value = 0;
         Word word_Value = 0;
         switch (instruction)

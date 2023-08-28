@@ -22,7 +22,7 @@ public:
 TEST_F(M6502_Test, LDA_Imediatate)
 {
     // Given
-    memory[0xFFFC] = CPU::INS_LDA_IM;
+    memory[0xFFFC] = INS_LDA_IM;
     memory[0xFFFD] = 0xA;
 
     // When
@@ -37,7 +37,7 @@ TEST_F(M6502_Test, LDA_Imediatate)
 TEST_F(M6502_Test, LDA_ZeroPage)
 {
     // Given
-    memory[0xFFFC] = CPU::INS_LDA_ZP;
+    memory[0xFFFC] = INS_LDA_ZP;
     memory[0xFFFD] = 0x0010;
     memory[0x0010] = 0xA;
 
@@ -54,7 +54,7 @@ TEST_F(M6502_Test, LDA_ZeroPage_OffsetX)
 {
     // Given
     processor.RegX = 0x5;
-    memory[0xFFFC] = CPU::INS_LDA_ZPX;
+    memory[0xFFFC] = INS_LDA_ZPX;
     memory[0xFFFD] = 0x0010;
     memory[0x0015] = 0xA;
 
@@ -71,7 +71,7 @@ TEST_F(M6502_Test, LDA_ZeroPage_OffsetX_Wrapping)
 {
     // Given
     processor.RegX = 0xFF;
-    memory[0xFFFC] = CPU::INS_LDA_ZPX;
+    memory[0xFFFC] = INS_LDA_ZPX;
     memory[0xFFFD] = 0x0080;
     memory[0x007F] = 0xA;
 
