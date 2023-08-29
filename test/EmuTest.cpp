@@ -38,7 +38,7 @@ TEST_F(M6502_Test, LDA_ZeroPage)
 {
     // Given
     memory[0xFFFC] = INS_LDA_ZP;
-    memory[0xFFFD] = 0x0010;
+    memory[0xFFFD] = 0x10;
     memory[0x0010] = 0xA;
 
     // When
@@ -55,7 +55,7 @@ TEST_F(M6502_Test, LDA_ZeroPage_OffsetX)
     // Given
     processor.RegX = 0x5;
     memory[0xFFFC] = INS_LDA_ZPX;
-    memory[0xFFFD] = 0x0010;
+    memory[0xFFFD] = 0x10;
     memory[0x0015] = 0xA;
 
     // When
@@ -72,7 +72,7 @@ TEST_F(M6502_Test, LDA_ZeroPage_OffsetX_Wrapping)
     // Given
     processor.RegX = 0xFF;
     memory[0xFFFC] = INS_LDA_ZPX;
-    memory[0xFFFD] = 0x0080;
+    memory[0xFFFD] = 0x80;
     memory[0x007F] = 0xA;
 
     // When
@@ -142,9 +142,9 @@ TEST_F(M6502_Test, LDA_Indirect_OffsetX)
     // Given
     processor.RegX = 0x2F;
     memory[0xFFFC] = INS_LDA_IDX;
-    memory[0xFFFD] = 0x0055;
-    memory[0x0084] = 0x0022;
-    memory[0x0085] = 0x00EF;
+    memory[0xFFFD] = 0x55;
+    memory[0x0084] = 0x22;
+    memory[0x0085] = 0xEF;
     memory[0xEF22] = 0x26;
 
     // When
@@ -161,9 +161,9 @@ TEST_F(M6502_Test, LDA_Indirect_OffsetY)
     // Given
     processor.RegY = 0xAC;
     memory[0xFFFC] = INS_LDA_IDY;
-    memory[0xFFFD] = 0x004C;
-    memory[0x004C] = 0x0041;
-    memory[0x004D] = 0x000C;
+    memory[0xFFFD] = 0x4C;
+    memory[0x004C] = 0x41;
+    memory[0x004D] = 0x0C;
     memory[0x0CED] = 0x34;
 
     // When
