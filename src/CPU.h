@@ -28,7 +28,8 @@ struct CPU
     
     void Reset(Memory& memory);
     void LDA_SetStatus();
-    void Execute(uint32_t cycles, Memory& memory);
+    
+    uint32_t Execute(uint32_t cycles, Memory& memory);
 };
 
 #endif

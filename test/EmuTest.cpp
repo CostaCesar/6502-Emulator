@@ -26,9 +26,10 @@ TEST_F(M6502_Test, LDA_Imediatate)
     memory[0xFFFD] = 0xA;
 
     // When
-    processor.Execute(2, memory);
+    uint32_t cycles_executed = processor.Execute(2, memory);
 
     // Execute
+    EXPECT_EQ(cycles_executed, 2);
     EXPECT_EQ(processor.RegA, 0xA);
     EXPECT_FALSE(processor.F_Zero);
     EXPECT_FALSE(processor.F_Negative);
@@ -42,9 +43,10 @@ TEST_F(M6502_Test, LDA_ZeroPage)
     memory[0x0010] = 0xA;
 
     // When
-    processor.Execute(3, memory);
+    uint32_t cycles_executed = processor.Execute(3, memory);
 
     // Execute
+    EXPECT_EQ(cycles_executed, 3);
     EXPECT_EQ(processor.RegA, 0xA);
     EXPECT_FALSE(processor.F_Zero);
     EXPECT_FALSE(processor.F_Negative);
@@ -59,9 +61,10 @@ TEST_F(M6502_Test, LDA_ZeroPage_OffsetX)
     memory[0x0015] = 0xA;
 
     // When
-    processor.Execute(4, memory);
+    uint32_t cycles_executed = processor.Execute(4, memory);
 
     // Execute
+    EXPECT_EQ(cycles_executed, 4);
     EXPECT_EQ(processor.RegA, 0xA);
     EXPECT_FALSE(processor.F_Zero);
     EXPECT_FALSE(processor.F_Negative);
@@ -76,9 +79,10 @@ TEST_F(M6502_Test, LDA_ZeroPage_OffsetX_Wrapping)
     memory[0x007F] = 0xA;
 
     // When
-    processor.Execute(4, memory);
+    uint32_t cycles_executed = processor.Execute(4, memory);
 
     // Execute
+    EXPECT_EQ(cycles_executed, 4);
     EXPECT_EQ(processor.RegA, 0xA);
     EXPECT_FALSE(processor.F_Zero);
     EXPECT_FALSE(processor.F_Negative);
@@ -93,9 +97,10 @@ TEST_F(M6502_Test, LDA_Absolute)
     memory[0xA180] = 0xA;
 
     // When
-    processor.Execute(4, memory);
+    uint32_t cycles_executed = processor.Execute(4, memory);
 
     // Execute
+    EXPECT_EQ(cycles_executed, 4);
     EXPECT_EQ(processor.RegA, 0xA);
     EXPECT_FALSE(processor.F_Zero);
     EXPECT_FALSE(processor.F_Negative);
@@ -111,9 +116,10 @@ TEST_F(M6502_Test, LDA_Absolute_OffsetX)
     memory[0xBC0E] = 0xA;
 
     // When
-    processor.Execute(4, memory);
+    uint32_t cycles_executed = processor.Execute(4, memory);
 
     // Execute
+    EXPECT_EQ(cycles_executed, 4);
     EXPECT_EQ(processor.RegA, 0xA);
     EXPECT_FALSE(processor.F_Zero);
     EXPECT_FALSE(processor.F_Negative);
@@ -129,9 +135,10 @@ TEST_F(M6502_Test, LDA_Absolute_OffsetY)
     memory[0xAAED] = 0xA;
 
     // When
-    processor.Execute(4, memory);
+    uint32_t cycles_executed = processor.Execute(4, memory);
 
     // Execute
+    EXPECT_EQ(cycles_executed, 4);
     EXPECT_EQ(processor.RegA, 0xA);
     EXPECT_FALSE(processor.F_Zero);
     EXPECT_FALSE(processor.F_Negative);
@@ -148,9 +155,10 @@ TEST_F(M6502_Test, LDA_Indirect_OffsetX)
     memory[0xEF22] = 0x26;
 
     // When
-    processor.Execute(6, memory);
+    uint32_t cycles_executed = processor.Execute(6, memory);
 
     // Execute
+    EXPECT_EQ(cycles_executed, 6);
     EXPECT_EQ(processor.RegA, 0x26);
     EXPECT_FALSE(processor.F_Zero);
     EXPECT_FALSE(processor.F_Negative);
@@ -167,9 +175,10 @@ TEST_F(M6502_Test, LDA_Indirect_OffsetY)
     memory[0x0CED] = 0x34;
 
     // When
-    processor.Execute(6, memory);
+    uint32_t cycles_executed = processor.Execute(6, memory);
 
     // Execute
+    EXPECT_EQ(cycles_executed, 6);
     EXPECT_EQ(processor.RegA, 0x34);
     EXPECT_FALSE(processor.F_Zero);
     EXPECT_FALSE(processor.F_Negative);

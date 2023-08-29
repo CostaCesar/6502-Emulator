@@ -13,7 +13,7 @@ void CPU::Reset(Memory& memory)
 Byte CPU::ReadByte(uint32_t& cycles, Word address, Memory& memory)
 {
     Byte data = memory[address];
-    cycles--;
+    cycles++;
     return data;
 }
 
@@ -39,7 +39,7 @@ Word CPU::ReadWord(uint32_t& cycles, Word address, Memory& memory)
     // My platform is little endian
     Word data = memory[address];
     data |= (memory[++address] << 8);
-    cycles -= 2;
+    cycles += 2;
     return data;
 }
 
@@ -60,72 +60,73 @@ void CPU::LDA_SetStatus()
     F_Negative = (RegA & 0b10000000) > 0;
 }
 
-void CPU::Execute(uint32_t cycles, Memory& memory)
+uint32_t CPU::Execute(uint32_t cycles_total, Memory& memory)
 {
-    for(cycles; cycles > 0;)
+    uint32_t cycles_ran = 0;
+    for(cycles_ran; cycles_ran < cycles_total;)
     {
-        Instruction instruction = FetchInstruction(cycles, memory);
+        Instruction instruction = FetchInstruction(cycles_ran, memory);
         Byte byte_Value = 0;
         Word word_Value = 0;
         switch (instruction)
         {
         case INS_LDA_IM:
-            byte_Value = FetchByte(cycles, memory);
+            byte_Value = FetchByte(cycles_ran, memory);
             RegA = byte_Value;
             LDA_SetStatus();
             break;
         case INS_LDA_ZP:
-            byte_Value = FetchByte(cycles, memory);
-            RegA = ReadByte(cycles, byte_Value, memory);
+            byte_Value = FetchByte(cycles_ran, memory);
+            RegA = ReadByte(cycles_ran, byte_Value, memory);
             LDA_SetStatus();
             break;
         case INS_LDA_ZPX:
-            byte_Value = FetchByte(cycles, memory);
-            byte_Value += RegX, cycles--;
-            RegA = ReadByte(cycles, byte_Value, memory);
+            byte_Value = FetchByte(cycles_ran, memory);
+            byte_Value += RegX, cycles_ran++;
+            RegA = ReadByte(cycles_ran, byte_Value, memory);
             LDA_SetStatus();
             break;
         case INS_LDA_AB:
-            word_Value = FetchWord(cycles, memory);
-            RegA = ReadByte(cycles, word_Value, memory);
+            word_Value = FetchWord(cycles_ran, memory);
+            RegA = ReadByte(cycles_ran, word_Value, memory);
             LDA_SetStatus();
             break;
         case INS_LDA_ABX:
-            word_Value = FetchWord(cycles, memory);
+            word_Value = FetchWord(cycles_ran, memory);
             if((int) (word_Value / 0xFF) > (int) ((word_Value + RegX) / 0xFF))
             { /* Should do something with the cycles*/ }
             word_Value += RegX;
-            RegA = ReadByte(cycles, word_Value, memory);
+            RegA = ReadByte(cycles_ran, word_Value, memory);
             break;
         case INS_LDA_ABY:
-            word_Value = FetchWord(cycles, memory);
+            word_Value = FetchWord(cycles_ran, memory);
             if((int) (word_Value / 0xFF) > (int) ((word_Value + RegY) / 0xFF))
             { /* Should do something with the cycles*/ }
             word_Value += RegY;
-            RegA = ReadByte(cycles, word_Value, memory);
+            RegA = ReadByte(cycles_ran, word_Value, memory);
             break;
         case INS_LDA_IDX:
-            byte_Value = FetchByte(cycles, memory);
-            byte_Value += RegX, cycles--;
-            word_Value = ReadWord(cycles, byte_Value, memory);
-            RegA = ReadByte(cycles, word_Value, memory);
+            byte_Value = FetchByte(cycles_ran, memory);
+            byte_Value += RegX, cycles_ran++;
+            word_Value = ReadWord(cycles_ran, byte_Value, memory);
+            RegA = ReadByte(cycles_ran, word_Value, memory);
             break;
         case INS_LDA_IDY:
-            byte_Value = FetchByte(cycles, memory);
-            word_Value = ReadWord(cycles, byte_Value, memory);
-            word_Value += RegY, cycles--;
-            RegA = ReadByte(cycles, word_Value, memory);
+            byte_Value = FetchByte(cycles_ran, memory);
+            word_Value = ReadWord(cycles_ran, byte_Value, memory);
+            word_Value += RegY, cycles_ran++;
+            RegA = ReadByte(cycles_ran, word_Value, memory);
             break;
-    // INS_LDA_IDY = 0xB1, // 5 cycles (+1 if cross boundary): Load to RegA value from position ZP-memory + offset from RegY
         case INS_JSR:
-            word_Value = FetchWord(cycles, memory);
-            memory.WriteWord(StackPointer, ProgramCounter-1, cycles);
+            word_Value = FetchWord(cycles_ran, memory);
+            memory.WriteWord(StackPointer, ProgramCounter-1, cycles_ran);
             ProgramCounter = word_Value;
-            cycles--, StackPointer++;
+            cycles_ran--, StackPointer++;
             break;
         default:
             printf("Unknow instruction \"%#x\" ", instruction);
-            break;
+            return cycles_ran;
         }
     }
+    return cycles_ran;
 }
