@@ -121,7 +121,7 @@ uint32_t CPU::Execute(uint32_t cycles_total, Memory& memory)
             word_Value = FetchWord(cycles_ran, memory);
             memory.WriteWord(StackPointer, ProgramCounter-1, cycles_ran);
             ProgramCounter = word_Value;
-            cycles_ran--, StackPointer++;
+            cycles_ran++, StackPointer++;
             break;
         default:
             printf("Unknow instruction \"%#x\" ", instruction);
