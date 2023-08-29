@@ -85,6 +85,38 @@ void CPU::Execute(uint32_t cycles, Memory& memory)
             RegA = ReadByte(cycles, byte_Value, memory);
             LDA_SetStatus();
             break;
+        case INS_LDA_AB:
+            word_Value = FetchWord(cycles, memory);
+            RegA = ReadByte(cycles, word_Value, memory);
+            LDA_SetStatus();
+            break;
+        case INS_LDA_ABX:
+            word_Value = FetchWord(cycles, memory);
+            if((int) (word_Value / 0xFF) > (int) ((word_Value + RegX) / 0xFF))
+            { /* Should do something with the cycles*/ }
+            word_Value += RegX;
+            RegA = ReadByte(cycles, word_Value, memory);
+            break;
+        case INS_LDA_ABY:
+            word_Value = FetchWord(cycles, memory);
+            if((int) (word_Value / 0xFF) > (int) ((word_Value + RegY) / 0xFF))
+            { /* Should do something with the cycles*/ }
+            word_Value += RegY;
+            RegA = ReadByte(cycles, word_Value, memory);
+            break;
+        case INS_LDA_IDX:
+            byte_Value = FetchByte(cycles, memory);
+            byte_Value += RegX, cycles--;
+            word_Value = ReadWord(cycles, byte_Value, memory);
+            RegA = ReadByte(cycles, word_Value, memory);
+            break;
+        case INS_LDA_IDY:
+            byte_Value = FetchByte(cycles, memory);
+            word_Value = ReadWord(cycles, byte_Value, memory);
+            word_Value += RegY, cycles--;
+            RegA = ReadByte(cycles, word_Value, memory);
+            break;
+    // INS_LDA_IDY = 0xB1, // 5 cycles (+1 if cross boundary): Load to RegA value from position ZP-memory + offset from RegY
         case INS_JSR:
             word_Value = FetchWord(cycles, memory);
             memory.WriteWord(StackPointer, ProgramCounter-1, cycles);

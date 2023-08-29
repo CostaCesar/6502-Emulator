@@ -84,8 +84,95 @@ TEST_F(M6502_Test, LDA_ZeroPage_OffsetX_Wrapping)
     EXPECT_FALSE(processor.F_Negative);
 }
 
+TEST_F(M6502_Test, LDA_Absolute)
+{
+    // Given
+    memory[0xFFFC] = INS_LDA_AB;
+    memory[0xFFFD] = 0x80;
+    memory[0xFFFE] = 0xA1;
+    memory[0xA180] = 0xA;
 
-// INS_LDA_IM = 0xA9,  // 2 cycles: Load To RegA Imediate value
-// INS_LDA_ZP = 0xA5,  // 3 cyles: Load to RegA value from memory
-// INS_LDA_ZPX = 0xB5, // 4 cyles: Load to RegA value from memory + offset from RegX
-// INS_JSR = 0x20;     // 6 cyles: Branch to subroutine
+    // When
+    processor.Execute(4, memory);
+
+    // Execute
+    EXPECT_EQ(processor.RegA, 0xA);
+    EXPECT_FALSE(processor.F_Zero);
+    EXPECT_FALSE(processor.F_Negative);
+}
+
+TEST_F(M6502_Test, LDA_Absolute_OffsetX)
+{
+    // Given
+    processor.RegX = 0x64;
+    memory[0xFFFC] = INS_LDA_ABX;
+    memory[0xFFFD] = 0xAA;
+    memory[0xFFFE] = 0xBB;
+    memory[0xBC0E] = 0xA;
+
+    // When
+    processor.Execute(4, memory);
+
+    // Execute
+    EXPECT_EQ(processor.RegA, 0xA);
+    EXPECT_FALSE(processor.F_Zero);
+    EXPECT_FALSE(processor.F_Negative);
+}
+
+TEST_F(M6502_Test, LDA_Absolute_OffsetY)
+{
+    // Given
+    processor.RegY = 0x32;
+    memory[0xFFFC] = INS_LDA_ABY;
+    memory[0xFFFD] = 0xBB;
+    memory[0xFFFE] = 0xAA;
+    memory[0xAAED] = 0xA;
+
+    // When
+    processor.Execute(4, memory);
+
+    // Execute
+    EXPECT_EQ(processor.RegA, 0xA);
+    EXPECT_FALSE(processor.F_Zero);
+    EXPECT_FALSE(processor.F_Negative);
+}
+
+TEST_F(M6502_Test, LDA_Indirect_OffsetX)
+{
+    // Given
+    processor.RegX = 0x2F;
+    memory[0xFFFC] = INS_LDA_IDX;
+    memory[0xFFFD] = 0x0055;
+    memory[0x0084] = 0x0022;
+    memory[0x0085] = 0x00EF;
+    memory[0xEF22] = 0x26;
+
+    // When
+    processor.Execute(6, memory);
+
+    // Execute
+    EXPECT_EQ(processor.RegA, 0x26);
+    EXPECT_FALSE(processor.F_Zero);
+    EXPECT_FALSE(processor.F_Negative);
+}
+
+TEST_F(M6502_Test, LDA_Indirect_OffsetY)
+{
+    // Given
+    processor.RegY = 0xAC;
+    memory[0xFFFC] = INS_LDA_IDY;
+    memory[0xFFFD] = 0x004C;
+    memory[0x004C] = 0x0041;
+    memory[0x004D] = 0x000C;
+    memory[0x0CED] = 0x34;
+
+    // When
+    processor.Execute(6, memory);
+
+    // Execute
+    EXPECT_EQ(processor.RegA, 0x34);
+    EXPECT_FALSE(processor.F_Zero);
+    EXPECT_FALSE(processor.F_Negative);
+}
+
+
