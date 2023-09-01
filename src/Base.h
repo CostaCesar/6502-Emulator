@@ -7,7 +7,7 @@ using Word = unsigned short;
 /* Opcodes */
 enum Instruction: Byte
 {
-    // Memory
+    // >>>>> Memory <<<<<
     // > LDA
     INS_LDA_IM = 0xA9,  // 2 cycles: Load to RegA imediate value
     INS_LDA_ZP = 0xA5,  // 3 cycles: Load to RegA value from ZP-memory (0x0000 -> 0x00FF)
@@ -18,6 +18,13 @@ enum Instruction: Byte
     INS_LDA_IDX = 0xA1, // 6 cycles : Load to RegA value from position pointed by [ZP-memory + offset from RegX]
     INS_LDA_IDY = 0xB1, // 5 cycles (+1 if cross boundary): Load to RegA value from position ZP-memory + offset from RegY
     
+    // > LDX
+    INS_LDX_IM = 0xA2,  // 2 cycles: Load to RegX imediate value
+    INS_LDX_ZP = 0xA6,  // 3 cycles: Load to RegX value from ZP-memory (0x0000 -> 0x00FF)
+    INS_LDX_ZPY = 0xB6, // 4 cycles: Load to RegX value from ZP-memory + offset from RegY
+    INS_LDX_AB = 0xAE,  // 4 cycles: Load to RegX value from memory
+    INS_LDX_ABY = 0xBE, // 4 cycles (+1 if cross boundary): Load to RegX value from memory + offset from RegY
+
     // Jump
     INS_JSR = 0x20      // 6 cycles: Branch to subroutine
 };

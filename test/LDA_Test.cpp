@@ -2,15 +2,6 @@
 
 class LDA_Test : public M6502 {};
 
-static void VerifyUnusedFlags_LDA(const CPU&processor)
-{
-    EXPECT_EQ(processor.F_Break, 0);
-    EXPECT_EQ(processor.F_Interupt, 0);
-    EXPECT_EQ(processor.F_Decimal, 0);
-    EXPECT_EQ(processor.F_Carry, 0);
-    EXPECT_EQ(processor.F_OverFlow, 0);
-}
-
 TEST_F(LDA_Test, LDA_Imediatate)
 {
     // Given
@@ -25,7 +16,7 @@ TEST_F(LDA_Test, LDA_Imediatate)
     EXPECT_EQ(processor.RegA, 0xA);
     EXPECT_FALSE(processor.F_Zero);
     EXPECT_FALSE(processor.F_Negative);
-    VerifyUnusedFlags_LDA(processor);
+    VerifyUnusedFlags_LD(processor);
 }
 
 TEST_F(LDA_Test, LDA_ZeroPage)
@@ -43,7 +34,7 @@ TEST_F(LDA_Test, LDA_ZeroPage)
     EXPECT_EQ(processor.RegA, 0xA);
     EXPECT_FALSE(processor.F_Zero);
     EXPECT_FALSE(processor.F_Negative);
-    VerifyUnusedFlags_LDA(processor);
+    VerifyUnusedFlags_LD(processor);
 }
 
 TEST_F(LDA_Test, LDA_ZeroPage_OffsetX)
@@ -62,7 +53,7 @@ TEST_F(LDA_Test, LDA_ZeroPage_OffsetX)
     EXPECT_EQ(processor.RegA, 0xA);
     EXPECT_FALSE(processor.F_Zero);
     EXPECT_FALSE(processor.F_Negative);
-    VerifyUnusedFlags_LDA(processor);
+    VerifyUnusedFlags_LD(processor);
 }
 
 TEST_F(LDA_Test, LDA_ZeroPage_OffsetX_Wrapping)
@@ -81,7 +72,7 @@ TEST_F(LDA_Test, LDA_ZeroPage_OffsetX_Wrapping)
     EXPECT_EQ(processor.RegA, 0xA);
     EXPECT_FALSE(processor.F_Zero);
     EXPECT_FALSE(processor.F_Negative);
-    VerifyUnusedFlags_LDA(processor);
+    VerifyUnusedFlags_LD(processor);
 }
 
 TEST_F(LDA_Test, LDA_Absolute)
@@ -100,7 +91,7 @@ TEST_F(LDA_Test, LDA_Absolute)
     EXPECT_EQ(processor.RegA, 0xA);
     EXPECT_FALSE(processor.F_Zero);
     EXPECT_FALSE(processor.F_Negative);
-    VerifyUnusedFlags_LDA(processor);
+    VerifyUnusedFlags_LD(processor);
 }
 
 TEST_F(LDA_Test, LDA_Absolute_OffsetX)
@@ -120,7 +111,7 @@ TEST_F(LDA_Test, LDA_Absolute_OffsetX)
     EXPECT_EQ(processor.RegA, 0xA);
     EXPECT_FALSE(processor.F_Zero);
     EXPECT_FALSE(processor.F_Negative);
-    VerifyUnusedFlags_LDA(processor);
+    VerifyUnusedFlags_LD(processor);
 }
 
 TEST_F(LDA_Test, LDA_Absolute_OffsetX_CrossPage)
@@ -140,7 +131,7 @@ TEST_F(LDA_Test, LDA_Absolute_OffsetX_CrossPage)
     EXPECT_EQ(processor.RegA, 0xA);
     EXPECT_FALSE(processor.F_Zero);
     EXPECT_FALSE(processor.F_Negative);
-    VerifyUnusedFlags_LDA(processor);
+    VerifyUnusedFlags_LD(processor);
 }
 
 TEST_F(LDA_Test, LDA_Absolute_OffsetY)
@@ -160,7 +151,7 @@ TEST_F(LDA_Test, LDA_Absolute_OffsetY)
     EXPECT_EQ(processor.RegA, 0xA);
     EXPECT_FALSE(processor.F_Zero);
     EXPECT_FALSE(processor.F_Negative);
-    VerifyUnusedFlags_LDA(processor);
+    VerifyUnusedFlags_LD(processor);
 }
 
 TEST_F(LDA_Test, LDA_Absolute_OffsetY_CrossPage)
@@ -180,7 +171,7 @@ TEST_F(LDA_Test, LDA_Absolute_OffsetY_CrossPage)
     EXPECT_EQ(processor.RegA, 0xA);
     EXPECT_FALSE(processor.F_Zero);
     EXPECT_FALSE(processor.F_Negative);
-    VerifyUnusedFlags_LDA(processor);
+    VerifyUnusedFlags_LD(processor);
 }
 
 TEST_F(LDA_Test, LDA_Indirect_OffsetX)
@@ -201,7 +192,7 @@ TEST_F(LDA_Test, LDA_Indirect_OffsetX)
     EXPECT_EQ(processor.RegA, 0x26);
     EXPECT_FALSE(processor.F_Zero);
     EXPECT_FALSE(processor.F_Negative);
-    VerifyUnusedFlags_LDA(processor);
+    VerifyUnusedFlags_LD(processor);
 }
 
 TEST_F(LDA_Test, LDA_Indirect_OffsetY)
@@ -222,7 +213,7 @@ TEST_F(LDA_Test, LDA_Indirect_OffsetY)
     EXPECT_EQ(processor.RegA, 0x34);
     EXPECT_FALSE(processor.F_Zero);
     EXPECT_FALSE(processor.F_Negative);
-    VerifyUnusedFlags_LDA(processor);
+    VerifyUnusedFlags_LD(processor);
 }
 
 TEST_F(LDA_Test, LDA_Indirect_OffsetY_CrossPage)
@@ -243,7 +234,7 @@ TEST_F(LDA_Test, LDA_Indirect_OffsetY_CrossPage)
     EXPECT_EQ(processor.RegA, 0x34);
     EXPECT_FALSE(processor.F_Zero);
     EXPECT_FALSE(processor.F_Negative);
-    VerifyUnusedFlags_LDA(processor);
+    VerifyUnusedFlags_LD(processor);
 }
 
 

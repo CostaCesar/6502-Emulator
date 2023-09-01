@@ -27,7 +27,7 @@ struct CPU
     Instruction FetchInstruction(uint32_t& cycles, Memory& memory);
     
     void Reset(Memory& memory);
-    void LDA_SetStatus();
+    void LD_SetStatus(Byte& Register);
     
     uint32_t Execute(uint32_t cycles, Memory& memory);
 };

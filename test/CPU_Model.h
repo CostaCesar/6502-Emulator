@@ -22,4 +22,13 @@ public:
     }
 };
 
+static void VerifyUnusedFlags_LD(const CPU&processor)
+{
+    EXPECT_EQ(processor.F_Break, 0);
+    EXPECT_EQ(processor.F_Interupt, 0);
+    EXPECT_EQ(processor.F_Decimal, 0);
+    EXPECT_EQ(processor.F_Carry, 0);
+    EXPECT_EQ(processor.F_OverFlow, 0);
+}
+
 #endif

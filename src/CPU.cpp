@@ -54,10 +54,10 @@ Word CPU::FetchWord(uint32_t& cycles, Memory& memory)
 }
 
 /* Set flags required by a LDA operation */
-void CPU::LDA_SetStatus()
+void CPU::LD_SetStatus(Byte& Register)
 {
-    F_Zero = (RegA == 0);
-    F_Negative = (RegA & 0b10000000) > 0;
+    F_Zero = (Register == 0);
+    F_Negative = (Register & 0b10000000) > 0;
 }
 
 uint32_t CPU::Execute(uint32_t cycles_total, Memory& memory)
@@ -73,23 +73,23 @@ uint32_t CPU::Execute(uint32_t cycles_total, Memory& memory)
         case INS_LDA_IM:
             byte_Value = FetchByte(cycles_ran, memory);
             RegA = byte_Value;
-            LDA_SetStatus();
+            LD_SetStatus(RegA);
             break;
         case INS_LDA_ZP:
             byte_Value = FetchByte(cycles_ran, memory);
             RegA = ReadByte(cycles_ran, byte_Value, memory);
-            LDA_SetStatus();
+            LD_SetStatus(RegA);
             break;
         case INS_LDA_ZPX:
             byte_Value = FetchByte(cycles_ran, memory);
             byte_Value += RegX, cycles_ran++;
             RegA = ReadByte(cycles_ran, byte_Value, memory);
-            LDA_SetStatus();
+            LD_SetStatus(RegA);
             break;
         case INS_LDA_AB:
             word_Value = FetchWord(cycles_ran, memory);
             RegA = ReadByte(cycles_ran, word_Value, memory);
-            LDA_SetStatus();
+            LD_SetStatus(RegA);
             break;
         case INS_LDA_ABX:
             word_Value = FetchWord(cycles_ran, memory);
@@ -97,6 +97,7 @@ uint32_t CPU::Execute(uint32_t cycles_total, Memory& memory)
             { /* Should do something with the cycles*/ cycles_ran++; }
             word_Value += RegX;
             RegA = ReadByte(cycles_ran, word_Value, memory);
+            LD_SetStatus(RegA);
             break;
         case INS_LDA_ABY:
             word_Value = FetchWord(cycles_ran, memory);
@@ -104,12 +105,14 @@ uint32_t CPU::Execute(uint32_t cycles_total, Memory& memory)
             { /* Should do something with the cycles*/ cycles_ran++; }
             word_Value += RegY;
             RegA = ReadByte(cycles_ran, word_Value, memory);
+            LD_SetStatus(RegA);
             break;
         case INS_LDA_IDX:
             byte_Value = FetchByte(cycles_ran, memory);
             byte_Value += RegX, cycles_ran++;
             word_Value = ReadWord(cycles_ran, byte_Value, memory);
             RegA = ReadByte(cycles_ran, word_Value, memory);
+            LD_SetStatus(RegA);
             break;
         case INS_LDA_IDY:
             byte_Value = FetchByte(cycles_ran, memory);
@@ -118,6 +121,36 @@ uint32_t CPU::Execute(uint32_t cycles_total, Memory& memory)
             { /* Should do something with the cycles*/ cycles_ran++; }
             word_Value += RegY;
             RegA = ReadByte(cycles_ran, word_Value, memory);
+            LD_SetStatus(RegA);
+            break;
+        case INS_LDX_IM:
+            byte_Value = FetchByte(cycles_ran, memory);
+            RegX = byte_Value;
+            LD_SetStatus(RegX);
+            break;
+        case INS_LDX_ZP:
+            byte_Value = FetchByte(cycles_ran, memory);
+            RegX = ReadByte(cycles_ran, byte_Value, memory);
+            LD_SetStatus(RegX);
+            break;
+        case INS_LDX_ZPY:
+            byte_Value = FetchByte(cycles_ran, memory);
+            byte_Value += RegY, cycles_ran++;
+            RegX = ReadByte(cycles_ran, byte_Value, memory);
+            LD_SetStatus(RegX);
+            break;
+        case INS_LDX_AB:
+            word_Value = FetchWord(cycles_ran, memory);
+            RegX = ReadByte(cycles_ran, word_Value, memory);
+            LD_SetStatus(RegX);
+            break;
+        case INS_LDX_ABY:
+            word_Value = FetchWord(cycles_ran, memory);
+            if((int) (word_Value / 0xFF) < (int) ((word_Value + RegY) / 0xFF))
+            { /* Should do something with the cycles*/ cycles_ran++; }
+            word_Value += RegY;
+            RegX = ReadByte(cycles_ran, word_Value, memory);
+            LD_SetStatus(RegX);
             break;
         case INS_JSR:
             word_Value = FetchWord(cycles_ran, memory);
