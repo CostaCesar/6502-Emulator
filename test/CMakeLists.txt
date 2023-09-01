@@ -13,6 +13,7 @@ target_link_libraries(GTest::GTest INTERFACE gtest_main)
 add_executable(EmuTest
   LDA_Test.cpp
   LDX_Test.cpp
+  LDY_Test.cpp
 )
 target_link_libraries(EmuTest
   PRIVATE
