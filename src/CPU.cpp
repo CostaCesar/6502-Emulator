@@ -152,6 +152,35 @@ uint32_t CPU::Execute(uint32_t cycles_total, Memory& memory)
             RegX = ReadByte(cycles_ran, word_Value, memory);
             LD_SetStatus(RegX);
             break;
+        case INS_LDY_IM:
+            byte_Value = FetchByte(cycles_ran, memory);
+            RegY = byte_Value;
+            LD_SetStatus(RegY);
+            break;
+        case INS_LDY_ZP:
+            byte_Value = FetchByte(cycles_ran, memory);
+            RegY = ReadByte(cycles_ran, byte_Value, memory);
+            LD_SetStatus(RegY);
+            break;
+        case INS_LDY_ZPY:
+            byte_Value = FetchByte(cycles_ran, memory);
+            byte_Value += RegX, cycles_ran++;
+            RegY = ReadByte(cycles_ran, byte_Value, memory);
+            LD_SetStatus(RegY);
+            break;
+        case INS_LDY_AB:
+            word_Value = FetchWord(cycles_ran, memory);
+            RegY = ReadByte(cycles_ran, word_Value, memory);
+            LD_SetStatus(RegY);
+            break;
+        case INS_LDY_ABY:
+            word_Value = FetchWord(cycles_ran, memory);
+            if((int) (word_Value / 0xFF) < (int) ((word_Value + RegX) / 0xFF))
+            { /* Should do something with the cycles*/ cycles_ran++; }
+            word_Value += RegX;
+            RegY = ReadByte(cycles_ran, word_Value, memory);
+            LD_SetStatus(RegY);
+            break;
         case INS_JSR:
             word_Value = FetchWord(cycles_ran, memory);
             memory.WriteWord(StackPointer, ProgramCounter-1, cycles_ran);
