@@ -58,6 +58,15 @@
             "detail": "CMake template test task",
             "group": "test"
         }
+        {
+            "type": "shell",
+            "label": "Test (with output)",
+            "command": "D:\\Progm\\C++\\6502EMU\\build\\test\\EmuTest.exe",
+            "dependsOn": ["CMake: build"],
+            "args": [],
+            "detail": "Run test in terminal",
+            "group": "test"
+        }
     ],
     "version": "2.0.0"
 }
