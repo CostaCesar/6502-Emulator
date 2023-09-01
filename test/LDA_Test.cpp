@@ -1,23 +1,6 @@
-#include <gtest/gtest.h>
-#include "../src/Memory.h"
-#include "../src/CPU.h"
+#include "CPU_Model.h"
 
-class M6502_Test : public testing::Test
-{
-public:
-    Memory memory;
-    CPU processor;
-
-    virtual void SetUp()
-    {
-        processor.Reset(memory);
-    }
-
-    virtual void TearDown()
-    {
-
-    }
-};
+class LDA_Test : public M6502 {};
 
 static void VerifyUnusedFlags_LDA(const CPU&processor)
 {
@@ -28,7 +11,7 @@ static void VerifyUnusedFlags_LDA(const CPU&processor)
     EXPECT_EQ(processor.F_OverFlow, 0);
 }
 
-TEST_F(M6502_Test, LDA_Imediatate)
+TEST_F(LDA_Test, LDA_Imediatate)
 {
     // Given
     memory[0xFFFC] = INS_LDA_IM;
@@ -45,7 +28,7 @@ TEST_F(M6502_Test, LDA_Imediatate)
     VerifyUnusedFlags_LDA(processor);
 }
 
-TEST_F(M6502_Test, LDA_ZeroPage)
+TEST_F(LDA_Test, LDA_ZeroPage)
 {
     // Given
     memory[0xFFFC] = INS_LDA_ZP;
@@ -63,7 +46,7 @@ TEST_F(M6502_Test, LDA_ZeroPage)
     VerifyUnusedFlags_LDA(processor);
 }
 
-TEST_F(M6502_Test, LDA_ZeroPage_OffsetX)
+TEST_F(LDA_Test, LDA_ZeroPage_OffsetX)
 {
     // Given
     processor.RegX = 0x5;
@@ -82,7 +65,7 @@ TEST_F(M6502_Test, LDA_ZeroPage_OffsetX)
     VerifyUnusedFlags_LDA(processor);
 }
 
-TEST_F(M6502_Test, LDA_ZeroPage_OffsetX_Wrapping)
+TEST_F(LDA_Test, LDA_ZeroPage_OffsetX_Wrapping)
 {
     // Given
     processor.RegX = 0xFF;
@@ -101,7 +84,7 @@ TEST_F(M6502_Test, LDA_ZeroPage_OffsetX_Wrapping)
     VerifyUnusedFlags_LDA(processor);
 }
 
-TEST_F(M6502_Test, LDA_Absolute)
+TEST_F(LDA_Test, LDA_Absolute)
 {
     // Given
     memory[0xFFFC] = INS_LDA_AB;
@@ -120,7 +103,7 @@ TEST_F(M6502_Test, LDA_Absolute)
     VerifyUnusedFlags_LDA(processor);
 }
 
-TEST_F(M6502_Test, LDA_Absolute_OffsetX)
+TEST_F(LDA_Test, LDA_Absolute_OffsetX)
 {
     // Given
     processor.RegX = 0x64;
@@ -140,7 +123,7 @@ TEST_F(M6502_Test, LDA_Absolute_OffsetX)
     VerifyUnusedFlags_LDA(processor);
 }
 
-TEST_F(M6502_Test, LDA_Absolute_OffsetX_CrossPage)
+TEST_F(LDA_Test, LDA_Absolute_OffsetX_CrossPage)
 {
     // Given
     processor.RegX = 0xCC;
@@ -160,7 +143,7 @@ TEST_F(M6502_Test, LDA_Absolute_OffsetX_CrossPage)
     VerifyUnusedFlags_LDA(processor);
 }
 
-TEST_F(M6502_Test, LDA_Absolute_OffsetY)
+TEST_F(LDA_Test, LDA_Absolute_OffsetY)
 {
     // Given
     processor.RegY = 0x32;
@@ -180,7 +163,7 @@ TEST_F(M6502_Test, LDA_Absolute_OffsetY)
     VerifyUnusedFlags_LDA(processor);
 }
 
-TEST_F(M6502_Test, LDA_Absolute_OffsetY_CrossPage)
+TEST_F(LDA_Test, LDA_Absolute_OffsetY_CrossPage)
 {
     // Given
     processor.RegY = 0xFF;
@@ -200,7 +183,7 @@ TEST_F(M6502_Test, LDA_Absolute_OffsetY_CrossPage)
     VerifyUnusedFlags_LDA(processor);
 }
 
-TEST_F(M6502_Test, LDA_Indirect_OffsetX)
+TEST_F(LDA_Test, LDA_Indirect_OffsetX)
 {
     // Given
     processor.RegX = 0x2F;
@@ -221,7 +204,7 @@ TEST_F(M6502_Test, LDA_Indirect_OffsetX)
     VerifyUnusedFlags_LDA(processor);
 }
 
-TEST_F(M6502_Test, LDA_Indirect_OffsetY)
+TEST_F(LDA_Test, LDA_Indirect_OffsetY)
 {
     // Given
     processor.RegY = 0xAC;
@@ -242,7 +225,7 @@ TEST_F(M6502_Test, LDA_Indirect_OffsetY)
     VerifyUnusedFlags_LDA(processor);
 }
 
-TEST_F(M6502_Test, LDA_Indirect_OffsetY_CrossPage)
+TEST_F(LDA_Test, LDA_Indirect_OffsetY_CrossPage)
 {
     // Given
     processor.RegY = 0xE1;
