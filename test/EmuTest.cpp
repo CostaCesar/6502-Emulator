@@ -140,6 +140,26 @@ TEST_F(M6502_Test, LDA_Absolute_OffsetX)
     VerifyUnusedFlags_LDA(processor);
 }
 
+TEST_F(M6502_Test, LDA_Absolute_OffsetX_CrossPage)
+{
+    // Given
+    processor.RegX = 0xCC;
+    memory[0xFFFC] = INS_LDA_ABX;
+    memory[0xFFFD] = 0xAA;
+    memory[0xFFFE] = 0xBB;
+    memory[0xBC76] = 0xA;
+
+    // When
+    uint32_t cycles_executed = processor.Execute(5, memory);
+
+    // Execute
+    EXPECT_EQ(cycles_executed, 5);
+    EXPECT_EQ(processor.RegA, 0xA);
+    EXPECT_FALSE(processor.F_Zero);
+    EXPECT_FALSE(processor.F_Negative);
+    VerifyUnusedFlags_LDA(processor);
+}
+
 TEST_F(M6502_Test, LDA_Absolute_OffsetY)
 {
     // Given
@@ -154,6 +174,26 @@ TEST_F(M6502_Test, LDA_Absolute_OffsetY)
 
     // Execute
     EXPECT_EQ(cycles_executed, 4);
+    EXPECT_EQ(processor.RegA, 0xA);
+    EXPECT_FALSE(processor.F_Zero);
+    EXPECT_FALSE(processor.F_Negative);
+    VerifyUnusedFlags_LDA(processor);
+}
+
+TEST_F(M6502_Test, LDA_Absolute_OffsetY_CrossPage)
+{
+    // Given
+    processor.RegY = 0xFF;
+    memory[0xFFFC] = INS_LDA_ABY;
+    memory[0xFFFD] = 0xBB;
+    memory[0xFFFE] = 0xAA;
+    memory[0xABBA] = 0xA;
+
+    // When
+    uint32_t cycles_executed = processor.Execute(5, memory);
+
+    // Execute
+    EXPECT_EQ(cycles_executed, 5);
     EXPECT_EQ(processor.RegA, 0xA);
     EXPECT_FALSE(processor.F_Zero);
     EXPECT_FALSE(processor.F_Negative);
@@ -190,6 +230,27 @@ TEST_F(M6502_Test, LDA_Indirect_OffsetY)
     memory[0x004C] = 0x41;
     memory[0x004D] = 0x0C;
     memory[0x0CED] = 0x34;
+
+    // When
+    uint32_t cycles_executed = processor.Execute(5, memory);
+
+    // Execute
+    EXPECT_EQ(cycles_executed, 5);
+    EXPECT_EQ(processor.RegA, 0x34);
+    EXPECT_FALSE(processor.F_Zero);
+    EXPECT_FALSE(processor.F_Negative);
+    VerifyUnusedFlags_LDA(processor);
+}
+
+TEST_F(M6502_Test, LDA_Indirect_OffsetY_CrossPage)
+{
+    // Given
+    processor.RegY = 0xE1;
+    memory[0xFFFC] = INS_LDA_IDY;
+    memory[0xFFFD] = 0x4C;
+    memory[0x004C] = 0x41;
+    memory[0x004D] = 0x0C;
+    memory[0x0D22] = 0x34;
 
     // When
     uint32_t cycles_executed = processor.Execute(6, memory);

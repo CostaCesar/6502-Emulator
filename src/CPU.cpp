@@ -93,15 +93,15 @@ uint32_t CPU::Execute(uint32_t cycles_total, Memory& memory)
             break;
         case INS_LDA_ABX:
             word_Value = FetchWord(cycles_ran, memory);
-            if((int) (word_Value / 0xFF) > (int) ((word_Value + RegX) / 0xFF))
-            { /* Should do something with the cycles*/ }
+            if((int) (word_Value / 0xFF) < (int) ((word_Value + RegX) / 0xFF))
+            { /* Should do something with the cycles*/ cycles_ran++; }
             word_Value += RegX;
             RegA = ReadByte(cycles_ran, word_Value, memory);
             break;
         case INS_LDA_ABY:
             word_Value = FetchWord(cycles_ran, memory);
-            if((int) (word_Value / 0xFF) > (int) ((word_Value + RegY) / 0xFF))
-            { /* Should do something with the cycles*/ }
+            if((int) (word_Value / 0xFF) < (int) ((word_Value + RegY) / 0xFF))
+            { /* Should do something with the cycles*/ cycles_ran++; }
             word_Value += RegY;
             RegA = ReadByte(cycles_ran, word_Value, memory);
             break;
@@ -114,7 +114,9 @@ uint32_t CPU::Execute(uint32_t cycles_total, Memory& memory)
         case INS_LDA_IDY:
             byte_Value = FetchByte(cycles_ran, memory);
             word_Value = ReadWord(cycles_ran, byte_Value, memory);
-            word_Value += RegY, cycles_ran++;
+            if((int) (word_Value / 0xFF) < (int) ((word_Value + RegY) / 0xFF))
+            { /* Should do something with the cycles*/ cycles_ran++; }
+            word_Value += RegY;
             RegA = ReadByte(cycles_ran, word_Value, memory);
             break;
         case INS_JSR:
