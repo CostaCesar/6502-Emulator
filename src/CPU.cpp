@@ -10,7 +10,7 @@ void CPU::Reset(Memory& memory)
 }
 
 /* Read 1 byte from memory */
-Byte CPU::ReadByte(uint32_t& cycles, Word address, Memory& memory)
+Byte CPU::ReadByte(uint32_t& cycles, Word address, const Memory& memory)
 {
     Byte data = memory[address];
     cycles++;
@@ -18,14 +18,14 @@ Byte CPU::ReadByte(uint32_t& cycles, Word address, Memory& memory)
 }
 
 /* Read 1 byte from memory AND increment program counter */
-Byte CPU::FetchByte(uint32_t& cycles, Memory& memory)
+Byte CPU::FetchByte(uint32_t& cycles, const Memory& memory)
 {
     Byte data = ReadByte(cycles, ProgramCounter, memory);
     ProgramCounter++;
     return data;
 }
 /* Read instruction from memory AND increment program counter */
-Instruction CPU::FetchInstruction(uint32_t& cycles, Memory& memory)
+Instruction CPU::FetchInstruction(uint32_t& cycles, const Memory& memory)
 {
     Byte data = ReadByte(cycles, ProgramCounter, memory);
     ProgramCounter++;
@@ -34,7 +34,7 @@ Instruction CPU::FetchInstruction(uint32_t& cycles, Memory& memory)
 
 /* Read 1 word (2 bytes) from memory */
 /* NOTE: Both my platform (x86) and 6502 are little-endian */
-Word CPU::ReadWord(uint32_t& cycles, Word address, Memory& memory)
+Word CPU::ReadWord(uint32_t& cycles, Word address, const Memory& memory)
 {
     // My platform is little endian
     Word data = memory[address];
@@ -45,7 +45,7 @@ Word CPU::ReadWord(uint32_t& cycles, Word address, Memory& memory)
 
 /* Read 1 word (2 bytes) from memory AND increment program counter */
 /* NOTE: Both my platform (x86) and 6502 are little-endian */
-Word CPU::FetchWord(uint32_t& cycles, Memory& memory)
+Word CPU::FetchWord(uint32_t& cycles, const Memory& memory)
 {
     // 6502 is little endian
     Word data = ReadWord(cycles, ProgramCounter, memory);
@@ -59,7 +59,7 @@ void CPU::LD_SetStatus(Byte& cpu_register)
     F_Zero = (cpu_register == 0);
     F_Negative = (cpu_register & 0b10000000) > 0;
 }
-void CPU::LD_SetRegister(uint32_t& cycles, Byte& cpu_register, Word address, Memory& memory)
+void CPU::LD_SetRegister(uint32_t& cycles, Byte& cpu_register, Word address, const Memory& memory)
 {
     cpu_register = ReadByte(cycles, address, memory);
     LD_SetStatus(cpu_register);

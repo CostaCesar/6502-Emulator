@@ -22,16 +22,16 @@ struct CPU
 
     void Reset(Memory& memory);
     
-    Byte ReadByte(uint32_t& cycles, Word address, Memory& memory);
-    Byte FetchByte(uint32_t& cycles, Memory& memory);
-    Word ReadWord(uint32_t& cycles, Word address, Memory& memory);
-    Word FetchWord(uint32_t& cycles, Memory& memory);
-    Instruction FetchInstruction(uint32_t& cycles, Memory& memory);
+    Byte ReadByte(uint32_t& cycles, Word address, const Memory& memory);
+    Byte FetchByte(uint32_t& cycles, const Memory& memory);
+    Word ReadWord(uint32_t& cycles, Word address, const Memory& memory);
+    Word FetchWord(uint32_t& cycles, const Memory& memory);
+    Instruction FetchInstruction(uint32_t& cycles, const Memory& memory);
 
     void Cycles_WhenPageCross(uint32_t& cycles, Word start_adrress, Byte offset);
     void IncrementByRegister(uint32_t& cycles, Byte& value, Byte cpu_register);
     void LD_SetStatus(Byte& cpu_register);
-    void LD_SetRegister(uint32_t& cycles, Byte& cpu_register, Word address, Memory& memory);
+    void LD_SetRegister(uint32_t& cycles, Byte& cpu_register, Word address, const Memory& memory);
     
     uint32_t Execute(uint32_t cycles, Memory& memory);
 };
