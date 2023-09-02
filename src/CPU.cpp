@@ -127,7 +127,7 @@ uint32_t CPU::Execute(uint32_t cycles_total, Memory& memory)
         case INS_LDA_IDY:
             byte_Value = FetchByte(cycles_ran, memory);
             word_Value = ReadWord(cycles_ran, byte_Value, memory);
-            Cycles_WhenPageCross(cycles_ran, word_Value, RegX);
+            Cycles_WhenPageCross(cycles_ran, word_Value, RegY);
             word_Value += RegY;
             LD_SetRegister(cycles_ran, RegA, word_Value, memory);
             LD_SetStatus(RegA);
@@ -174,7 +174,7 @@ uint32_t CPU::Execute(uint32_t cycles_total, Memory& memory)
             break;
         case INS_LDY_ABX:
             word_Value = FetchWord(cycles_ran, memory);
-            Cycles_WhenPageCross(cycles_ran, word_Value, RegY);
+            Cycles_WhenPageCross(cycles_ran, word_Value, RegX);
             word_Value += RegX;
             LD_SetRegister(cycles_ran, RegY, word_Value, memory);
             break;
