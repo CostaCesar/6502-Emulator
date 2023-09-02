@@ -28,9 +28,9 @@ enum Instruction: Byte
     // > LDY
     INS_LDY_IM = 0xA2,  // 2 cycles: Load to RegY imediate value
     INS_LDY_ZP = 0xA6,  // 3 cycles: Load to RegY value from ZP-memory (0x0000 -> 0x00FF)
-    INS_LDY_ZPY = 0xB6, // 4 cycles: Load to RegY value from ZP-memory + offset from RegX
+    INS_LDY_ZPX = 0xB6, // 4 cycles: Load to RegY value from ZP-memory + offset from RegX
     INS_LDY_AB = 0xAE,  // 4 cycles: Load to RegY value from memory
-    INS_LDY_ABY = 0xBE, // 4 cycles (+1 if cross boundary): Load to RegY value from memory + offset from RegX
+    INS_LDY_ABX = 0xBE, // 4 cycles (+1 if cross boundary): Load to RegY value from memory + offset from RegX
 
     // >>>>> Jump <<<<<
     INS_JSR = 0x20      // 6 cycles: Branch to subroutine

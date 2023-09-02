@@ -54,10 +54,29 @@ Word CPU::FetchWord(uint32_t& cycles, Memory& memory)
 }
 
 /* Set flags required by a LDA operation */
-void CPU::LD_SetStatus(Byte& Register)
+void CPU::LD_SetStatus(Byte& cpu_register)
 {
-    F_Zero = (Register == 0);
-    F_Negative = (Register & 0b10000000) > 0;
+    F_Zero = (cpu_register == 0);
+    F_Negative = (cpu_register & 0b10000000) > 0;
+}
+void CPU::LD_SetRegister(uint32_t& cycles, Byte& cpu_register, Word address, Memory& memory)
+{
+    cpu_register = ReadByte(cycles, address, memory);
+    LD_SetStatus(cpu_register);
+}
+
+/* Increment processor register by value, using up 1 cycle for it */
+void CPU::IncrementByRegister(uint32_t& cycles, Byte& value, Byte cpu_register)
+{
+    value += cpu_register;
+    cycles++;
+}
+
+/* Handles the additional cycle when a load instruction crosses the page border */
+void CPU::Cycles_WhenPageCross(uint32_t& cycles, Word start_adrress, Byte offset)
+{
+    if((int) (start_adrress / 0xFF) < (int) (start_adrress + offset) / 0xFF)
+        cycles++;
 }
 
 uint32_t CPU::Execute(uint32_t cycles_total, Memory& memory)
@@ -71,115 +90,93 @@ uint32_t CPU::Execute(uint32_t cycles_total, Memory& memory)
         switch (instruction)
         {
         case INS_LDA_IM:
-            byte_Value = FetchByte(cycles_ran, memory);
-            RegA = byte_Value;
+            RegA = FetchByte(cycles_ran, memory);
             LD_SetStatus(RegA);
             break;
         case INS_LDA_ZP:
             byte_Value = FetchByte(cycles_ran, memory);
-            RegA = ReadByte(cycles_ran, byte_Value, memory);
-            LD_SetStatus(RegA);
+            LD_SetRegister(cycles_ran, RegA, byte_Value, memory);
             break;
         case INS_LDA_ZPX:
             byte_Value = FetchByte(cycles_ran, memory);
-            byte_Value += RegX, cycles_ran++;
-            RegA = ReadByte(cycles_ran, byte_Value, memory);
-            LD_SetStatus(RegA);
+            IncrementByRegister(cycles_ran, byte_Value, RegX);
+            LD_SetRegister(cycles_ran, RegA, byte_Value, memory);
             break;
         case INS_LDA_AB:
             word_Value = FetchWord(cycles_ran, memory);
-            RegA = ReadByte(cycles_ran, word_Value, memory);
-            LD_SetStatus(RegA);
+            LD_SetRegister(cycles_ran, RegA, word_Value, memory);
             break;
         case INS_LDA_ABX:
             word_Value = FetchWord(cycles_ran, memory);
-            if((int) (word_Value / 0xFF) < (int) ((word_Value + RegX) / 0xFF))
-            { /* Should do something with the cycles*/ cycles_ran++; }
+            Cycles_WhenPageCross(cycles_ran, word_Value, RegX);
             word_Value += RegX;
-            RegA = ReadByte(cycles_ran, word_Value, memory);
-            LD_SetStatus(RegA);
+            LD_SetRegister(cycles_ran, RegA, word_Value, memory);
             break;
         case INS_LDA_ABY:
             word_Value = FetchWord(cycles_ran, memory);
-            if((int) (word_Value / 0xFF) < (int) ((word_Value + RegY) / 0xFF))
-            { /* Should do something with the cycles*/ cycles_ran++; }
+            Cycles_WhenPageCross(cycles_ran, word_Value, RegY);
             word_Value += RegY;
-            RegA = ReadByte(cycles_ran, word_Value, memory);
-            LD_SetStatus(RegA);
+            LD_SetRegister(cycles_ran, RegA, word_Value, memory);
             break;
         case INS_LDA_IDX:
             byte_Value = FetchByte(cycles_ran, memory);
-            byte_Value += RegX, cycles_ran++;
+            IncrementByRegister(cycles_ran, byte_Value, RegX);
             word_Value = ReadWord(cycles_ran, byte_Value, memory);
-            RegA = ReadByte(cycles_ran, word_Value, memory);
-            LD_SetStatus(RegA);
+            LD_SetRegister(cycles_ran, RegA, word_Value, memory);
             break;
         case INS_LDA_IDY:
             byte_Value = FetchByte(cycles_ran, memory);
             word_Value = ReadWord(cycles_ran, byte_Value, memory);
-            if((int) (word_Value / 0xFF) < (int) ((word_Value + RegY) / 0xFF))
-            { /* Should do something with the cycles*/ cycles_ran++; }
+            Cycles_WhenPageCross(cycles_ran, word_Value, RegX);
             word_Value += RegY;
-            RegA = ReadByte(cycles_ran, word_Value, memory);
+            LD_SetRegister(cycles_ran, RegA, word_Value, memory);
             LD_SetStatus(RegA);
             break;
         case INS_LDX_IM:
-            byte_Value = FetchByte(cycles_ran, memory);
-            RegX = byte_Value;
+            RegX = FetchByte(cycles_ran, memory);
             LD_SetStatus(RegX);
             break;
         case INS_LDX_ZP:
             byte_Value = FetchByte(cycles_ran, memory);
-            RegX = ReadByte(cycles_ran, byte_Value, memory);
-            LD_SetStatus(RegX);
+            LD_SetRegister(cycles_ran, RegX, byte_Value, memory);
             break;
         case INS_LDX_ZPY:
             byte_Value = FetchByte(cycles_ran, memory);
-            byte_Value += RegY, cycles_ran++;
-            RegX = ReadByte(cycles_ran, byte_Value, memory);
-            LD_SetStatus(RegX);
+            IncrementByRegister(cycles_ran, byte_Value, RegY);
+            LD_SetRegister(cycles_ran, RegX, byte_Value, memory);
             break;
         case INS_LDX_AB:
             word_Value = FetchWord(cycles_ran, memory);
-            RegX = ReadByte(cycles_ran, word_Value, memory);
-            LD_SetStatus(RegX);
+            LD_SetRegister(cycles_ran, RegX, word_Value, memory);
             break;
         case INS_LDX_ABY:
             word_Value = FetchWord(cycles_ran, memory);
-            if((int) (word_Value / 0xFF) < (int) ((word_Value + RegY) / 0xFF))
-            { /* Should do something with the cycles*/ cycles_ran++; }
+            Cycles_WhenPageCross(cycles_ran, word_Value, RegY);
             word_Value += RegY;
-            RegX = ReadByte(cycles_ran, word_Value, memory);
-            LD_SetStatus(RegX);
+            LD_SetRegister(cycles_ran, RegX, word_Value, memory);
             break;
         case INS_LDY_IM:
-            byte_Value = FetchByte(cycles_ran, memory);
-            RegY = byte_Value;
+            RegY = FetchByte(cycles_ran, memory);
             LD_SetStatus(RegY);
             break;
         case INS_LDY_ZP:
             byte_Value = FetchByte(cycles_ran, memory);
-            RegY = ReadByte(cycles_ran, byte_Value, memory);
-            LD_SetStatus(RegY);
+            LD_SetRegister(cycles_ran, RegY, byte_Value, memory);
             break;
-        case INS_LDY_ZPY:
+        case INS_LDY_ZPX:
             byte_Value = FetchByte(cycles_ran, memory);
-            byte_Value += RegX, cycles_ran++;
-            RegY = ReadByte(cycles_ran, byte_Value, memory);
-            LD_SetStatus(RegY);
+            IncrementByRegister(cycles_ran, byte_Value, RegX);
+            LD_SetRegister(cycles_ran, RegY, byte_Value, memory);
             break;
         case INS_LDY_AB:
             word_Value = FetchWord(cycles_ran, memory);
-            RegY = ReadByte(cycles_ran, word_Value, memory);
-            LD_SetStatus(RegY);
+            LD_SetRegister(cycles_ran, RegY, word_Value, memory);
             break;
-        case INS_LDY_ABY:
+        case INS_LDY_ABX:
             word_Value = FetchWord(cycles_ran, memory);
-            if((int) (word_Value / 0xFF) < (int) ((word_Value + RegX) / 0xFF))
-            { /* Should do something with the cycles*/ cycles_ran++; }
+            Cycles_WhenPageCross(cycles_ran, word_Value, RegY);
             word_Value += RegX;
-            RegY = ReadByte(cycles_ran, word_Value, memory);
-            LD_SetStatus(RegY);
+            LD_SetRegister(cycles_ran, RegY, word_Value, memory);
             break;
         case INS_JSR:
             word_Value = FetchWord(cycles_ran, memory);

@@ -37,11 +37,11 @@ TEST_F(LDY_Test, LDY_ZeroPage)
     VerifyUnusedFlags_LD(processor);
 }
 
-TEST_F(LDY_Test, LDY_ZeroPage_OffsetY)
+TEST_F(LDY_Test, LDY_ZeroPage_OffsetX)
 {
     // Given
     processor.RegX = 0x5;
-    memory[0xFFFC] = INS_LDY_ZPY;
+    memory[0xFFFC] = INS_LDY_ZPX;
     memory[0xFFFD] = 0x10;
     memory[0x0015] = 0xA;
 
@@ -56,11 +56,11 @@ TEST_F(LDY_Test, LDY_ZeroPage_OffsetY)
     VerifyUnusedFlags_LD(processor);
 }
 
-TEST_F(LDY_Test, LDY_ZeroPage_OffsetY_Wrapping)
+TEST_F(LDY_Test, LDY_ZeroPage_OffsetX_Wrapping)
 {
     // Given
     processor.RegX = 0xFF;
-    memory[0xFFFC] = INS_LDY_ZPY;
+    memory[0xFFFC] = INS_LDY_ZPX;
     memory[0xFFFD] = 0x80;
     memory[0x007F] = 0xA;
 
@@ -94,11 +94,11 @@ TEST_F(LDY_Test, LDY_Absolute)
     VerifyUnusedFlags_LD(processor);
 }
 
-TEST_F(LDY_Test, LDY_Absolute_OffsetY)
+TEST_F(LDY_Test, LDY_Absolute_OffsetX)
 {
     // Given
     processor.RegX = 0x32;
-    memory[0xFFFC] = INS_LDY_ABY;
+    memory[0xFFFC] = INS_LDY_ABX;
     memory[0xFFFD] = 0xBB;
     memory[0xFFFE] = 0xAA;
     memory[0xAAED] = 0xA;
@@ -114,11 +114,11 @@ TEST_F(LDY_Test, LDY_Absolute_OffsetY)
     VerifyUnusedFlags_LD(processor);
 }
 
-TEST_F(LDY_Test, LDY_Absolute_OffsetY_CrossPage)
+TEST_F(LDY_Test, LDY_Absolute_OffsetX_CrossPage)
 {
     // Given
     processor.RegX = 0xFF;
-    memory[0xFFFC] = INS_LDY_ABY;
+    memory[0xFFFC] = INS_LDY_ABX;
     memory[0xFFFD] = 0xBB;
     memory[0xFFFE] = 0xAA;
     memory[0xABBA] = 0xA;
