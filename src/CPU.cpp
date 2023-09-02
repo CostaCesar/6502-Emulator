@@ -73,10 +73,11 @@ void CPU::IncrementByRegister(uint32_t& cycles, Byte& value, Byte cpu_register)
 }
 
 /* Handles the additional cycle when a load instruction crosses the page border */
-void CPU::Cycles_WhenPageCross(uint32_t& cycles, Word start_adrress, Byte offset)
+void CPU::Check_PageCross(uint32_t& cycles, Word& adrress, Byte offset)
 {
-    if((int) (start_adrress / 0xFF) < (int) (start_adrress + offset) / 0xFF)
+    if((int) (adrress / 0xFF) < (int) (adrress + offset) / 0xFF)
         cycles++;
+    adrress += offset;
 }
 
 uint32_t CPU::Execute(uint32_t cycles_total, Memory& memory)
@@ -108,14 +109,12 @@ uint32_t CPU::Execute(uint32_t cycles_total, Memory& memory)
             break;
         case INS_LDA_ABX:
             word_Value = FetchWord(cycles_ran, memory);
-            Cycles_WhenPageCross(cycles_ran, word_Value, RegX);
-            word_Value += RegX;
+            Check_PageCross(cycles_ran, word_Value, RegX);
             LD_SetRegister(cycles_ran, RegA, word_Value, memory);
             break;
         case INS_LDA_ABY:
             word_Value = FetchWord(cycles_ran, memory);
-            Cycles_WhenPageCross(cycles_ran, word_Value, RegY);
-            word_Value += RegY;
+            Check_PageCross(cycles_ran, word_Value, RegY);
             LD_SetRegister(cycles_ran, RegA, word_Value, memory);
             break;
         case INS_LDA_IDX:
@@ -127,8 +126,7 @@ uint32_t CPU::Execute(uint32_t cycles_total, Memory& memory)
         case INS_LDA_IDY:
             byte_Value = FetchByte(cycles_ran, memory);
             word_Value = ReadWord(cycles_ran, byte_Value, memory);
-            Cycles_WhenPageCross(cycles_ran, word_Value, RegY);
-            word_Value += RegY;
+            Check_PageCross(cycles_ran, word_Value, RegY);
             LD_SetRegister(cycles_ran, RegA, word_Value, memory);
             LD_SetStatus(RegA);
             break;
@@ -151,8 +149,7 @@ uint32_t CPU::Execute(uint32_t cycles_total, Memory& memory)
             break;
         case INS_LDX_ABY:
             word_Value = FetchWord(cycles_ran, memory);
-            Cycles_WhenPageCross(cycles_ran, word_Value, RegY);
-            word_Value += RegY;
+            Check_PageCross(cycles_ran, word_Value, RegY);
             LD_SetRegister(cycles_ran, RegX, word_Value, memory);
             break;
         case INS_LDY_IM:
@@ -174,8 +171,7 @@ uint32_t CPU::Execute(uint32_t cycles_total, Memory& memory)
             break;
         case INS_LDY_ABX:
             word_Value = FetchWord(cycles_ran, memory);
-            Cycles_WhenPageCross(cycles_ran, word_Value, RegX);
-            word_Value += RegX;
+            Check_PageCross(cycles_ran, word_Value, RegX);
             LD_SetRegister(cycles_ran, RegY, word_Value, memory);
             break;
         case INS_JSR:
