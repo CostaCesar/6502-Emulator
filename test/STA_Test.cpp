@@ -55,7 +55,7 @@ TEST_F(STA_Test, STA_ZeroPage_OffsetX_Wrapping)
 
     // Execute
     EXPECT_EQ(cycles_executed, 4);
-    EXPECT_EQ(memory[POSIT + OFSET], VALUE);
+    EXPECT_EQ(memory[(Byte) (POSIT + OFSET)], VALUE);
     VerifyUnusedFlags_ST(processor);
 }
 
@@ -145,9 +145,9 @@ TEST_F(STA_Test, STA_Indirect_OffsetY)
     const uint16_t VALUE = 0x40;
     const uint16_t OFSET = 0xA;
     const uint16_t ZPPOS = 0x20;
-    processor.RegX = OFSET;
+    processor.RegY = OFSET;
     processor.RegA = VALUE;
-    memory[0xFFFC] = INS_STA_IDX;
+    memory[0xFFFC] = INS_STA_IDY;
     memory[0xFFFD] = ZPPOS;
     memory[ZPPOS]  = 0xBA;
     memory[ZPPOS+1]= 0xDC;

@@ -65,8 +65,13 @@ void CPU::LD_SetRegister(uint32_t& cycles, Byte& cpu_register, Word address, con
     LD_SetStatus(cpu_register);
 }
 
-/* Increment processor register by value, using up 1 cycle for it */
+/* Increment data by value from register, using up 1 cycle for it */
 void CPU::IncrementByRegister(uint32_t& cycles, Byte& value, Byte cpu_register)
+{
+    value += cpu_register;
+    cycles++;
+}
+void CPU::IncrementByRegister(uint32_t& cycles, Word& value, Byte cpu_register)
 {
     value += cpu_register;
     cycles++;
@@ -173,6 +178,41 @@ uint32_t CPU::Execute(uint32_t cycles_total, Memory& memory)
             word_Value = FetchWord(cycles_ran, memory);
             Check_PageCross(cycles_ran, word_Value, RegX);
             LD_SetRegister(cycles_ran, RegY, word_Value, memory);
+            break;
+        case INS_STA_ZP:
+            byte_Value = FetchByte(cycles_ran, memory);
+            memory.WriteByte(byte_Value, RegA, cycles_ran);
+            break;
+        case INS_STA_ZPX:
+            byte_Value = FetchByte(cycles_ran, memory);
+            IncrementByRegister(cycles_ran, byte_Value, RegX);
+            memory.WriteByte(byte_Value, RegA, cycles_ran);
+            break;
+        case INS_STA_AB:
+            word_Value = FetchWord(cycles_ran, memory);
+            memory.WriteByte(word_Value, RegA, cycles_ran);
+            break;
+        case INS_STA_ABX:
+            word_Value = FetchWord(cycles_ran, memory);
+            IncrementByRegister(cycles_ran, word_Value, RegX);
+            memory.WriteByte(word_Value, RegA, cycles_ran);
+            break;
+        case INS_STA_ABY:
+            word_Value = FetchWord(cycles_ran, memory);
+            IncrementByRegister(cycles_ran, word_Value, RegY);
+            memory.WriteByte(word_Value, RegA, cycles_ran);
+            break;
+        case INS_STA_IDX:
+            byte_Value = FetchByte(cycles_ran, memory);
+            word_Value = ReadWord(cycles_ran, byte_Value + RegX, memory);
+            memory.WriteByte(word_Value, RegA, cycles_ran);
+            cycles_ran++;
+            break;
+        case INS_STA_IDY:
+            byte_Value = FetchByte(cycles_ran, memory);
+            word_Value = ReadWord(cycles_ran, byte_Value, memory);
+            memory.WriteByte(word_Value + RegY, RegA, cycles_ran);
+            cycles_ran++;
             break;
         case INS_JSR:
             word_Value = FetchWord(cycles_ran, memory);
