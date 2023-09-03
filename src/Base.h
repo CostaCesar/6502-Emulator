@@ -40,7 +40,11 @@ enum Instruction: Byte
     INS_STA_ABY = 0x99, // 5 cycles: Store RegA value tomemory + offset from RegY
     INS_STA_IDX = 0x81, // 6 cycles: Store RegA value to position pointed by [ZP-memory + offset from RegX]
     INS_STA_IDY = 0x91, // 6 cycles: Store RegA value to position ZP-memory + offset from RegY
-    
+
+    // > STX
+    INS_STX_ZP  = 0x86, // 3 cycles: Store RegX value to ZP-memory (0x0000 -> 0x00FF)
+    INS_STX_ZPX = 0x96, // 4 cycles: Store RegX value to ZP-memory + offset from RegX
+    INS_STX_AB  = 0x8E, // 4 cycles: Store RegX value to memory
     
     // >>>>> Jump <<<<<
     INS_JSR = 0x20      // 6 cycles: Branch to subroutine
