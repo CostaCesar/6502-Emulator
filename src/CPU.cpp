@@ -206,14 +206,27 @@ uint32_t CPU::Execute(uint32_t cycles_total, Memory& memory)
             byte_Value = FetchByte(cycles_ran, memory);
             word_Value = ReadWord(cycles_ran, byte_Value + RegX, memory);
             memory.WriteByte(word_Value, RegA, cycles_ran);
-            cycles_ran++;
+            cycles_ran++;   // Must figure out why
             break;
         case INS_STA_IDY:
             byte_Value = FetchByte(cycles_ran, memory);
             word_Value = ReadWord(cycles_ran, byte_Value, memory);
             memory.WriteByte(word_Value + RegY, RegA, cycles_ran);
-            cycles_ran++;
+            cycles_ran++;   // Must figure out why   
             break;
+        case INS_STX_ZP:
+            byte_Value = FetchByte(cycles_ran, memory);
+            memory.WriteByte(byte_Value, RegX, cycles_ran);
+            break;  
+        case INS_STX_ZPY:
+            byte_Value = FetchByte(cycles_ran, memory);
+            IncrementByRegister(cycles_ran, byte_Value, RegY);
+            memory.WriteByte(byte_Value, RegX, cycles_ran);
+            break; 
+        case INS_STX_AB:
+            word_Value = FetchWord(cycles_ran, memory);
+            memory.WriteByte(word_Value, RegX, cycles_ran);
+            break; 
         case INS_JSR:
             word_Value = FetchWord(cycles_ran, memory);
             memory.WriteWord(StackPointer, ProgramCounter-1, cycles_ran);

@@ -28,7 +28,7 @@ TEST_F(STX_Test, STX_ZeroPage_OffsetY)
     const uint32_t POSIT = 0x10;
     processor.RegX = VALUE;
     processor.RegY = OFSET;
-    memory[0xFFFC] = INS_STX_ZPX;
+    memory[0xFFFC] = INS_STX_ZPY;
     memory[0xFFFD] = POSIT;
 
     // When
@@ -48,7 +48,7 @@ TEST_F(STX_Test, STX_ZeroPage_OffsetY_Wrapping)
     const uint16_t POSIT = 0xFA;
     processor.RegX = VALUE;
     processor.RegY = OFSET;
-    memory[0xFFFC] = INS_STX_ZPX;
+    memory[0xFFFC] = INS_STX_ZPY;
     memory[0xFFFD] = POSIT;
     // When
     uint32_t cycles_executed = processor.Execute(4, memory);

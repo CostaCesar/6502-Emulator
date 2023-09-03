@@ -43,7 +43,7 @@ enum Instruction: Byte
 
     // > STX
     INS_STX_ZP  = 0x86, // 3 cycles: Store RegX value to ZP-memory (0x0000 -> 0x00FF)
-    INS_STX_ZPX = 0x96, // 4 cycles: Store RegX value to ZP-memory + offset from RegX
+    INS_STX_ZPY = 0x96, // 4 cycles: Store RegX value to ZP-memory + offset from RegX
     INS_STX_AB  = 0x8E, // 4 cycles: Store RegX value to memory
     
     // >>>>> Jump <<<<<
