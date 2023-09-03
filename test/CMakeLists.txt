@@ -16,6 +16,7 @@ add_executable(INS_Test
   LDY_Test.cpp
   STA_Test.cpp
   STX_Test.cpp
+  STY_Test.cpp
 )
 target_link_libraries(INS_Test
   PRIVATE
