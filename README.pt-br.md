@@ -1,5 +1,7 @@
 # 6502-Emulator
 
+[![en](https://img.shields.io/badge/See_in_english-red)](https://github.com/CostaCesar/6502-Emulator/blob/main/README.md)
+
 ![Static Badge](https://img.shields.io/badge/Estado-Prototipo-yellow)
 ![Static Badge](https://img.shields.io/badge/Feito_em-C%2B%2B-blue)
 ![Static Badge](https://img.shields.io/badge/Testes-GoogleTest-orange)
