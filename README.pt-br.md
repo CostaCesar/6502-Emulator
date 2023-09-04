@@ -36,7 +36,7 @@ Está planejado para o projeto:
 Em resumo, o projeto está em um estágio muito inicial, com quase nenhuma instrução feita e nenhuma interface com o usuário
 
 ## Créditos
-Excluindo a biblioteca GoogleTest (é claro), todo o código neste projeto foi feito por mim, CostaCesar. Ainda assim, como deixei claro na sessão [sobre](#About-/-Sobre), a ideia para esse
+Excluindo a biblioteca GoogleTest (é claro), todo o código neste projeto foi feito por mim, CostaCesar. Ainda assim, como deixei claro na sessão [sobre](#sobre), a ideia para esse
 emulador veio de [Dave Poo](https://www.youtube.com/playlist?list=PLLwK93hM93Z13TRzPx9JqTIn33feefl37) e sua implementação original do 6502. Esse repositório é apenas uma expansão disso.
 
 Também quero agradecer a [CodingWithMat](https://www.youtube.com/@codingwithmat) pelo tutorial de como usar GoogleTest + Cmake, pois foi de grande ajudar para o projeto.
