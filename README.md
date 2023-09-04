@@ -66,7 +66,7 @@ In summary, the project is in a very early stage, with almost no instructions av
 Em resumo, o projeto está em um estágio muito inicial, com quase nenhuma instrução feita e nenhuma interface com o usuário
 
 ## Credits / Créditos
-###English
+### English
 Excluding the GoogleTest library (obviously), all of the code in this project was written by me, CostaCesar. That said, as I made clear in the [about](#About-/-Sobre) section, the idea for this
 emulator comes from [Dave Poo](https://www.youtube.com/playlist?list=PLLwK93hM93Z13TRzPx9JqTIn33feefl37) and his original implementation of the 6502. This is just an expansion of it.
 
@@ -77,7 +77,7 @@ And if you want to contribute with the project in any way, just contact me in [G
 ❤️ Any help is deeply appreciated! ❤️
 <br/>
 <br/>
-###Português
+### Português
 Excluindo a biblioteca GoogleTest (é claro), todo o código neste projeto foi feito por mim, CostaCesar. Ainda assim, como deixei claro na sessão [sobre](#About-/-Sobre), a ideia para esse
 emulador veio de [Dave Poo](https://www.youtube.com/playlist?list=PLLwK93hM93Z13TRzPx9JqTIn33feefl37) e sua implementação original do 6502. Esse repositório é apenas uma expansão disso.
 
