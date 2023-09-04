@@ -36,7 +36,7 @@ It's planned to have:
 In summary, the project is in a very early stage, with almost no instructions available and no real interface with the user
 
 ## Credits
-Excluding the GoogleTest library (obviously), all of the code in this project was written by me, CostaCesar. That said, as I made clear in the [about](#sobre) section, the idea for this
+Excluding the GoogleTest library (obviously), all of the code in this project was written by me, CostaCesar. That said, as I made clear in the [about](#about) section, the idea for this
 emulator comes from [Dave Poo](https://www.youtube.com/playlist?list=PLLwK93hM93Z13TRzPx9JqTIn33feefl37) and his original implementation of the 6502. This is just an expansion of it.
 
 I also want to thank [CodingWithMat](https://www.youtube.com/@codingwithmat) for the tutorial in the GoogleTest + CMake usage, as it was of great help for the project.
