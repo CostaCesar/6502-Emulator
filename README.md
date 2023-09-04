@@ -1,6 +1,6 @@
 # 6502-Emulator
 
-[![pt](https://img.shields.io/badge/Ver_em_portugu%C3%AAs-green)](https://github.com/CostaCesar/6502-Emulator/blob/master/README.pt-br.md)
+[![pt](https://img.shields.io/badge/Ver_em_portugu%C3%AAs-green)](https://github.com/CostaCesar/6502-Emulator/blob/main/README.pt-br.md)
 
 ![Static Badge](https://img.shields.io/badge/Status-Prototyping-yellow)
 ![Static Badge](https://img.shields.io/badge/Made_with-C%2B%2B-blue)
