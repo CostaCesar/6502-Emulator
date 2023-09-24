@@ -82,12 +82,31 @@ void CPU::IncrementByRegister(uint32_t& cycles, Word& value, Byte cpu_register)
 }
 
 /* Handles the additional cycle when a load instruction crosses the page border */
-void CPU::Check_PageCross(uint32_t& cycles, Word& adrress, Byte offset)
+void CPU::Check_PageCross(uint32_t& cycles, Word& address, Byte offset)
 {
-    if((int) (adrress / 0xFF) < (int) (adrress + offset) / 0xFF)
+    if((int) (address / 0xFF) < (int) (address + offset) / 0xFF)
         cycles++;
-    adrress += offset;
+    address += offset;
 }
+
+/* Write current Program Counter (-1) to the Stack*/
+void CPU::Push_PC_ToStack(uint32_t& cycles, Memory& memory)
+{
+    memory.WriteWord(StackPointer_ToWord() - 1, ProgramCounter, cycles);
+    cycles++;
+    StackPointer -= 2;
+}
+/* Get previous Program Counter from the Stack*/
+void CPU::Pop_PC_FromStack(uint32_t& cycles, Memory& memory)
+{
+    ProgramCounter = ReadWord(cycles, StackPointer_ToWord() + 1, memory);
+    cycles += 3;
+    StackPointer += 2;
+}
+
+/* Convert the Stack Pointer's current address to a Word value*/
+Word CPU::StackPointer_ToWord() const
+{ return 0x0100 | StackPointer; }
 
 uint32_t CPU::Execute(uint32_t cycles_total, Memory& memory)
 {
@@ -247,9 +266,11 @@ uint32_t CPU::Execute(uint32_t cycles_total, Memory& memory)
             break; 
         case INS_JSR:
             word_Value = FetchWord(cycles_ran, memory);
-            memory.WriteWord(StackPointer, ProgramCounter-1, cycles_ran);
+            Push_PC_ToStack(cycles_ran, memory);
             ProgramCounter = word_Value;
-            cycles_ran++, StackPointer++;
+            break;
+        case INS_RTS:
+            Pop_PC_FromStack(cycles_ran, memory);
             break;
         default:
             printf("Unknow instruction \"%#x\" ", instruction);

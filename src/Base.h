@@ -52,7 +52,8 @@ enum Instruction: Byte
     INS_STY_AB  = 0x8C, // 4 cycles: Store RegY value to memory
     
     // >>>>> Jump <<<<<
-    INS_JSR = 0x20      // 6 cycles: Branch to subroutine
+    INS_JSR = 0x20,     // 6 cycles: Branch to subroutine
+    INS_RTS = 0x60      // 6 cycles: Return from subroutine 
 };
 
 #endif

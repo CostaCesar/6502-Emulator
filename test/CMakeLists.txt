@@ -17,6 +17,7 @@ add_executable(INS_Test
   STA_Test.cpp
   STX_Test.cpp
   STY_Test.cpp
+  JSR-RTS_Test.cpp
 )
 target_link_libraries(INS_Test
   PRIVATE

@@ -22,6 +22,10 @@ struct CPU
 
     void Reset(Memory& memory);
     void Reset(Word address, Memory& memory);
+
+    void Push_PC_ToStack(uint32_t& cycles, Memory& memory);
+    void Pop_PC_FromStack(uint32_t& cycles, Memory& memory);
+    Word StackPointer_ToWord() const;
     
     Byte ReadByte(uint32_t& cycles, Word address, const Memory& memory);
     Byte FetchByte(uint32_t& cycles, const Memory& memory);
