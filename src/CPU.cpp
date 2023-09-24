@@ -2,7 +2,11 @@
 
 void CPU::Reset(Memory& memory)
 {
-    ProgramCounter = 0xFFFC;
+    Reset(0xFFFC, memory);
+}
+void CPU::Reset(Word address, Memory& memory)
+{
+    ProgramCounter = address;
     StackPointer = 0x00FF;
     F_Carry = F_Decimal = F_Zero = F_Interupt = F_Break = F_OverFlow = F_Negative = 0;
     RegA = RegY = RegX = 0;
@@ -133,7 +137,6 @@ uint32_t CPU::Execute(uint32_t cycles_total, Memory& memory)
             word_Value = ReadWord(cycles_ran, byte_Value, memory);
             Check_PageCross(cycles_ran, word_Value, RegY);
             LD_SetRegister(cycles_ran, RegA, word_Value, memory);
-            LD_SetStatus(RegA);
             break;
         case INS_LDX_IM:
             RegX = FetchByte(cycles_ran, memory);
@@ -206,13 +209,15 @@ uint32_t CPU::Execute(uint32_t cycles_total, Memory& memory)
             byte_Value = FetchByte(cycles_ran, memory);
             word_Value = ReadWord(cycles_ran, byte_Value + RegX, memory);
             memory.WriteByte(word_Value, RegA, cycles_ran);
-            cycles_ran++;   // Must figure out why
+            // Cycle used to secure memory in case of overflow in the addition of the adrres
+            cycles_ran++;   
             break;
         case INS_STA_IDY:
             byte_Value = FetchByte(cycles_ran, memory);
             word_Value = ReadWord(cycles_ran, byte_Value, memory);
             memory.WriteByte(word_Value + RegY, RegA, cycles_ran);
-            cycles_ran++;   // Must figure out why   
+            // Cycle used to secure memory in case of overflow in the addition of the adrres   
+            cycles_ran++;
             break;
         case INS_STX_ZP:
             byte_Value = FetchByte(cycles_ran, memory);

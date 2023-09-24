@@ -21,6 +21,7 @@ struct CPU
     Byte F_Negative : 1; 
 
     void Reset(Memory& memory);
+    void Reset(Word address, Memory& memory);
     
     Byte ReadByte(uint32_t& cycles, Word address, const Memory& memory);
     Byte FetchByte(uint32_t& cycles, const Memory& memory);
