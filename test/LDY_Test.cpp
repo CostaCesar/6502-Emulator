@@ -5,7 +5,7 @@ class LDY_Test : public M6502 {};
 TEST_F(LDY_Test, LDY_Imediatate)
 {
     // Given
-    memory[0xFFFC] = INS_LDY_IM;
+    memory[0xFFFC] = Instruction::LDY_IM;
     memory[0xFFFD] = 0xA;
 
     // When
@@ -22,7 +22,7 @@ TEST_F(LDY_Test, LDY_Imediatate)
 TEST_F(LDY_Test, LDY_ZeroPage)
 {
     // Given
-    memory[0xFFFC] = INS_LDY_ZP;
+    memory[0xFFFC] = Instruction::LDY_ZP;
     memory[0xFFFD] = 0x10;
     memory[0x0010] = 0xA;
 
@@ -41,7 +41,7 @@ TEST_F(LDY_Test, LDY_ZeroPage_OffsetX)
 {
     // Given
     processor.RegX = 0x5;
-    memory[0xFFFC] = INS_LDY_ZPX;
+    memory[0xFFFC] = Instruction::LDY_ZPX;
     memory[0xFFFD] = 0x10;
     memory[0x0015] = 0xA;
 
@@ -60,7 +60,7 @@ TEST_F(LDY_Test, LDY_ZeroPage_OffsetX_Wrapping)
 {
     // Given
     processor.RegX = 0xFF;
-    memory[0xFFFC] = INS_LDY_ZPX;
+    memory[0xFFFC] = Instruction::LDY_ZPX;
     memory[0xFFFD] = 0x80;
     memory[0x007F] = 0xA;
 
@@ -78,7 +78,7 @@ TEST_F(LDY_Test, LDY_ZeroPage_OffsetX_Wrapping)
 TEST_F(LDY_Test, LDY_Absolute)
 {
     // Given
-    memory[0xFFFC] = INS_LDY_AB;
+    memory[0xFFFC] = Instruction::LDY_AB;
     memory[0xFFFD] = 0x80;
     memory[0xFFFE] = 0xA1;
     memory[0xA180] = 0xA;
@@ -98,7 +98,7 @@ TEST_F(LDY_Test, LDY_Absolute_OffsetX)
 {
     // Given
     processor.RegX = 0x32;
-    memory[0xFFFC] = INS_LDY_ABX;
+    memory[0xFFFC] = Instruction::LDY_ABX;
     memory[0xFFFD] = 0xBB;
     memory[0xFFFE] = 0xAA;
     memory[0xAAED] = 0xA;
@@ -118,7 +118,7 @@ TEST_F(LDY_Test, LDY_Absolute_OffsetX_CrossPage)
 {
     // Given
     processor.RegX = 0xFF;
-    memory[0xFFFC] = INS_LDY_ABX;
+    memory[0xFFFC] = Instruction::LDY_ABX;
     memory[0xFFFD] = 0xBB;
     memory[0xFFFE] = 0xAA;
     memory[0xABBA] = 0xA;

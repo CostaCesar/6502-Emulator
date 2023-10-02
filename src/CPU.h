@@ -31,7 +31,7 @@ struct CPU
     Byte FetchByte(uint32_t& cycles, const Memory& memory);
     Word ReadWord(uint32_t& cycles, Word address, const Memory& memory);
     Word FetchWord(uint32_t& cycles, const Memory& memory);
-    Instruction FetchInstruction(uint32_t& cycles, const Memory& memory);
+    Instruction::Opcode FetchInstruction(uint32_t& cycles, const Memory& memory);
 
     void Check_PageCross(uint32_t& cycles, Word& adrress, Byte offset);
     void IncrementByRegister(uint32_t& cycles, Byte& value, Byte cpu_register);

@@ -1,4 +1,5 @@
 #include "CPU.h"
+using namespace Instruction;
 
 void CPU::Reset(Memory& memory)
 {
@@ -29,11 +30,11 @@ Byte CPU::FetchByte(uint32_t& cycles, const Memory& memory)
     return data;
 }
 /* Read instruction from memory AND increment program counter */
-Instruction CPU::FetchInstruction(uint32_t& cycles, const Memory& memory)
+Opcode CPU::FetchInstruction(uint32_t& cycles, const Memory& memory)
 {
     Byte data = ReadByte(cycles, ProgramCounter, memory);
     ProgramCounter++;
-    return (Instruction) data;
+    return (Opcode) data;
 }
 
 /* Read 1 word (2 bytes) from memory */
@@ -113,163 +114,163 @@ uint32_t CPU::Execute(uint32_t cycles_total, Memory& memory)
     uint32_t cycles_ran = 0;
     for(cycles_ran; cycles_ran < cycles_total;)
     {
-        Instruction instruction = FetchInstruction(cycles_ran, memory);
+        Opcode instruction = FetchInstruction(cycles_ran, memory);
         Byte byte_Value = 0;
         Word word_Value = 0;
         switch (instruction)
         {
-        case INS_LDA_IM:
+        case LDA_IM:
             RegA = FetchByte(cycles_ran, memory);
             LD_SetStatus(RegA);
             break;
-        case INS_LDA_ZP:
+        case LDA_ZP:
             byte_Value = FetchByte(cycles_ran, memory);
             LD_SetRegister(cycles_ran, RegA, byte_Value, memory);
             break;
-        case INS_LDA_ZPX:
+        case LDA_ZPX:
             byte_Value = FetchByte(cycles_ran, memory);
             IncrementByRegister(cycles_ran, byte_Value, RegX);
             LD_SetRegister(cycles_ran, RegA, byte_Value, memory);
             break;
-        case INS_LDA_AB:
+        case LDA_AB:
             word_Value = FetchWord(cycles_ran, memory);
             LD_SetRegister(cycles_ran, RegA, word_Value, memory);
             break;
-        case INS_LDA_ABX:
+        case LDA_ABX:
             word_Value = FetchWord(cycles_ran, memory);
             Check_PageCross(cycles_ran, word_Value, RegX);
             LD_SetRegister(cycles_ran, RegA, word_Value, memory);
             break;
-        case INS_LDA_ABY:
+        case LDA_ABY:
             word_Value = FetchWord(cycles_ran, memory);
             Check_PageCross(cycles_ran, word_Value, RegY);
             LD_SetRegister(cycles_ran, RegA, word_Value, memory);
             break;
-        case INS_LDA_IDX:
+        case LDA_IDX:
             byte_Value = FetchByte(cycles_ran, memory);
             IncrementByRegister(cycles_ran, byte_Value, RegX);
             word_Value = ReadWord(cycles_ran, byte_Value, memory);
             LD_SetRegister(cycles_ran, RegA, word_Value, memory);
             break;
-        case INS_LDA_IDY:
+        case LDA_IDY:
             byte_Value = FetchByte(cycles_ran, memory);
             word_Value = ReadWord(cycles_ran, byte_Value, memory);
             Check_PageCross(cycles_ran, word_Value, RegY);
             LD_SetRegister(cycles_ran, RegA, word_Value, memory);
             break;
-        case INS_LDX_IM:
+        case LDX_IM:
             RegX = FetchByte(cycles_ran, memory);
             LD_SetStatus(RegX);
             break;
-        case INS_LDX_ZP:
+        case LDX_ZP:
             byte_Value = FetchByte(cycles_ran, memory);
             LD_SetRegister(cycles_ran, RegX, byte_Value, memory);
             break;
-        case INS_LDX_ZPY:
+        case LDX_ZPY:
             byte_Value = FetchByte(cycles_ran, memory);
             IncrementByRegister(cycles_ran, byte_Value, RegY);
             LD_SetRegister(cycles_ran, RegX, byte_Value, memory);
             break;
-        case INS_LDX_AB:
+        case LDX_AB:
             word_Value = FetchWord(cycles_ran, memory);
             LD_SetRegister(cycles_ran, RegX, word_Value, memory);
             break;
-        case INS_LDX_ABY:
+        case LDX_ABY:
             word_Value = FetchWord(cycles_ran, memory);
             Check_PageCross(cycles_ran, word_Value, RegY);
             LD_SetRegister(cycles_ran, RegX, word_Value, memory);
             break;
-        case INS_LDY_IM:
+        case LDY_IM:
             RegY = FetchByte(cycles_ran, memory);
             LD_SetStatus(RegY);
             break;
-        case INS_LDY_ZP:
+        case LDY_ZP:
             byte_Value = FetchByte(cycles_ran, memory);
             LD_SetRegister(cycles_ran, RegY, byte_Value, memory);
             break;
-        case INS_LDY_ZPX:
+        case LDY_ZPX:
             byte_Value = FetchByte(cycles_ran, memory);
             IncrementByRegister(cycles_ran, byte_Value, RegX);
             LD_SetRegister(cycles_ran, RegY, byte_Value, memory);
             break;
-        case INS_LDY_AB:
+        case LDY_AB:
             word_Value = FetchWord(cycles_ran, memory);
             LD_SetRegister(cycles_ran, RegY, word_Value, memory);
             break;
-        case INS_LDY_ABX:
+        case LDY_ABX:
             word_Value = FetchWord(cycles_ran, memory);
             Check_PageCross(cycles_ran, word_Value, RegX);
             LD_SetRegister(cycles_ran, RegY, word_Value, memory);
             break;
-        case INS_STA_ZP:
+        case STA_ZP:
             byte_Value = FetchByte(cycles_ran, memory);
             memory.WriteByte(byte_Value, RegA, cycles_ran);
             break;
-        case INS_STA_ZPX:
+        case STA_ZPX:
             byte_Value = FetchByte(cycles_ran, memory);
             IncrementByRegister(cycles_ran, byte_Value, RegX);
             memory.WriteByte(byte_Value, RegA, cycles_ran);
             break;
-        case INS_STA_AB:
+        case STA_AB:
             word_Value = FetchWord(cycles_ran, memory);
             memory.WriteByte(word_Value, RegA, cycles_ran);
             break;
-        case INS_STA_ABX:
+        case STA_ABX:
             word_Value = FetchWord(cycles_ran, memory);
             IncrementByRegister(cycles_ran, word_Value, RegX);
             memory.WriteByte(word_Value, RegA, cycles_ran);
             break;
-        case INS_STA_ABY:
+        case STA_ABY:
             word_Value = FetchWord(cycles_ran, memory);
             IncrementByRegister(cycles_ran, word_Value, RegY);
             memory.WriteByte(word_Value, RegA, cycles_ran);
             break;
-        case INS_STA_IDX:
+        case STA_IDX:
             byte_Value = FetchByte(cycles_ran, memory);
             word_Value = ReadWord(cycles_ran, byte_Value + RegX, memory);
             memory.WriteByte(word_Value, RegA, cycles_ran);
             // Cycle used to secure memory in case of overflow in the addition of the adrres
             cycles_ran++;   
             break;
-        case INS_STA_IDY:
+        case STA_IDY:
             byte_Value = FetchByte(cycles_ran, memory);
             word_Value = ReadWord(cycles_ran, byte_Value, memory);
             memory.WriteByte(word_Value + RegY, RegA, cycles_ran);
             // Cycle used to secure memory in case of overflow in the addition of the adrres   
             cycles_ran++;
             break;
-        case INS_STX_ZP:
+        case STX_ZP:
             byte_Value = FetchByte(cycles_ran, memory);
             memory.WriteByte(byte_Value, RegX, cycles_ran);
             break;  
-        case INS_STX_ZPY:
+        case STX_ZPY:
             byte_Value = FetchByte(cycles_ran, memory);
             IncrementByRegister(cycles_ran, byte_Value, RegY);
             memory.WriteByte(byte_Value, RegX, cycles_ran);
             break; 
-        case INS_STX_AB:
+        case STX_AB:
             word_Value = FetchWord(cycles_ran, memory);
             memory.WriteByte(word_Value, RegX, cycles_ran);
             break; 
-        case INS_STY_ZP:
+        case STY_ZP:
             byte_Value = FetchByte(cycles_ran, memory);
             memory.WriteByte(byte_Value, RegY, cycles_ran);
             break;  
-        case INS_STY_ZPX:
+        case STY_ZPX:
             byte_Value = FetchByte(cycles_ran, memory);
             IncrementByRegister(cycles_ran, byte_Value, RegX);
             memory.WriteByte(byte_Value, RegY, cycles_ran);
             break; 
-        case INS_STY_AB:
+        case STY_AB:
             word_Value = FetchWord(cycles_ran, memory);
             memory.WriteByte(word_Value, RegY, cycles_ran);
             break; 
-        case INS_JSR:
+        case JSR:
             word_Value = FetchWord(cycles_ran, memory);
             Push_PC_ToStack(cycles_ran, memory);
             ProgramCounter = word_Value;
             break;
-        case INS_RTS:
+        case RTS:
             Pop_PC_FromStack(cycles_ran, memory);
             break;
         default:

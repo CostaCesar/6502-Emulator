@@ -8,7 +8,7 @@ TEST_F(STA_Test, STA_ZeroPage)
     const uint16_t VALUE = 0x40;
     const uint32_t POSIT = 0x10;
     processor.RegA = VALUE;
-    memory[0xFFFC] = INS_STA_ZP;
+    memory[0xFFFC] = Instruction::STA_ZP;
     memory[0xFFFD] = POSIT;
 
     // When
@@ -28,7 +28,7 @@ TEST_F(STA_Test, STA_ZeroPage_OffsetX)
     const uint32_t POSIT = 0x10;
     processor.RegA = VALUE;
     processor.RegX = OFSET;
-    memory[0xFFFC] = INS_STA_ZPX;
+    memory[0xFFFC] = Instruction::STA_ZPX;
     memory[0xFFFD] = POSIT;
 
     // When
@@ -48,7 +48,7 @@ TEST_F(STA_Test, STA_ZeroPage_OffsetX_Wrapping)
     const uint16_t POSIT = 0xFA;
     processor.RegA = VALUE;
     processor.RegX = OFSET;
-    memory[0xFFFC] = INS_STA_ZPX;
+    memory[0xFFFC] = Instruction::STA_ZPX;
     memory[0xFFFD] = POSIT;
     // When
     uint32_t cycles_executed = processor.Execute(4, memory);
@@ -64,7 +64,7 @@ TEST_F(STA_Test, STA_Absolute)
     // Given
     const uint16_t VALUE = 0x40;
     processor.RegA = VALUE;
-    memory[0xFFFC] = INS_STA_AB;
+    memory[0xFFFC] = Instruction::STA_AB;
     memory[0xFFFD] = 0x80;
     memory[0xFFFE] = 0xA1;
 
@@ -84,7 +84,7 @@ TEST_F(STA_Test, STA_Absolute_OffsetX)
     const uint16_t OFSET = 0xA;
     processor.RegX = OFSET;
     processor.RegA = VALUE;
-    memory[0xFFFC] = INS_STA_ABX;
+    memory[0xFFFC] = Instruction::STA_ABX;
     memory[0xFFFD] = 0xAA;
     memory[0xFFFE] = 0xBB;
 
@@ -104,7 +104,7 @@ TEST_F(STA_Test, STA_Absolute_OffsetY)
     const uint16_t OFSET = 0xA;
     processor.RegY = OFSET;
     processor.RegA = VALUE;
-    memory[0xFFFC] = INS_STA_ABY;
+    memory[0xFFFC] = Instruction::STA_ABY;
     memory[0xFFFD] = 0xAA;
     memory[0xFFFE] = 0xBB;
 
@@ -125,7 +125,7 @@ TEST_F(STA_Test, STA_Indirect_OffsetX)
     const uint16_t ZPPOS = 0x20;
     processor.RegX = OFSET;
     processor.RegA = VALUE;
-    memory[0xFFFC] = INS_STA_IDX;
+    memory[0xFFFC] = Instruction::STA_IDX;
     memory[0xFFFD] = ZPPOS - OFSET;
     memory[ZPPOS]  = 0xBA;
     memory[ZPPOS+1]= 0xDC;
@@ -147,7 +147,7 @@ TEST_F(STA_Test, STA_Indirect_OffsetY)
     const uint16_t ZPPOS = 0x20;
     processor.RegY = OFSET;
     processor.RegA = VALUE;
-    memory[0xFFFC] = INS_STA_IDY;
+    memory[0xFFFC] = Instruction::STA_IDY;
     memory[0xFFFD] = ZPPOS;
     memory[ZPPOS]  = 0xBA;
     memory[ZPPOS+1]= 0xDC;

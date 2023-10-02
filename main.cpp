@@ -8,10 +8,10 @@ int main(int argc, char ** argv)
     processor.Reset(memory);
     
     // start - Hacked code
-    memory[0xFFFC] = INS_JSR;
+    memory[0xFFFC] = Instruction::JSR;
     memory[0xFFFD] = 0xAA; 
     memory[0xFFFE] = 0xAA;
-    memory[0xAAAA] = INS_LDA_IM;
+    memory[0xAAAA] = Instruction::LDA_IM;
     memory[0xAAAB] = 0xA;
     // end - Hacked code
 
