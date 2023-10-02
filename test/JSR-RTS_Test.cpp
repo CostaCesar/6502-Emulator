@@ -20,6 +20,7 @@ TEST_F(JSR_Test, JSR_Basic)
     EXPECT_EQ(processor.RegA, VALUE);
     EXPECT_EQ(processor.StackPointer, 0x00FF - 2);
     EXPECT_EQ(processor.ProgramCounter, POSIT + 2);
+    EXPECT_EQ(processor.FlagStatus, 0x0000);
 }
 
 TEST_F(JSR_Test, RTS_Basic)
@@ -40,4 +41,6 @@ TEST_F(JSR_Test, RTS_Basic)
     // Execute
     EXPECT_EQ(cycles_executed, 14);
     EXPECT_EQ(processor.RegA, VALUE);
+    EXPECT_EQ(processor.StackPointer, 0x00FF);
+    EXPECT_EQ(processor.FlagStatus, 0x0000);
 }

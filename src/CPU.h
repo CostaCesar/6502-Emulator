@@ -5,6 +5,17 @@
 #include "Base.h"
 #include "Memory.h"
 
+struct CPU_Flags
+{
+    Byte Carry      : 1; 
+    Byte Zero       : 1; 
+    Byte Interupt   : 1; 
+    Byte Decimal    : 1; 
+    Byte Break      : 1;
+    Byte UNUSED     : 1; 
+    Byte OverFlow   : 1; 
+    Byte Negative   : 1; 
+};
 struct CPU
 {
     Word ProgramCounter;
@@ -12,13 +23,12 @@ struct CPU
 
     Byte RegA, RegX, RegY;
 
-    Byte F_Carry : 1; 
-    Byte F_Zero : 1; 
-    Byte F_Interupt : 1; 
-    Byte F_Decimal : 1; 
-    Byte F_Break : 1; 
-    Byte F_OverFlow : 1; 
-    Byte F_Negative : 1; 
+    union // CPU status
+    {
+        Byte FlagStatus;
+        CPU_Flags Flags;
+    };
+    
 
     void Reset(Memory& memory);
     void Reset(Word address, Memory& memory);

@@ -14,8 +14,8 @@ TEST_F(LDA_Test, LDA_Imediatate)
     // Execute
     EXPECT_EQ(cycles_executed, 2);
     EXPECT_EQ(processor.RegA, 0xA);
-    EXPECT_FALSE(processor.F_Zero);
-    EXPECT_FALSE(processor.F_Negative);
+    EXPECT_FALSE(processor.Flags.Zero);
+    EXPECT_FALSE(processor.Flags.Negative);
     VerifyUnusedFlags_LD(processor);
 }
 
@@ -32,8 +32,8 @@ TEST_F(LDA_Test, LDA_ZeroPage)
     // Execute
     EXPECT_EQ(cycles_executed, 3);
     EXPECT_EQ(processor.RegA, 0xA);
-    EXPECT_FALSE(processor.F_Zero);
-    EXPECT_FALSE(processor.F_Negative);
+    EXPECT_FALSE(processor.Flags.Zero);
+    EXPECT_FALSE(processor.Flags.Negative);
     VerifyUnusedFlags_LD(processor);
 }
 
@@ -51,8 +51,8 @@ TEST_F(LDA_Test, LDA_ZeroPage_OffsetX)
     // Execute
     EXPECT_EQ(cycles_executed, 4);
     EXPECT_EQ(processor.RegA, 0xA);
-    EXPECT_FALSE(processor.F_Zero);
-    EXPECT_FALSE(processor.F_Negative);
+    EXPECT_FALSE(processor.Flags.Zero);
+    EXPECT_FALSE(processor.Flags.Negative);
     VerifyUnusedFlags_LD(processor);
 }
 
@@ -70,8 +70,8 @@ TEST_F(LDA_Test, LDA_ZeroPage_OffsetX_Wrapping)
     // Execute
     EXPECT_EQ(cycles_executed, 4);
     EXPECT_EQ(processor.RegA, 0xA);
-    EXPECT_FALSE(processor.F_Zero);
-    EXPECT_FALSE(processor.F_Negative);
+    EXPECT_FALSE(processor.Flags.Zero);
+    EXPECT_FALSE(processor.Flags.Negative);
     VerifyUnusedFlags_LD(processor);
 }
 
@@ -89,8 +89,8 @@ TEST_F(LDA_Test, LDA_Absolute)
     // Execute
     EXPECT_EQ(cycles_executed, 4);
     EXPECT_EQ(processor.RegA, 0xA);
-    EXPECT_FALSE(processor.F_Zero);
-    EXPECT_FALSE(processor.F_Negative);
+    EXPECT_FALSE(processor.Flags.Zero);
+    EXPECT_FALSE(processor.Flags.Negative);
     VerifyUnusedFlags_LD(processor);
 }
 
@@ -109,8 +109,8 @@ TEST_F(LDA_Test, LDA_Absolute_OffsetX)
     // Execute
     EXPECT_EQ(cycles_executed, 4);
     EXPECT_EQ(processor.RegA, 0xA);
-    EXPECT_FALSE(processor.F_Zero);
-    EXPECT_FALSE(processor.F_Negative);
+    EXPECT_FALSE(processor.Flags.Zero);
+    EXPECT_FALSE(processor.Flags.Negative);
     VerifyUnusedFlags_LD(processor);
 }
 
@@ -129,8 +129,8 @@ TEST_F(LDA_Test, LDA_Absolute_OffsetX_CrossPage)
     // Execute
     EXPECT_EQ(cycles_executed, 5);
     EXPECT_EQ(processor.RegA, 0xA);
-    EXPECT_FALSE(processor.F_Zero);
-    EXPECT_FALSE(processor.F_Negative);
+    EXPECT_FALSE(processor.Flags.Zero);
+    EXPECT_FALSE(processor.Flags.Negative);
     VerifyUnusedFlags_LD(processor);
 }
 
@@ -149,8 +149,8 @@ TEST_F(LDA_Test, LDA_Absolute_OffsetY)
     // Execute
     EXPECT_EQ(cycles_executed, 4);
     EXPECT_EQ(processor.RegA, 0xA);
-    EXPECT_FALSE(processor.F_Zero);
-    EXPECT_FALSE(processor.F_Negative);
+    EXPECT_FALSE(processor.Flags.Zero);
+    EXPECT_FALSE(processor.Flags.Negative);
     VerifyUnusedFlags_LD(processor);
 }
 
@@ -169,8 +169,8 @@ TEST_F(LDA_Test, LDA_Absolute_OffsetY_CrossPage)
     // Execute
     EXPECT_EQ(cycles_executed, 5);
     EXPECT_EQ(processor.RegA, 0xA);
-    EXPECT_FALSE(processor.F_Zero);
-    EXPECT_FALSE(processor.F_Negative);
+    EXPECT_FALSE(processor.Flags.Zero);
+    EXPECT_FALSE(processor.Flags.Negative);
     VerifyUnusedFlags_LD(processor);
 }
 
@@ -190,8 +190,8 @@ TEST_F(LDA_Test, LDA_Indirect_OffsetX)
     // Execute
     EXPECT_EQ(cycles_executed, 6);
     EXPECT_EQ(processor.RegA, 0x26);
-    EXPECT_FALSE(processor.F_Zero);
-    EXPECT_FALSE(processor.F_Negative);
+    EXPECT_FALSE(processor.Flags.Zero);
+    EXPECT_FALSE(processor.Flags.Negative);
     VerifyUnusedFlags_LD(processor);
 }
 
@@ -211,8 +211,8 @@ TEST_F(LDA_Test, LDA_Indirect_OffsetY)
     // Execute
     EXPECT_EQ(cycles_executed, 5);
     EXPECT_EQ(processor.RegA, 0x34);
-    EXPECT_FALSE(processor.F_Zero);
-    EXPECT_FALSE(processor.F_Negative);
+    EXPECT_FALSE(processor.Flags.Zero);
+    EXPECT_FALSE(processor.Flags.Negative);
     VerifyUnusedFlags_LD(processor);
 }
 
@@ -232,8 +232,8 @@ TEST_F(LDA_Test, LDA_Indirect_OffsetY_CrossPage)
     // Execute
     EXPECT_EQ(cycles_executed, 6);
     EXPECT_EQ(processor.RegA, 0x34);
-    EXPECT_FALSE(processor.F_Zero);
-    EXPECT_FALSE(processor.F_Negative);
+    EXPECT_FALSE(processor.Flags.Zero);
+    EXPECT_FALSE(processor.Flags.Negative);
     VerifyUnusedFlags_LD(processor);
 }
 

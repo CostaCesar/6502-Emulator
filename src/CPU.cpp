@@ -9,7 +9,7 @@ void CPU::Reset(Word address, Memory& memory)
 {
     ProgramCounter = address;
     StackPointer = 0x00FF;
-    F_Carry = F_Decimal = F_Zero = F_Interupt = F_Break = F_OverFlow = F_Negative = 0;
+    FlagStatus = 0;
     RegA = RegY = RegX = 0;
     memory.Initialise();
 }
@@ -61,8 +61,8 @@ Word CPU::FetchWord(uint32_t& cycles, const Memory& memory)
 /* Set flags required by a LDA operation */
 void CPU::LD_SetStatus(Byte& cpu_register)
 {
-    F_Zero = (cpu_register == 0);
-    F_Negative = (cpu_register & 0b10000000) > 0;
+    Flags.Zero = (cpu_register == 0);
+    Flags.Negative = (cpu_register & 0b10000000) > 0;
 }
 void CPU::LD_SetRegister(uint32_t& cycles, Byte& cpu_register, Word address, const Memory& memory)
 {
