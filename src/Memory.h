@@ -11,9 +11,10 @@ struct Memory
 
     void Initialise();
 
-    Byte& operator[] (uint32_t address); /* Read from memory */ 
-    Byte operator[] (uint32_t address) const; /* Write to memory */ 
+    Byte& operator[] (uint32_t address);  /* Write to memory */ 
+    Byte operator[] (uint32_t address) const; /* Read from memory */ 
     void WriteWord(uint32_t address, const Word value, uint32_t& cycles); /* Write 1 word (2 bytes) to memory */
+    void WriteWord(uint32_t address, const Word value); /* Write 1 word (2 bytes) to memory, without cycle*/
     void WriteByte(uint32_t address, const Byte value, uint32_t& cycles); /* Write 1 byte to memory */
 };
 
