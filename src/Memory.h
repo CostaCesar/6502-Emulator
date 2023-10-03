@@ -11,6 +11,8 @@ struct Memory
 
     void Initialise();
 
+    Word FlipWord(Word value); /* Flips Word's bytes*/
+
     Byte& operator[] (uint32_t address);  /* Write to memory */ 
     Byte operator[] (uint32_t address) const; /* Read from memory */ 
     void WriteWord(uint32_t address, const Word value, uint32_t& cycles); /* Write 1 word (2 bytes) to memory */

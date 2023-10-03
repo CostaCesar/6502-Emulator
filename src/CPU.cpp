@@ -279,7 +279,13 @@ uint32_t CPU::Execute(uint32_t cycles_total, Memory& memory)
             break;
         case JMP_ID:
             word_Value = FetchWord(cycles_ran, memory);
-            ProgramCounter = ReadWord(cycles_ran, word_Value, memory);
+            if(ChipModel == CHIP_STANDART && (word_Value + 1) % 0x0100 == 0)
+            {
+                byte_Value = ReadByte(cycles_ran, ((int) word_Value - 0x00FF), memory);
+                word_Value = (byte_Value << 8) + ReadByte(cycles_ran, word_Value, memory);
+            }
+            else word_Value = ReadWord(cycles_ran, word_Value, memory);
+            ProgramCounter = word_Value;
             break;
         default:
             printf("Unknow instruction \"%#x\" ", instruction);

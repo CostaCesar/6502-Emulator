@@ -6,6 +6,13 @@ void Memory::Initialise()
         Data[i] = 0;
 }
 
+Word Memory::FlipWord(Word value)
+{
+    Word flipped_value = value << 8;
+    flipped_value = value | 0x00FF;
+    return flipped_value;
+}
+
 /* Read from memory */ 
 Byte Memory::operator[] (uint32_t address) const
 {

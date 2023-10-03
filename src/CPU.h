@@ -18,6 +18,7 @@ struct CPU_Flags
 };
 struct CPU
 {
+    Variant ChipModel = CHIP_STANDART;
     Word ProgramCounter;
     Byte StackPointer;
 

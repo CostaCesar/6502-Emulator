@@ -61,4 +61,10 @@ namespace Instruction
     };  
 }
 
+enum Variant : Byte
+{
+    CHIP_STANDART = 1,
+    CHIP_65SC02 = 2
+};
+
 #endif
