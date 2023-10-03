@@ -54,8 +54,10 @@ namespace Instruction
         STY_AB  = 0x8C, // 4 cycles: Store RegY value to memory
         
         // >>>>> Jump <<<<<
-        JSR = 0x20,     // 6 cycles: Branch to subroutine
-        RTS = 0x60      // 6 cycles: Return from subroutine 
+        JSR     = 0x20,     // 6 cycles: Branch to subroutine
+        RTS     = 0x60,     // 6 cycles: Return from subroutine
+        JMP_AB  = 0x4C,     // 3 cycles: Jump to position in memory directly
+        JMP_ID  = 0x6C      // 3 cycles: Jump to position in memory pointed by another position 
     };  
 }
 

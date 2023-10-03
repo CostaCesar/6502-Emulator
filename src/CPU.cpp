@@ -273,6 +273,14 @@ uint32_t CPU::Execute(uint32_t cycles_total, Memory& memory)
         case RTS:
             Pop_PC_FromStack(cycles_ran, memory);
             break;
+        case JMP_AB:
+            word_Value = FetchWord(cycles_ran, memory);
+            ProgramCounter = word_Value;
+            break;
+        case JMP_ID:
+            word_Value = FetchWord(cycles_ran, memory);
+            ProgramCounter = ReadWord(cycles_ran, word_Value, memory);
+            break;
         default:
             printf("Unknow instruction \"%#x\" ", instruction);
             return cycles_ran;

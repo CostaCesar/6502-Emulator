@@ -17,7 +17,7 @@ add_executable(Instruction_Test
   STA_Test.cpp
   STX_Test.cpp
   STY_Test.cpp
-  JSR-RTS_Test.cpp
+  JumpFamily_Test.cpp
 )
 target_link_libraries(Instruction_Test
   PRIVATE
