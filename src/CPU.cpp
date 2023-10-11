@@ -287,6 +287,21 @@ uint32_t CPU::Execute(uint32_t cycles_total, Memory& memory)
             else word_Value = ReadWord(cycles_ran, word_Value, memory);
             ProgramCounter = word_Value;
             break;
+        case TSX:
+            RegX = StackPointer;
+            cycles_ran++;
+            LD_SetStatus(RegX);
+            break;
+        case TXS:
+            break;    
+        case PHA:
+            break;     
+        case PHP:
+            break;    
+        case PLA:
+            break; 
+        case PLP:
+            break; 
         default:
             printf("Unknow instruction \"%#x\" ", instruction);
             return cycles_ran;
