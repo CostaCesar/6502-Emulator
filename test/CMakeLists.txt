@@ -18,6 +18,7 @@ add_executable(Instruction_Test
   STX_Test.cpp
   STY_Test.cpp
   JumpFamily_Test.cpp
+  StackFamily_Test.cpp
 )
 target_link_libraries(Instruction_Test
   PRIVATE

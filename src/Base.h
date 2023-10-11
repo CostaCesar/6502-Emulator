@@ -57,7 +57,18 @@ namespace Instruction
         JSR     = 0x20,     // 6 cycles: Branch to subroutine
         RTS     = 0x60,     // 6 cycles: Return from subroutine
         JMP_AB  = 0x4C,     // 3 cycles: Jump to position in memory directly
-        JMP_ID  = 0x6C      // 3 cycles: Jump to position in memory pointed by another position 
+        JMP_ID  = 0x6C,     // 3 cycles: Jump to position in memory pointed by another position
+
+        // >>>>> Stack <<<<<
+        TSX     = 0xBA,     // 2 cycles: Transfer Stack Pointer to Index X
+        TXS     = 0x9A,     // 2 cycles: Transfer Index X to Stack Register
+        PHA     = 0x48,     // 3 cycles: Push Accumulator on Stack
+        PHP     = 0x08,     // 3 cycles: Push Processor Status on Stack
+                            // The status register will be pushed with the break flag and bit 5 set to 1.
+        PLA     = 0x68,     // 4 cycles: Pull Accumulator from Stack
+        PLP     = 0x28      // 4 cycles: Pull Processor Status from Stack
+                            // The status register will be pulled with the break flag and bit 5 ignored
+                            
     };  
 }
 
