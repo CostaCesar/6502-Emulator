@@ -293,6 +293,9 @@ uint32_t CPU::Execute(uint32_t cycles_total, Memory& memory)
             LD_SetStatus(RegX);
             break;
         case TXS:
+            StackPointer = RegX;
+            cycles_ran++;
+            LD_SetStatus(StackPointer);
             break;    
         case PHA:
             break;     
