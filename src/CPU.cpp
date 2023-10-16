@@ -298,8 +298,14 @@ uint32_t CPU::Execute(uint32_t cycles_total, Memory& memory)
             LD_SetStatus(StackPointer);
             break;    
         case PHA:
+            memory.WriteByte(StackPointer, RegA, cycles_ran);
+            StackPointer--;
+            cycles_ran++;
             break;     
         case PHP:
+            memory.WriteByte(StackPointer, FlagStatus, cycles_ran);
+            StackPointer--;
+            cycles_ran++;
             break;    
         case PLA:
             break; 
