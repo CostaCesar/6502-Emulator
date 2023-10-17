@@ -6,16 +6,16 @@ TEST_F(AND_Test, AND_Imediatate)
 {
     // Given
     uint32_t CYCLES = 2;
-    processor.RegA = 0b00101010;
+    processor.RegA = 0b01010101;
     memory[0xFFFC] = Instruction::AND_IM;
-    memory[0xFFFD] = 0b01010101;
+    memory[0xFFFD] = 0b01000001;
 
     // When
     uint32_t cycles_executed = processor.Execute(CYCLES, memory);
 
     // Execute
     EXPECT_EQ(cycles_executed, CYCLES);
-    EXPECT_EQ(processor.RegA, 0b01111111);
+    EXPECT_EQ(processor.RegA, 0b01000001);
     EXPECT_FALSE(processor.Flags.Zero);
     EXPECT_FALSE(processor.Flags.Negative);
     VerifyUnusedFlags_LD(processor);
@@ -24,9 +24,9 @@ TEST_F(AND_Test, AND_Imediatate_ZeroFlag)
 {
     // Given
     uint32_t CYCLES = 2;
-    processor.RegA = 0x00;
+    processor.RegA = 0b10101010;
     memory[0xFFFC] = Instruction::AND_IM;
-    memory[0xFFFD] = 0x00;
+    memory[0xFFFD] = 0b01010101;
 
     // When
     uint32_t cycles_executed = processor.Execute(CYCLES, memory);
@@ -42,16 +42,16 @@ TEST_F(AND_Test, AND_Imediatate_NegativeFlag)
 {
     // Given
     uint32_t CYCLES = 2;
-    processor.RegA = 0b01000000;
+    processor.RegA = 0b11000000;
     memory[0xFFFC] = Instruction::AND_IM;
-    memory[0xFFFD] = 0b10000000;
+    memory[0xFFFD] = 0b10000001;
 
     // When
     uint32_t cycles_executed = processor.Execute(CYCLES, memory);
 
     // Execute
     EXPECT_EQ(cycles_executed, CYCLES);
-    EXPECT_EQ(processor.RegA, 0b11000000);
+    EXPECT_EQ(processor.RegA, 0b10000000);
     EXPECT_FALSE(processor.Flags.Zero);
     EXPECT_TRUE(processor.Flags.Negative);
     VerifyUnusedFlags_LD(processor);
@@ -71,7 +71,7 @@ TEST_F(AND_Test, AND_ZeroPage)
 
     // Execute
     EXPECT_EQ(cycles_executed, CYCLES);
-    EXPECT_EQ(processor.RegA, 0b01111100);
+    EXPECT_EQ(processor.RegA, 0b00010000);
     EXPECT_FALSE(processor.Flags.Zero);
     EXPECT_FALSE(processor.Flags.Negative);
     VerifyUnusedFlags_LD(processor);
@@ -85,14 +85,14 @@ TEST_F(AND_Test, AND_ZeroPage_OffsetX)
     processor.RegA = 0b10111100;
     memory[0xFFFC] = Instruction::AND_ZPX;
     memory[0xFFFD] = 0x10;
-    memory[0x0015] = 0b01100110;
+    memory[0x0015] = 0b11100110;
 
     // When
     uint32_t cycles_executed = processor.Execute(CYCLES, memory);
 
     // Execute
     EXPECT_EQ(cycles_executed, CYCLES);
-    EXPECT_EQ(processor.RegA, 0b11111110);
+    EXPECT_EQ(processor.RegA, 0b10100100);
     EXPECT_FALSE(processor.Flags.Zero);
     EXPECT_TRUE(processor.Flags.Negative);
     VerifyUnusedFlags_LD(processor);
@@ -113,7 +113,7 @@ TEST_F(AND_Test, AND_ZeroPage_OffsetX_Wrapping)
 
     // Execute
     EXPECT_EQ(cycles_executed, CYCLES);
-    EXPECT_EQ(processor.RegA, 0b01111110);
+    EXPECT_EQ(processor.RegA, 0b00100100);
     EXPECT_FALSE(processor.Flags.Zero);
     EXPECT_FALSE(processor.Flags.Negative);
     VerifyUnusedFlags_LD(processor);
@@ -134,7 +134,7 @@ TEST_F(AND_Test, AND_Absolute)
 
     // Execute
     EXPECT_EQ(cycles_executed, CYCLES);
-    EXPECT_EQ(processor.RegA, 0b01011010);
+    EXPECT_EQ(processor.RegA, 0b01000000);
     EXPECT_FALSE(processor.Flags.Zero);
     EXPECT_FALSE(processor.Flags.Negative);
     VerifyUnusedFlags_LD(processor);
@@ -145,7 +145,7 @@ TEST_F(AND_Test, AND_Absolute_OffsetX)
     // Given
     uint32_t CYCLES = 4;
     processor.RegX = 0x64;
-    processor.RegA = 0b00111100;
+    processor.RegA = 0b10111100;
     memory[0xFFFC] = Instruction::AND_ABX;
     memory[0xFFFD] = 0xAA;
     memory[0xFFFE] = 0xBB;
@@ -156,7 +156,7 @@ TEST_F(AND_Test, AND_Absolute_OffsetX)
 
     // Execute
     EXPECT_EQ(cycles_executed, CYCLES);
-    EXPECT_EQ(processor.RegA, 0b10111110);
+    EXPECT_EQ(processor.RegA, 0b10010000);
     EXPECT_FALSE(processor.Flags.Zero);
     EXPECT_TRUE(processor.Flags.Negative);
     VerifyUnusedFlags_LD(processor);
@@ -178,7 +178,7 @@ TEST_F(AND_Test, AND_Absolute_OffsetX_CrossPage)
 
     // Execute
     EXPECT_EQ(cycles_executed, CYCLES);
-    EXPECT_EQ(processor.RegA, 0b00111110);
+    EXPECT_EQ(processor.RegA, 0b00010000);
     EXPECT_FALSE(processor.Flags.Zero);
     EXPECT_FALSE(processor.Flags.Negative);
     VerifyUnusedFlags_LD(processor);
@@ -200,7 +200,7 @@ TEST_F(AND_Test, AND_Absolute_OffsetY)
 
     // Execute
     EXPECT_EQ(cycles_executed, CYCLES);
-    EXPECT_EQ(processor.RegA, 0b01011010);
+    EXPECT_EQ(processor.RegA, 0b01000000);
     EXPECT_FALSE(processor.Flags.Zero);
     EXPECT_FALSE(processor.Flags.Negative);
     VerifyUnusedFlags_LD(processor);
@@ -222,7 +222,7 @@ TEST_F(AND_Test, AND_Absolute_OffsetY_CrossPage)
 
     // Execute
     EXPECT_EQ(cycles_executed, CYCLES);
-    EXPECT_EQ(processor.RegA, 0b10111110);
+    EXPECT_EQ(processor.RegA, 0b10010000);
     EXPECT_FALSE(processor.Flags.Zero);
     EXPECT_TRUE(processor.Flags.Negative);
     VerifyUnusedFlags_LD(processor);
@@ -267,9 +267,9 @@ TEST_F(AND_Test, AND_Indirect_OffsetY)
 
     // Execute
     EXPECT_EQ(cycles_executed, CYCLES);
-    EXPECT_EQ(processor.RegA, 0b11010011);
-    EXPECT_FALSE(processor.Flags.Zero);
-    EXPECT_TRUE(processor.Flags.Negative);
+    EXPECT_EQ(processor.RegA, 0x00);
+    EXPECT_TRUE(processor.Flags.Zero);
+    EXPECT_FALSE(processor.Flags.Negative);
     VerifyUnusedFlags_LD(processor);
 }
 
@@ -290,9 +290,9 @@ TEST_F(AND_Test, AND_Indirect_OffsetY_CrossPage)
 
     // Execute
     EXPECT_EQ(cycles_executed, CYCLES);
-    EXPECT_EQ(processor.RegA, 0b11111111);
-    EXPECT_FALSE(processor.Flags.Zero);
-    EXPECT_TRUE(processor.Flags.Negative);
+    EXPECT_EQ(processor.RegA, 0x00);
+    EXPECT_TRUE(processor.Flags.Zero);
+    EXPECT_FALSE(processor.Flags.Negative);
     VerifyUnusedFlags_LD(processor);
 }
 
