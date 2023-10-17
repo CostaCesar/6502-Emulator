@@ -233,11 +233,12 @@ TEST_F(AND_Test, AND_Indirect_OffsetX)
     // Given
     uint32_t CYCLES = 6;
     processor.RegA = 0b01000001;
-    processor.RegX = 0xCC;
-    memory[0xFFFC] = Instruction::AND_ABX;
-    memory[0xFFFD] = 0xAA;
-    memory[0xFFFE] = 0xBB;
-    memory[0xBC76] = 0b01000001;
+    processor.RegX = 0x02;
+    memory[0xFFFC] = Instruction::AND_IDX;
+    memory[0xFFFD] = 0x0E;
+    memory[0x0010] = 0xAA;
+    memory[0x0011] = 0xBB;
+    memory[0xBBAA] = 0b01000001;
 
     // When
     uint32_t cycles_executed = processor.Execute(CYCLES, memory);
