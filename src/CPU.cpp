@@ -329,7 +329,55 @@ uint32_t CPU::Execute(uint32_t cycles_total, Memory& memory)
             break; 
         case PLP:
             FlagStatus = PopByte_Stack(cycles_ran, memory);
+            break;
+        case AND_IM:
+            break;
+        case AND_ZP:
             break; 
+        case AND_ZPX:
+            break;
+        case AND_AB:
+            break;
+        case AND_ABX:
+            break;
+        case AND_ABY:
+            break; 
+        case AND_IDX:
+            break; 
+        case AND_IDY:
+            break;
+        case ORA_IM:
+            break;
+        case ORA_ZP:
+            break;
+        case ORA_ZPX:
+            break;
+        case ORA_AB:
+            break;
+        case ORA_ABX:
+            break;
+        case ORA_ABY:
+            break;
+        case ORA_IDX:
+            break;
+        case ORA_IDY:
+            break;
+        case EOR_IM:
+            break;
+        case EOR_ZP:
+            break;
+        case EOR_ZPX:
+            break;
+        case EOR_AB:
+            break;
+        case EOR_ABX:
+            break;
+        case EOR_ABY:
+            break;
+        case EOR_IDX:
+            break;
+        case EOR_IDY:
+            break;
         default:
             printf("Unknow instruction \"%#x\" ", instruction);
             return cycles_ran;
