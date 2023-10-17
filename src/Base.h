@@ -61,24 +61,34 @@ namespace Instruction
 
         // >>>>> Logical <<<<<
         // > AND
-        AND_IM  = 0x29, // 2 cycles: Load to RegA imediate value
-        AND_ZP  = 0x25, // 3 cycles: Load to RegA value from ZP-memory (0x0000 -> 0x00FF)
-        AND_ZPX = 0x35, // 4 cycles: Load to RegA value from ZP-memory + offset from RegX
-        AND_AB  = 0x2D, // 4 cycles: Load to RegA value from memory
-        AND_ABX = 0x3D, // 4 cycles: (+1 if cross boundary): Load to RegA value from memory + offset from RegX
-        AND_ABY = 0x39, // 4 cycles: (+1 if cross boundary): Load to RegA value from memory + offset from RegY
-        AND_IDX = 0x21, // 6 cycles: Load to RegA value from position pointed by [ZP-memory + offset from RegX]
-        AND_IDY = 0x31, // 5 cycles: (+1 if cross boundary): Load to RegA value from position ZP-memory + offset from RegY
+        AND_IM  = 0x29, // 2 cycles: Use imediate value to AND with RegA
+        AND_ZP  = 0x25, // 3 cycles: Use ZP-memory (0x0000 -> 0x00FF) to AND with RegA
+        AND_ZPX = 0x35, // 4 cycles: Use ZP-memory + offset from RegX to AND with RegA
+        AND_AB  = 0x2D, // 4 cycles: Use value from memory to AND with RegA
+        AND_ABX = 0x3D, // 4 cycles: (+1 if cross boundary): Use value from memory + offset from RegX to AND with RegA
+        AND_ABY = 0x39, // 4 cycles: (+1 if cross boundary): Use value from memory + offset from RegY to AND with RegA
+        AND_IDX = 0x21, // 6 cycles: Use value from position pointed by [ZP-memory + offset from RegX] to AND with RegA
+        AND_IDY = 0x31, // 5 cycles: (+1 if cross boundary): Use value from position ZP-memory + offset from RegY to AND with RegA
 
         // > ORA
-        ORA_IM  = 0x09, // 2 cycles: Load to RegA imediatPHPe value
-        ORA_ZP  = 0x05, // 3 cycles: Load to RegA value from ZP-memory (0x0000 -> 0x00FF)
-        ORA_ZPX = 0x15, // 4 cycles: Load to RegA value from ZP-memory + offset from RegX
-        ORA_AB  = 0x0D, // 4 cycles: Load to RegA value from memory
-        ORA_ABX = 0x1D, // 4 cycles: (+1 if cross boundary): Load to RegA value from memory + offset from RegX
-        ORA_ABY = 0x19, // 4 cycles: (+1 if cross boundary): Load to RegA value from memory + offset from RegY
-        ORA_IDX = 0x01, // 6 cycles: Load to RegA value from position pointed by [ZP-memory + offset from RegX]
-        ORA_IDY = 0x11, // 5 cycles: (+1 if cross boundary): Load to RegA value from position ZP-memory + offset from RegY
+        ORA_IM  = 0x09, // 2 cycles: Use imediate value to OR with RegA
+        ORA_ZP  = 0x05, // 3 cycles: Use ZP-memory (0x0000 -> 0x00FF) to OR with RegA
+        ORA_ZPX = 0x15, // 4 cycles: Use ZP-memory + offset from RegX to OR with RegA
+        ORA_AB  = 0x0D, // 4 cycles: Use value from memory to OR with RegA
+        ORA_ABX = 0x1D, // 4 cycles: (+1 if cross boundary): Use value from memory + offset from RegX to OR with RegA
+        ORA_ABY = 0x19, // 4 cycles: (+1 if cross boundary): Use value from memory + offset from RegY to OR with RegA
+        ORA_IDX = 0x01, // 6 cycles: Use value from position pointed by [ZP-memory + offset from RegX] to OR with RegA
+        ORA_IDY = 0x11, // 5 cycles: (+1 if cross boundary): Use value from position ZP-memory + offset from RegY to OR with RegA
+
+        // > EOR
+        EOR_IM  = 0x49, // 2 cycles: Use imediate value to XOR with RegA
+        EOR_ZP  = 0x45, // 3 cycles: Use ZP-memory (0x0000 -> 0x00FF) to XOR with RegA
+        EOR_ZPX = 0x55, // 4 cycles: Use ZP-memory + offset from RegX to XOR with RegA
+        EOR_AB  = 0x4D, // 4 cycles: Use value from memory to XOR with RegA
+        EOR_ABX = 0x5D, // 4 cycles: (+1 if cross boundary): Use value from memory + offset from RegX to XOR with RegA
+        EOR_ABY = 0x59, // 4 cycles: (+1 if cross boundary): Use value from memory + offset from RegY to XOR with RegA
+        EOR_IDX = 0x41, // 6 cycles: Use value from position pointed by [ZP-memory + offset from RegX] to XOR with RegA
+        EOR_IDY = 0x51, // 5 cycles: (+1 if cross boundary): Use value from position ZP-memory + offset from RegY to XOR with RegA
 
         // > BIT
         // Zero Flag: Bitwise AND value wiht RegA
@@ -87,15 +97,6 @@ namespace Instruction
         BIT_ZP  = 0x24, // 3 cycles: Test bits in value from ZP memory and put it in Processor Flags
         BIT_AB  = 0x2C, // 4 cycles: Test bits in value from memory and put it in Processor Flags
 
-        // > EOR
-        EOR_IM  = 0x49, // 2 cycles: Load to RegA imediatPHPe value
-        EOR_ZP  = 0x45, // 3 cycles: Load to RegA value from ZP-memory (0x0000 -> 0x00FF)
-        EOR_ZPX = 0x55, // 4 cycles: Load to RegA value from ZP-memory + offset from RegX
-        EOR_AB  = 0x4D, // 4 cycles: Load to RegA value from memory
-        EOR_ABX = 0x5D, // 4 cycles: (+1 if cross boundary): Load to RegA value from memory + offset from RegX
-        EOR_ABY = 0x59, // 4 cycles: (+1 if cross boundary): Load to RegA value from memory + offset from RegY
-        EOR_IDX = 0x41, // 6 cycles: Load to RegA value from position pointed by [ZP-memory + offset from RegX]
-        EOR_IDY = 0x51, // 5 cycles: (+1 if cross boundary): Load to RegA value from position ZP-memory + offset from RegY
 
         // >>>>> Stack <<<<<
         TSX     = 0xBA, // 2 cycles: Transfer Stack Pointer to Index X
