@@ -312,7 +312,6 @@ uint32_t CPU::Execute(uint32_t cycles_total, Memory& memory)
         case TXS:
             StackPointer = RegX;
             cycles_ran++;
-            LD_SetStatus(StackPointer);
             break;    
         case PHA:
             memory.WriteByte(StackPointer, RegA, cycles_ran);
@@ -326,6 +325,7 @@ uint32_t CPU::Execute(uint32_t cycles_total, Memory& memory)
             break;    
         case PLA:
             RegA = PopByte_Stack(cycles_ran, memory);
+            LD_SetStatus(RegA);
             break; 
         case PLP:
             FlagStatus = PopByte_Stack(cycles_ran, memory);

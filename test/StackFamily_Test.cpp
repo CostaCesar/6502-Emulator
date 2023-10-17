@@ -71,7 +71,6 @@ TEST_F(Stack_Test, TXS_Test)
     processor.Reset(memory);
     const uint16_t VALUE = 0xF1;
     processor.RegX = VALUE;
-    processor.Flags.Zero = processor.Flags.Negative = false;
     memory[0xFFFC] = Instruction::TXS;
 
     // When
@@ -80,49 +79,7 @@ TEST_F(Stack_Test, TXS_Test)
     // Execute
     EXPECT_EQ(cycles_executed, 2);
     EXPECT_EQ(processor.StackPointer, VALUE);
-    EXPECT_FALSE(processor.Flags.Zero);
-    EXPECT_TRUE(processor.Flags.Negative);
-    VerifyUnusedFlags_LD(processor);
-};
-
-TEST_F(Stack_Test, TXS_Test_ZeroFlag)
-{
-    // Given
-    processor.Reset(memory);
-    const uint16_t VALUE = 0x00;
-    processor.RegX = VALUE;
-    processor.Flags.Zero = processor.Flags.Negative = false;
-    memory[0xFFFC] = Instruction::TXS;
-
-    // When
-    uint32_t cycles_executed = processor.Execute(2, memory);
-
-    // Execute
-    EXPECT_EQ(cycles_executed, 2);
-    EXPECT_EQ(processor.StackPointer, VALUE);
-    EXPECT_TRUE(processor.Flags.Zero);
-    EXPECT_FALSE(processor.Flags.Negative);
-    VerifyUnusedFlags_LD(processor);
-};
-
-TEST_F(Stack_Test, TXS_Test_NegativeFlag)
-{
-    // Given
-    processor.Reset(memory);
-    const uint16_t VALUE = 0xF1;
-    processor.RegX = VALUE;
-    processor.Flags.Zero = processor.Flags.Negative = false;
-    memory[0xFFFC] = Instruction::TXS;
-
-    // When
-    uint32_t cycles_executed = processor.Execute(2, memory);
-
-    // Execute
-    EXPECT_EQ(cycles_executed, 2);
-    EXPECT_EQ(processor.StackPointer, VALUE);
-    EXPECT_FALSE(processor.Flags.Zero);
-    EXPECT_TRUE(processor.Flags.Negative);
-    VerifyUnusedFlags_LD(processor);
+    VerifyUnusedFlags_ST(processor);
 };
 
 TEST_F(Stack_Test, PHA_Test)
@@ -130,7 +87,7 @@ TEST_F(Stack_Test, PHA_Test)
     // Given
     processor.Reset(memory);
     const uint32_t CYCLES = 3;
-    const uint8_t VALUE = 0xF1;
+    const uint8_t VALUE = 0x64;
     processor.RegA = VALUE;
     memory[0xFFFC] = Instruction::PHA;
 
@@ -165,7 +122,7 @@ TEST_F(Stack_Test, PLA_Test)
     // Given
     processor.Reset(memory);
     const uint32_t CYCLES = 4;
-    const uint8_t VALUE = 0xF1;
+    const uint8_t VALUE = 0x64;
     memory[processor.StackPointer_ToWord()] = VALUE;
     memory[0xFFFC] = Instruction::PLA;
     processor.StackPointer--;
@@ -179,6 +136,51 @@ TEST_F(Stack_Test, PLA_Test)
     EXPECT_EQ(processor.StackPointer, 0x00FF);
     VerifyUnusedFlags_LD(processor);
 };
+
+TEST_F(Stack_Test, PLA_Test_ZeroFlag)
+{
+    // Given
+    processor.Reset(memory);
+    const uint32_t CYCLES = 4;
+    const uint8_t VALUE = 0x00;
+    memory[processor.StackPointer_ToWord()] = VALUE;
+    memory[0xFFFC] = Instruction::PLA;
+    processor.StackPointer--;
+
+    // When
+    uint32_t cycles_executed = processor.Execute(CYCLES, memory);
+
+    // Execute
+    EXPECT_EQ(cycles_executed, CYCLES);
+    EXPECT_EQ(processor.RegA, VALUE);
+    EXPECT_EQ(processor.StackPointer, 0x00FF);
+    EXPECT_TRUE(processor.Flags.Zero);
+    EXPECT_FALSE(processor.Flags.Negative);
+    VerifyUnusedFlags_LD(processor);
+};
+
+TEST_F(Stack_Test, PLA_Test_NegativeFlag)
+{
+    // Given
+    processor.Reset(memory);
+    const uint32_t CYCLES = 4;
+    const uint8_t VALUE = 0xF1;
+    memory[processor.StackPointer_ToWord()] = VALUE;
+    memory[0xFFFC] = Instruction::PLA;
+    processor.StackPointer--;
+
+    // When
+    uint32_t cycles_executed = processor.Execute(CYCLES, memory);
+
+    // Execute
+    EXPECT_EQ(cycles_executed, CYCLES);
+    EXPECT_EQ(processor.RegA, VALUE);
+    EXPECT_EQ(processor.StackPointer, 0x00FF);
+    EXPECT_FALSE(processor.Flags.Zero);
+    EXPECT_TRUE(processor.Flags.Negative);
+    VerifyUnusedFlags_LD(processor);
+};
+
 
 TEST_F(Stack_Test, PLP_Test)
 {
