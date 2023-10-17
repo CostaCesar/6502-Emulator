@@ -327,6 +327,9 @@ uint32_t CPU::Execute(uint32_t cycles_total, Memory& memory)
             FlagStatus = PopByte_Stack(cycles_ran, memory);
             break;
         case AND_IM:
+            byte_Value = FetchByte(cycles_ran, memory);
+            RegA |= byte_Value;
+            LD_SetStatus(RegA);
             break;
         case AND_ZP:
             break; 
