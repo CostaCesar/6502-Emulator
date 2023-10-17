@@ -70,6 +70,22 @@ void CPU::LD_SetRegister(uint32_t& cycles, Byte& cpu_register, Word address, con
     LD_SetStatus(cpu_register);
 }
 
+Byte CPU::PopByte_Stack(uint32_t& cycles, const Memory& memory)
+{
+    Byte output = ReadByte(cycles, StackPointer_ToWord() + 1, memory);
+    StackPointer++;
+    cycles += 2;
+    return output;
+}
+
+void CPU::PushByte_Stack(uint32_t& cycles, Byte value, Memory& memory)
+{
+    memory.WriteByte(StackPointer_ToWord(), value, cycles);
+    StackPointer--;
+    cycles++;
+    return;
+}
+
 /* Increment data by value from register, using up 1 cycle for it */
 void CPU::IncrementByRegister(uint32_t& cycles, Byte& value, Byte cpu_register)
 {
@@ -91,18 +107,19 @@ void CPU::Check_PageCross(uint32_t& cycles, Word& address, Byte offset)
 }
 
 /* Write current Program Counter (-1) to the Stack*/
-void CPU::Push_PC_ToStack(uint32_t& cycles, Memory& memory)
+void CPU::PushWord_Stack(uint32_t& cycles, Memory& memory)
 {
     memory.WriteWord(StackPointer_ToWord() - 1, ProgramCounter, cycles);
     cycles++;
     StackPointer -= 2;
 }
 /* Get previous Program Counter from the Stack*/
-void CPU::Pop_PC_FromStack(uint32_t& cycles, Memory& memory)
+Word CPU::PopWord_Stack(uint32_t& cycles, Memory& memory)
 {
-    ProgramCounter = ReadWord(cycles, StackPointer_ToWord() + 1, memory);
+    Word output = ReadWord(cycles, StackPointer_ToWord() + 1, memory);
     cycles += 3;
     StackPointer += 2;
+    return output;
 }
 
 /* Convert the Stack Pointer's current address to a Word value*/
@@ -267,11 +284,11 @@ uint32_t CPU::Execute(uint32_t cycles_total, Memory& memory)
             break; 
         case JSR:
             word_Value = FetchWord(cycles_ran, memory);
-            Push_PC_ToStack(cycles_ran, memory);
+            PushWord_Stack(cycles_ran, memory);
             ProgramCounter = word_Value;
             break;
         case RTS:
-            Pop_PC_FromStack(cycles_ran, memory);
+            ProgramCounter = PopWord_Stack(cycles_ran, memory);
             break;
         case JMP_AB:
             word_Value = FetchWord(cycles_ran, memory);
@@ -308,8 +325,10 @@ uint32_t CPU::Execute(uint32_t cycles_total, Memory& memory)
             cycles_ran++;
             break;    
         case PLA:
+            RegA = PopByte_Stack(cycles_ran, memory);
             break; 
         case PLP:
+            FlagStatus = PopByte_Stack(cycles_ran, memory);
             break; 
         default:
             printf("Unknow instruction \"%#x\" ", instruction);
