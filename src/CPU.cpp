@@ -380,37 +380,113 @@ uint32_t CPU::Execute(uint32_t cycles_total, Memory& memory)
             RegA |= byte_Value;
             LD_SetStatus(RegA);
             break;
-        case ORA_IM:
+         case ORA_IM:
+            byte_Value = FetchByte(cycles_ran, memory);
+            RegA |= byte_Value;
+            LD_SetStatus(RegA);
             break;
         case ORA_ZP:
-            break;
+            byte_Value = FetchByte(cycles_ran, memory);
+            byte_Value = ReadByte(cycles_ran, byte_Value, memory);
+            RegA |= byte_Value;
+            LD_SetStatus(RegA);
+            break; 
         case ORA_ZPX:
+            byte_Value = FetchByte(cycles_ran, memory);
+            IncrementByRegister(cycles_ran, byte_Value, RegX);
+            byte_Value = ReadByte(cycles_ran, byte_Value, memory);
+            RegA |= byte_Value;
+            LD_SetStatus(RegA);
             break;
         case ORA_AB:
+            word_Value = FetchWord(cycles_ran, memory);
+            byte_Value = ReadByte(cycles_ran, word_Value, memory);
+            RegA |= byte_Value;
+            LD_SetStatus(RegA);
             break;
         case ORA_ABX:
+            word_Value = FetchWord(cycles_ran, memory);
+            Check_PageCross(cycles_ran, word_Value, RegX);
+            byte_Value = ReadByte(cycles_ran, word_Value, memory);
+            RegA |= byte_Value;
+            LD_SetStatus(RegA);
             break;
         case ORA_ABY:
-            break;
+            word_Value = FetchWord(cycles_ran, memory);
+            Check_PageCross(cycles_ran, word_Value, RegY);
+            byte_Value = ReadByte(cycles_ran, word_Value, memory);
+            RegA |= byte_Value;
+            LD_SetStatus(RegA);
+            break; 
         case ORA_IDX:
+            byte_Value = FetchByte(cycles_ran, memory);
+            IncrementByRegister(cycles_ran, byte_Value, RegX);
+            word_Value = ReadWord(cycles_ran, byte_Value, memory);
+            byte_Value = ReadByte(cycles_ran, word_Value, memory);
+            RegA |= byte_Value;
+            LD_SetStatus(RegA);
             break;
         case ORA_IDY:
+            byte_Value = FetchByte(cycles_ran, memory);
+            word_Value = ReadWord(cycles_ran, byte_Value, memory);
+            Check_PageCross(cycles_ran, word_Value, RegY);
+            byte_Value = ReadByte(cycles_ran, word_Value, memory);
+            RegA |= byte_Value;
+            LD_SetStatus(RegA);
             break;
-        case EOR_IM:
+         case EOR_IM:
+            byte_Value = FetchByte(cycles_ran, memory);
+            RegA ^= byte_Value;
+            LD_SetStatus(RegA);
             break;
         case EOR_ZP:
-            break;
+            byte_Value = FetchByte(cycles_ran, memory);
+            byte_Value = ReadByte(cycles_ran, byte_Value, memory);
+            RegA ^= byte_Value;
+            LD_SetStatus(RegA);
+            break; 
         case EOR_ZPX:
+            byte_Value = FetchByte(cycles_ran, memory);
+            IncrementByRegister(cycles_ran, byte_Value, RegX);
+            byte_Value = ReadByte(cycles_ran, byte_Value, memory);
+            RegA ^= byte_Value;
+            LD_SetStatus(RegA);
             break;
         case EOR_AB:
+            word_Value = FetchWord(cycles_ran, memory);
+            byte_Value = ReadByte(cycles_ran, word_Value, memory);
+            RegA ^= byte_Value;
+            LD_SetStatus(RegA);
             break;
         case EOR_ABX:
+            word_Value = FetchWord(cycles_ran, memory);
+            Check_PageCross(cycles_ran, word_Value, RegX);
+            byte_Value = ReadByte(cycles_ran, word_Value, memory);
+            RegA ^= byte_Value;
+            LD_SetStatus(RegA);
             break;
         case EOR_ABY:
-            break;
+            word_Value = FetchWord(cycles_ran, memory);
+            Check_PageCross(cycles_ran, word_Value, RegY);
+            byte_Value = ReadByte(cycles_ran, word_Value, memory);
+            RegA ^= byte_Value;
+            LD_SetStatus(RegA);
+            break; 
         case EOR_IDX:
+            byte_Value = FetchByte(cycles_ran, memory);
+            IncrementByRegister(cycles_ran, byte_Value, RegX);
+            word_Value = ReadWord(cycles_ran, byte_Value, memory);
+            byte_Value = ReadByte(cycles_ran, word_Value, memory);
+            RegA ^= byte_Value;
+            LD_SetStatus(RegA);
             break;
         case EOR_IDY:
+            byte_Value = FetchByte(cycles_ran, memory);
+            word_Value = ReadWord(cycles_ran, byte_Value, memory);
+            Check_PageCross(cycles_ran, word_Value, RegY);
+            byte_Value = ReadByte(cycles_ran, word_Value, memory);
+            RegA ^= byte_Value;
+            LD_SetStatus(RegA);
             break;
         default:
             printf("Unknow instruction \"%#x\" ", instruction);
