@@ -365,8 +365,20 @@ uint32_t CPU::Execute(uint32_t cycles_total, Memory& memory)
             LD_SetStatus(RegA);
             break; 
         case AND_IDX:
-            break; 
+            byte_Value = FetchByte(cycles_ran, memory);
+            IncrementByRegister(cycles_ran, byte_Value, RegX);
+            word_Value = ReadWord(cycles_ran, byte_Value, memory);
+            byte_Value = ReadByte(cycles_ran, word_Value, memory);
+            RegA |= byte_Value;
+            LD_SetStatus(RegA);
+            break;
         case AND_IDY:
+            byte_Value = FetchByte(cycles_ran, memory);
+            word_Value = ReadWord(cycles_ran, byte_Value, memory);
+            Check_PageCross(cycles_ran, word_Value, RegY);
+            byte_Value = ReadByte(cycles_ran, word_Value, memory);
+            RegA |= byte_Value;
+            LD_SetStatus(RegA);
             break;
         case ORA_IM:
             break;
