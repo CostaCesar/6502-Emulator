@@ -332,14 +332,37 @@ uint32_t CPU::Execute(uint32_t cycles_total, Memory& memory)
             LD_SetStatus(RegA);
             break;
         case AND_ZP:
+            byte_Value = FetchByte(cycles_ran, memory);
+            byte_Value = ReadByte(cycles_ran, byte_Value, memory);
+            RegA |= byte_Value;
+            LD_SetStatus(RegA);
             break; 
         case AND_ZPX:
+            byte_Value = FetchByte(cycles_ran, memory);
+            IncrementByRegister(cycles_ran, byte_Value, RegX);
+            byte_Value = ReadByte(cycles_ran, byte_Value, memory);
+            RegA |= byte_Value;
+            LD_SetStatus(RegA);
             break;
         case AND_AB:
+            word_Value = FetchWord(cycles_ran, memory);
+            byte_Value = ReadByte(cycles_ran, word_Value, memory);
+            RegA |= byte_Value;
+            LD_SetStatus(RegA);
             break;
         case AND_ABX:
+            word_Value = FetchWord(cycles_ran, memory);
+            Check_PageCross(cycles_ran, word_Value, RegX);
+            byte_Value = ReadByte(cycles_ran, word_Value, memory);
+            RegA |= byte_Value;
+            LD_SetStatus(RegA);
             break;
         case AND_ABY:
+            word_Value = FetchWord(cycles_ran, memory);
+            Check_PageCross(cycles_ran, word_Value, RegY);
+            byte_Value = ReadByte(cycles_ran, word_Value, memory);
+            RegA |= byte_Value;
+            LD_SetStatus(RegA);
             break; 
         case AND_IDX:
             break; 
