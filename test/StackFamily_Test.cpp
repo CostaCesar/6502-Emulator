@@ -96,7 +96,7 @@ TEST_F(Stack_Test, PHA_Test)
 
     // Execute
     EXPECT_EQ(cycles_executed, CYCLES);
-    EXPECT_EQ(memory[processor.StackPointer+1], processor.RegA);
+    EXPECT_EQ(memory[processor.StackPointer_ToWord()+1], processor.RegA);
     EXPECT_FALSE(processor.FlagStatus);
 };
 
@@ -114,7 +114,7 @@ TEST_F(Stack_Test, PHP_Test) // Oh no, PHP is invading the system!
 
     // Execute
     EXPECT_EQ(cycles_executed, CYCLES);
-    EXPECT_EQ(memory[processor.StackPointer+1], processor.FlagStatus);
+    EXPECT_EQ(memory[processor.StackPointer_ToWord()+1], processor.FlagStatus);
 };
 
 TEST_F(Stack_Test, PLA_Test)

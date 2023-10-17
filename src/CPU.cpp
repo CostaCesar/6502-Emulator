@@ -314,14 +314,10 @@ uint32_t CPU::Execute(uint32_t cycles_total, Memory& memory)
             cycles_ran++;
             break;    
         case PHA:
-            memory.WriteByte(StackPointer, RegA, cycles_ran);
-            StackPointer--;
-            cycles_ran++;
+            PushByte_Stack(cycles_ran, RegA, memory);
             break;     
         case PHP:
-            memory.WriteByte(StackPointer, FlagStatus, cycles_ran);
-            StackPointer--;
-            cycles_ran++;
+            PushByte_Stack(cycles_ran, FlagStatus, memory);
             break;    
         case PLA:
             RegA = PopByte_Stack(cycles_ran, memory);
