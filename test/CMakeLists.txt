@@ -22,6 +22,7 @@ add_executable(Instruction_Test
   AND_Test.cpp
   EOR_Test.cpp
   ORA_Test.cpp
+  BIT_Test.cpp
 )
 target_link_libraries(Instruction_Test
   PRIVATE

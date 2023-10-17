@@ -80,6 +80,13 @@ namespace Instruction
         ORA_IDX = 0x01, // 6 cycles: Load to RegA value from position pointed by [ZP-memory + offset from RegX]
         ORA_IDY = 0x11, // 5 cycles: (+1 if cross boundary): Load to RegA value from position ZP-memory + offset from RegY
 
+        // > BIT
+        // Zero Flag: Bitwise AND value wiht RegA
+        // Overflow Flag: Move bit 6 of value to flag
+        // Negative Flag: Move bit 7 of value to flag
+        BIT_ZP  = 0x24, // 3 cycles: Test bits in value from ZP memory and put it in Processor Flags
+        BIT_AB  = 0x2C, // 4 cycles: Test bits in value from memory and put it in Processor Flags
+
         // > EOR
         EOR_IM  = 0x49, // 2 cycles: Load to RegA imediatPHPe value
         EOR_ZP  = 0x45, // 3 cycles: Load to RegA value from ZP-memory (0x0000 -> 0x00FF)

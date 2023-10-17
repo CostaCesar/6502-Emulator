@@ -488,6 +488,18 @@ uint32_t CPU::Execute(uint32_t cycles_total, Memory& memory)
             RegA ^= byte_Value;
             LD_SetStatus(RegA);
             break;
+        case BIT_ZP:
+            byte_Value = FetchByte(cycles_ran, memory);
+            byte_Value = ReadByte(cycles_ran, (Word) byte_Value, memory);
+            Flags.Zero = !(RegA & byte_Value);
+            FlagStatus |= (byte_Value & 0b11000000);
+            break;
+        case BIT_AB:
+            word_Value = FetchWord(cycles_ran, memory);
+            byte_Value = ReadByte(cycles_ran, word_Value, memory);
+            Flags.Zero = !(RegA & byte_Value);
+            FlagStatus |= (byte_Value & 0b11000000);
+            break;
         default:
             printf("Unknow instruction \"%#x\" ", instruction);
             return cycles_ran;
