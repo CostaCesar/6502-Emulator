@@ -65,7 +65,7 @@ Word CPU::FetchWord(uint32_t& cycles, const Memory& memory)
 }
 
 /* Set flags required by a LDA operation */
-void CPU::SetStatus_NegvZero(Byte& cpu_register)
+void CPU::SetStatus_NegvZero(Byte cpu_register)
 {
     Flags.Zero = (cpu_register == 0);
     Flags.Negative = (cpu_register & 0b10000000) > 0;
@@ -89,6 +89,14 @@ void CPU::Logical_Operate(uint32_t& cycles, Word address, char operation, const 
     }
     SetStatus_NegvZero(RegA);
 }
+void CPU::Memory_Increment(uint32_t& cycles, Word address, Byte increment_value, Memory& memory)
+{
+    Byte byte_Value = ReadByte(cycles, address, memory);
+    IncrementByRegister(cycles, byte_Value, increment_value);
+    memory.WriteByte(address, byte_Value, cycles);
+    SetStatus_NegvZero(byte_Value);
+}
+
 void CPU::Bit_Test(uint32_t& cycles, Word address, const Memory& memory)
 {
     Byte value = ReadByte(cycles, address, memory);
@@ -483,6 +491,46 @@ uint32_t CPU::Execute(uint32_t cycles_total, Memory& memory)
             byte_Value = ReadByte(cycles_ran, word_Value, memory);
             Flags.Zero = !(RegA & byte_Value);
             FlagStatus |= (byte_Value & 0b11000000);
+            break;
+        case DEC_ZP:
+            byte_Value = FetchByte(cycles_ran, memory);
+            word_Value = (Word) byte_Value;
+            Memory_Increment(cycles_ran, word_Value, -1, memory);
+            break;
+        case DEC_ZPX:
+            byte_Value = FetchByte(cycles_ran, memory);
+            IncrementByRegister(cycles_ran, byte_Value, RegX);
+            word_Value = (Word) byte_Value;
+            Memory_Increment(cycles_ran, word_Value, -1, memory);
+            break;
+        case DEC_AB:
+            word_Value = FetchWord(cycles_ran, memory);
+            Memory_Increment(cycles_ran, word_Value, -1, memory);
+            break;
+        case DEC_ABX:
+            word_Value = FetchWord(cycles_ran, memory);
+            IncrementByRegister(cycles_ran, word_Value, RegX);
+            Memory_Increment(cycles_ran, word_Value, -1, memory);
+            break;
+        case INC_ZP:
+            byte_Value = FetchByte(cycles_ran, memory);
+            word_Value = (Word) byte_Value;
+            Memory_Increment(cycles_ran, word_Value, 1, memory);
+            break;
+        case INC_ZPX:
+            byte_Value = FetchByte(cycles_ran, memory);
+            IncrementByRegister(cycles_ran, byte_Value, RegX);
+            word_Value = (Word) byte_Value;
+            Memory_Increment(cycles_ran, word_Value, 1, memory);
+            break;
+        case INC_AB:
+            word_Value = FetchWord(cycles_ran, memory);
+            Memory_Increment(cycles_ran, word_Value, 1, memory);
+            break;
+        case INC_ABX:
+            word_Value = FetchWord(cycles_ran, memory);
+            IncrementByRegister(cycles_ran, word_Value, RegX);
+            Memory_Increment(cycles_ran, word_Value, 1, memory);
             break;
         default:
             printf("Unknow instruction \"%#x\" ", instruction);

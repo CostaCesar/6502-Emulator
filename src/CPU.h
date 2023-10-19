@@ -50,11 +50,13 @@ struct CPU
     void Check_PageCross(uint32_t& cycles, Word& adrress, Byte offset);
     void IncrementByRegister(uint32_t& cycles, Byte& value, Byte cpu_register);
     void IncrementByRegister(uint32_t& cycles, Word& value, Byte cpu_register);
-    void SetStatus_NegvZero(Byte& cpu_register);
     void Load_Register(uint32_t& cycles, Byte& cpu_register, Word address, const Memory& memory);
     void Logical_Operate(uint32_t& cycles, Word address, char operation, const Memory& memory);
     void Bit_Test(uint32_t& cycles, Word address, const Memory& memory);
+    void Memory_Increment(uint32_t& cycles, Word address, Byte value, Memory& memory);
     
+    void SetStatus_NegvZero(Byte cpu_register);
+
     uint32_t Execute(uint32_t cycles, Memory& memory);
 };
 

@@ -52,6 +52,18 @@ namespace Instruction
         STY_ZP  = 0x84, // 3 cycles: Store RegY value to ZP-memory (0x0000 -> 0x00FF)
         STY_ZPX = 0x94, // 4 cycles: Store RegY value to ZP-memory + offset from RegX
         STY_AB  = 0x8C, // 4 cycles: Store RegY value to memory
+
+        // > DEC
+        DEC_ZP  = 0xC6, // 5 cycles: Decrement value in ZP-memory address (0x0000 -> 0x00FF)
+        DEC_ZPX = 0xD6, // 6 cycles: Decrement value in ZP-memory address + offset from Regx
+        DEC_AB  = 0xCE, // 6 cycles: Decrement value in memory
+        DEC_ABX = 0xDE, // 7 cycles: Decrement value in memory + offset from RegX
+
+        // > INC
+        INC_ZP  = 0xE6, // 5 cycles: Increment value in ZP-memory address (0x0000 -> 0x00FF)
+        INC_ZPX = 0xF6, // 6 cycles: Increment value in ZP-memory address + offset from Regx
+        INC_AB  = 0xEE, // 6 cycles: Increment value in memory
+        INC_ABX = 0xFE, // 7 cycles: Increment value in memory + offset from RegX
         
         // >>>>> Jump <<<<<
         JSR     = 0x20, // 6 cycles: Branch to subroutine
@@ -105,8 +117,7 @@ namespace Instruction
                         // The status register will be pushed with the break flag and bit 5 set to 1.
         PLA     = 0x68, // 4 cycles: Pull Accumulator from Stack
         PLP     = 0x28  // 4 cycles: Pull Processor Status from Stack
-                        // The status register will be pulled with the break flag and bit 5 ignored
-                            
+                        // The status register will be pulled with the break flag and bit 5 ignored              
     };  
 }
 
