@@ -70,6 +70,7 @@ void CPU::SetStatus_NegvZero(Byte cpu_register)
     Flags.Zero = (cpu_register == 0);
     Flags.Negative = (cpu_register & 0b10000000) > 0;
 }
+
 void CPU::Load_Register(uint32_t& cycles, Byte& cpu_register, Word address, const Memory& memory)
 {
     cpu_register = ReadByte(cycles, address, memory);
@@ -96,12 +97,27 @@ void CPU::Memory_Increment(uint32_t& cycles, Word address, Byte increment_value,
     memory.WriteByte(address, byte_Value, cycles);
     SetStatus_NegvZero(byte_Value);
 }
-
 void CPU::Bit_Test(uint32_t& cycles, Word address, const Memory& memory)
 {
     Byte value = ReadByte(cycles, address, memory);
     Flags.Zero = !(RegA & value);
     FlagStatus |= (value & 0b11000000);
+}
+void CPU::Shift_Value_WithZero(uint32_t& cycles, Byte& value, char direc)
+{
+    if(direc == '<')
+    {
+        Flags.Carry = (value & 0b10000000) != 0;
+        value = value << 1;
+    }
+    else if(direc == '>')
+    {
+        value = value >> 1;
+        value += 0b10000000;
+        Flags.Carry = 0;
+    }
+    cycles++;
+    SetStatus_NegvZero(value);
 }
 
 Byte CPU::PopByte_Stack(uint32_t& cycles, const Memory& memory)
@@ -531,6 +547,17 @@ uint32_t CPU::Execute(uint32_t cycles_total, Memory& memory)
             word_Value = FetchWord(cycles_ran, memory);
             IncrementByRegister(cycles_ran, word_Value, RegX);
             Memory_Increment(cycles_ran, word_Value, 1, memory);
+            break;
+        case ASL_RGA:
+            Shift_Value_WithZero(cycles_ran, RegA, '<');
+            break;
+        case ASL_ZP:
+            break;
+        case ASL_ZPX:
+            break;
+        case ASL_AB:
+            break;
+        case ASL_ABX:
             break;
         default:
             printf("Unknow instruction \"%#x\" ", instruction);

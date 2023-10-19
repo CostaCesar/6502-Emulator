@@ -54,6 +54,7 @@ struct CPU
     void Logical_Operate(uint32_t& cycles, Word address, char operation, const Memory& memory);
     void Bit_Test(uint32_t& cycles, Word address, const Memory& memory);
     void Memory_Increment(uint32_t& cycles, Word address, Byte value, Memory& memory);
+    void Shift_Value_WithZero(uint32_t& cycles, Byte& value, char direc);
     
     void SetStatus_NegvZero(Byte cpu_register);
 

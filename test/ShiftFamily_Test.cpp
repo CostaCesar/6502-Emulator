@@ -45,7 +45,7 @@ TEST_F(Shift_Test, ASL_RegA_Test_NegvFlag)
 TEST_F(Shift_Test, ASL_RegA_Test_ZeroFlag)
 {
     // Given
-    const uint32_t CYCLES = 2;
+    const uint32_t CYCLES = 4;
     const Byte VALUE = 0b10000000;
     processor.RegA = VALUE;
     memory[0xFFFC] = Instruction::ASL_RGA;
@@ -56,7 +56,7 @@ TEST_F(Shift_Test, ASL_RegA_Test_ZeroFlag)
 
     // Execute
     EXPECT_EQ(cycles_executed, CYCLES);
-    EXPECT_EQ(processor.RegA, VALUE << 1);
+    EXPECT_EQ(processor.RegA, 0);
     EXPECT_FALSE(processor.Flags.Negative);
     EXPECT_FALSE(processor.Flags.Carry);
     EXPECT_TRUE(processor.Flags.Zero);
@@ -76,7 +76,7 @@ TEST_F(Shift_Test, ASL_RegA_Test_CarryFlag)
 
     // Execute
     EXPECT_EQ(cycles_executed, CYCLES);
-    EXPECT_EQ(processor.RegA, VALUE << 1);
+    EXPECT_EQ(processor.RegA, (Byte) (VALUE << 1));
     EXPECT_FALSE(processor.Flags.Negative);
     EXPECT_TRUE(processor.Flags.Carry);
     EXPECT_FALSE(processor.Flags.Zero);

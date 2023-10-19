@@ -111,10 +111,10 @@ namespace Instruction
 
         // > ASL
         ASL_RGA = 0x0A, // 2 cycles: Shifts 1 bit left in the RegA. Push 0 to the empty bit.
-        ASL_ZP  = 0x44, // 5 cycles: Shifts 1 bit left in ZP-memory address. Push 0 to the empty bit.
-        ASL_ZPX = 0x44, // 6 cycles: Shifts 1 bit left in ZP-memory address + offset from RegX. Push 0 to the empty bit.
-        ASL_AB  = 0x44, // 6 cycles: Shifts 1 bit left in memory address. Push 0 to the empty bit.
-        ASL_ABX = 0x44, // 7 cycles: Shifts 1 bit left in memory address + offset from RegX. Push 0 to the empty bit.
+        ASL_ZP  = 0x06, // 5 cycles: Shifts 1 bit left in ZP-memory address. Push 0 to the empty bit.
+        ASL_ZPX = 0x16, // 6 cycles: Shifts 1 bit left in ZP-memory address + offset from RegX. Push 0 to the empty bit.
+        ASL_AB  = 0x0E, // 6 cycles: Shifts 1 bit left in memory address. Push 0 to the empty bit.
+        ASL_ABX = 0x1E, // 7 cycles: Shifts 1 bit left in memory address + offset from RegX. Push 0 to the empty bit.
         
         // > LSR
         LSR_RGA = 0x4A, // 2 cycles: Shifts 1 bit right in the RegA. Push 0 to the empty bit.
