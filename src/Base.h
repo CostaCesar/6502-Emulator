@@ -109,6 +109,33 @@ namespace Instruction
         BIT_ZP  = 0x24, // 3 cycles: Test bits in value from ZP memory and put it in Processor Flags
         BIT_AB  = 0x2C, // 4 cycles: Test bits in value from memory and put it in Processor Flags
 
+        // > ASL
+        ASL_RGA = 0x0A, // 2 cycles: Shifts 1 bit left in the RegA. Push 0 to the empty bit.
+        ASL_ZP  = 0x44, // 5 cycles: Shifts 1 bit left in ZP-memory address. Push 0 to the empty bit.
+        ASL_ZPX = 0x44, // 6 cycles: Shifts 1 bit left in ZP-memory address + offset from RegX. Push 0 to the empty bit.
+        ASL_AB  = 0x44, // 6 cycles: Shifts 1 bit left in memory address. Push 0 to the empty bit.
+        ASL_ABX = 0x44, // 7 cycles: Shifts 1 bit left in memory address + offset from RegX. Push 0 to the empty bit.
+        
+        // > LSR
+        LSR_RGA = 0x4A, // 2 cycles: Shifts 1 bit right in the RegA. Push 0 to the empty bit.
+        LSR_ZP  = 0x46, // 5 cycles: Shifts 1 bit right in ZP-memory address. Push 0 to the empty bit.
+        LSR_ZPX = 0x56, // 6 cycles: Shifts 1 bit right in ZP-memory address + offset from RegX. Push 0 to the empty bit.
+        LSR_AB  = 0x4E, // 6 cycles: Shifts 1 bit right in memory address. Push 0 to the empty bit.
+        LSR_ABX = 0x5E, // 7 cycles: Shifts 1 bit right in memory address + offset from RegX. Push 0 to the empty bit.
+        
+        // > ROL
+        ROL_RGA = 0x2A, // 2 cycles: Shifts 1 bit left in the RegA. Push Carry to the empty bit 
+        ROL_ZP  = 0x26, // 5 cycles: Shifts 1 bit left in ZP-memory address. Push Carry to the empty bit  
+        ROL_ZPX = 0x36, // 6 cycles: Shifts 1 bit left in ZP-memory address + offset from RegX.. Push Carry to the empty bit  
+        ROL_AB  = 0x2E, // 6 cycles: Shifts 1 bit left in memory address. Push Carry to the empty bit  
+        ROL_ABX = 0x3E, // 7 cycles: Shifts 1 bit left in memory address + offset from RegX. Push Carry to the empty bit  
+        
+        ROR_RGA = 0x6A, // 2 cycles: Shifts 1 bit right in the RegA. Push Carry to the empty bit 
+        ROR_ZP  = 0x66, // 5 cycles: Shifts 1 bit right in ZP-memory address. Push Carry to the empty bit  
+        ROR_ZPX = 0x76, // 6 cycles: Shifts 1 bit right in ZP-memory address + offset from RegX.. Push Carry to the empty bit  
+        ROR_AB  = 0x6E, // 6 cycles: Shifts 1 bit right in memory address. Push Carry to the empty bit  
+        ROR_ABX = 0x7E, // 7 cycles: Shifts 1 bit right in memory address + offset from RegX. Push Carry to the empty bit 
+
         // >>>>> Stack <<<<<
         TSX     = 0xBA, // 2 cycles: Transfer Stack Pointer to Index X
         TXS     = 0x9A, // 2 cycles: Transfer Index X to Stack Register
