@@ -96,7 +96,7 @@ TEST_F(Stack_Test, PHA_Test)
 
     // Execute
     EXPECT_EQ(cycles_executed, CYCLES);
-    EXPECT_EQ(memory[processor.StackPointer_ToWord()+1], processor.RegA);
+    EXPECT_EQ(memory[processor.Stack_AsWord()+1], processor.RegA);
     EXPECT_FALSE(processor.FlagStatus);
 };
 
@@ -114,7 +114,7 @@ TEST_F(Stack_Test, PHP_Test) // Oh no, PHP is invading the system!
 
     // Execute
     EXPECT_EQ(cycles_executed, CYCLES);
-    EXPECT_EQ(memory[processor.StackPointer_ToWord()+1], processor.FlagStatus);
+    EXPECT_EQ(memory[processor.Stack_AsWord()+1], processor.FlagStatus);
 };
 
 TEST_F(Stack_Test, PLA_Test)
@@ -123,7 +123,7 @@ TEST_F(Stack_Test, PLA_Test)
     processor.Reset(memory);
     const uint32_t CYCLES = 4;
     const uint8_t VALUE = 0x64;
-    memory[processor.StackPointer_ToWord()] = VALUE;
+    memory[processor.Stack_AsWord()] = VALUE;
     memory[0xFFFC] = Instruction::PLA;
     processor.StackPointer--;
 
@@ -143,7 +143,7 @@ TEST_F(Stack_Test, PLA_Test_ZeroFlag)
     processor.Reset(memory);
     const uint32_t CYCLES = 4;
     const uint8_t VALUE = 0x00;
-    memory[processor.StackPointer_ToWord()] = VALUE;
+    memory[processor.Stack_AsWord()] = VALUE;
     memory[0xFFFC] = Instruction::PLA;
     processor.StackPointer--;
 
@@ -165,7 +165,7 @@ TEST_F(Stack_Test, PLA_Test_NegativeFlag)
     processor.Reset(memory);
     const uint32_t CYCLES = 4;
     const uint8_t VALUE = 0xF1;
-    memory[processor.StackPointer_ToWord()] = VALUE;
+    memory[processor.Stack_AsWord()] = VALUE;
     memory[0xFFFC] = Instruction::PLA;
     processor.StackPointer--;
 
@@ -188,7 +188,7 @@ TEST_F(Stack_Test, PLP_Test)
     processor.Reset(memory);
     const uint32_t CYCLES = 4;
     const uint8_t VALUE = 0b10101010;
-    memory[processor.StackPointer_ToWord()] = VALUE;
+    memory[processor.Stack_AsWord()] = VALUE;
     memory[0xFFFC] = Instruction::PLP;
     processor.StackPointer--;
 

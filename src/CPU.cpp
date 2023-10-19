@@ -1,6 +1,12 @@
 #include "CPU.h"
 using namespace Instruction;
 
+CPU::CPU(Variant chip_Model, Memory& memory, Word start_from)
+{
+    ChipModel = chip_Model;
+    Reset(start_from, memory);
+}
+
 void CPU::Reset(Memory& memory)
 {
     Reset(0xFFFC, memory);
@@ -59,20 +65,40 @@ Word CPU::FetchWord(uint32_t& cycles, const Memory& memory)
 }
 
 /* Set flags required by a LDA operation */
-void CPU::LD_SetStatus(Byte& cpu_register)
+void CPU::SetStatus_NegvZero(Byte& cpu_register)
 {
     Flags.Zero = (cpu_register == 0);
     Flags.Negative = (cpu_register & 0b10000000) > 0;
 }
-void CPU::LD_SetRegister(uint32_t& cycles, Byte& cpu_register, Word address, const Memory& memory)
+void CPU::Load_Register(uint32_t& cycles, Byte& cpu_register, Word address, const Memory& memory)
 {
     cpu_register = ReadByte(cycles, address, memory);
-    LD_SetStatus(cpu_register);
+    SetStatus_NegvZero(cpu_register);
+}
+void CPU::Logical_Operate(uint32_t& cycles, Word address, char operation, const Memory& memory)
+{
+    Byte value = ReadByte(cycles, address, memory);
+    switch (operation)
+    {
+    case '&': RegA &= value;
+        break;
+    case '|': RegA |= value;
+        break;
+    case '^': RegA ^= value;
+        break;
+    }
+    SetStatus_NegvZero(RegA);
+}
+void CPU::Bit_Test(uint32_t& cycles, Word address, const Memory& memory)
+{
+    Byte value = ReadByte(cycles, address, memory);
+    Flags.Zero = !(RegA & value);
+    FlagStatus |= (value & 0b11000000);
 }
 
 Byte CPU::PopByte_Stack(uint32_t& cycles, const Memory& memory)
 {
-    Byte output = ReadByte(cycles, StackPointer_ToWord() + 1, memory);
+    Byte output = ReadByte(cycles, Stack_AsWord() + 1, memory);
     StackPointer++;
     cycles += 2;
     return output;
@@ -80,7 +106,7 @@ Byte CPU::PopByte_Stack(uint32_t& cycles, const Memory& memory)
 
 void CPU::PushByte_Stack(uint32_t& cycles, Byte value, Memory& memory)
 {
-    memory.WriteByte(StackPointer_ToWord(), value, cycles);
+    memory.WriteByte(Stack_AsWord(), value, cycles);
     StackPointer--;
     cycles++;
     return;
@@ -109,21 +135,21 @@ void CPU::Check_PageCross(uint32_t& cycles, Word& address, Byte offset)
 /* Write current Program Counter (-1) to the Stack*/
 void CPU::PushWord_Stack(uint32_t& cycles, Memory& memory)
 {
-    memory.WriteWord(StackPointer_ToWord() - 1, ProgramCounter, cycles);
+    memory.WriteWord(Stack_AsWord() - 1, ProgramCounter, cycles);
     cycles++;
     StackPointer -= 2;
 }
 /* Get previous Program Counter from the Stack*/
 Word CPU::PopWord_Stack(uint32_t& cycles, Memory& memory)
 {
-    Word output = ReadWord(cycles, StackPointer_ToWord() + 1, memory);
+    Word output = ReadWord(cycles, Stack_AsWord() + 1, memory);
     cycles += 3;
     StackPointer += 2;
     return output;
 }
 
 /* Convert the Stack Pointer's current address to a Word value*/
-Word CPU::StackPointer_ToWord() const
+Word CPU::Stack_AsWord() const
 { return 0x0100 | StackPointer; }
 
 uint32_t CPU::Execute(uint32_t cycles_total, Memory& memory)
@@ -138,86 +164,86 @@ uint32_t CPU::Execute(uint32_t cycles_total, Memory& memory)
         {
         case LDA_IM:
             RegA = FetchByte(cycles_ran, memory);
-            LD_SetStatus(RegA);
+            SetStatus_NegvZero(RegA);
             break;
         case LDA_ZP:
             byte_Value = FetchByte(cycles_ran, memory);
-            LD_SetRegister(cycles_ran, RegA, byte_Value, memory);
+            Load_Register(cycles_ran, RegA, byte_Value, memory);
             break;
         case LDA_ZPX:
             byte_Value = FetchByte(cycles_ran, memory);
             IncrementByRegister(cycles_ran, byte_Value, RegX);
-            LD_SetRegister(cycles_ran, RegA, byte_Value, memory);
+            Load_Register(cycles_ran, RegA, byte_Value, memory);
             break;
         case LDA_AB:
             word_Value = FetchWord(cycles_ran, memory);
-            LD_SetRegister(cycles_ran, RegA, word_Value, memory);
+            Load_Register(cycles_ran, RegA, word_Value, memory);
             break;
         case LDA_ABX:
             word_Value = FetchWord(cycles_ran, memory);
             Check_PageCross(cycles_ran, word_Value, RegX);
-            LD_SetRegister(cycles_ran, RegA, word_Value, memory);
+            Load_Register(cycles_ran, RegA, word_Value, memory);
             break;
         case LDA_ABY:
             word_Value = FetchWord(cycles_ran, memory);
             Check_PageCross(cycles_ran, word_Value, RegY);
-            LD_SetRegister(cycles_ran, RegA, word_Value, memory);
+            Load_Register(cycles_ran, RegA, word_Value, memory);
             break;
         case LDA_IDX:
             byte_Value = FetchByte(cycles_ran, memory);
             IncrementByRegister(cycles_ran, byte_Value, RegX);
             word_Value = ReadWord(cycles_ran, byte_Value, memory);
-            LD_SetRegister(cycles_ran, RegA, word_Value, memory);
+            Load_Register(cycles_ran, RegA, word_Value, memory);
             break;
         case LDA_IDY:
             byte_Value = FetchByte(cycles_ran, memory);
             word_Value = ReadWord(cycles_ran, byte_Value, memory);
             Check_PageCross(cycles_ran, word_Value, RegY);
-            LD_SetRegister(cycles_ran, RegA, word_Value, memory);
+            Load_Register(cycles_ran, RegA, word_Value, memory);
             break;
         case LDX_IM:
             RegX = FetchByte(cycles_ran, memory);
-            LD_SetStatus(RegX);
+            SetStatus_NegvZero(RegX);
             break;
         case LDX_ZP:
             byte_Value = FetchByte(cycles_ran, memory);
-            LD_SetRegister(cycles_ran, RegX, byte_Value, memory);
+            Load_Register(cycles_ran, RegX, byte_Value, memory);
             break;
         case LDX_ZPY:
             byte_Value = FetchByte(cycles_ran, memory);
             IncrementByRegister(cycles_ran, byte_Value, RegY);
-            LD_SetRegister(cycles_ran, RegX, byte_Value, memory);
+            Load_Register(cycles_ran, RegX, byte_Value, memory);
             break;
         case LDX_AB:
             word_Value = FetchWord(cycles_ran, memory);
-            LD_SetRegister(cycles_ran, RegX, word_Value, memory);
+            Load_Register(cycles_ran, RegX, word_Value, memory);
             break;
         case LDX_ABY:
             word_Value = FetchWord(cycles_ran, memory);
             Check_PageCross(cycles_ran, word_Value, RegY);
-            LD_SetRegister(cycles_ran, RegX, word_Value, memory);
+            Load_Register(cycles_ran, RegX, word_Value, memory);
             break;
         case LDY_IM:
             RegY = FetchByte(cycles_ran, memory);
-            LD_SetStatus(RegY);
+            SetStatus_NegvZero(RegY);
             break;
         case LDY_ZP:
             byte_Value = FetchByte(cycles_ran, memory);
-            LD_SetRegister(cycles_ran, RegY, byte_Value, memory);
+            Load_Register(cycles_ran, RegY, byte_Value, memory);
             break;
         case LDY_ZPX:
             byte_Value = FetchByte(cycles_ran, memory);
             IncrementByRegister(cycles_ran, byte_Value, RegX);
-            LD_SetRegister(cycles_ran, RegY, byte_Value, memory);
+            Load_Register(cycles_ran, RegY, byte_Value, memory);
             break;
         case LDY_AB:
             word_Value = FetchWord(cycles_ran, memory);
-            LD_SetRegister(cycles_ran, RegY, word_Value, memory);
+            Load_Register(cycles_ran, RegY, word_Value, memory);
             break;
         case LDY_ABX:
             word_Value = FetchWord(cycles_ran, memory);
             Check_PageCross(cycles_ran, word_Value, RegX);
-            LD_SetRegister(cycles_ran, RegY, word_Value, memory);
+            Load_Register(cycles_ran, RegY, word_Value, memory);
             break;
         case STA_ZP:
             byte_Value = FetchByte(cycles_ran, memory);
@@ -246,14 +272,14 @@ uint32_t CPU::Execute(uint32_t cycles_total, Memory& memory)
             byte_Value = FetchByte(cycles_ran, memory);
             word_Value = ReadWord(cycles_ran, byte_Value + RegX, memory);
             memory.WriteByte(word_Value, RegA, cycles_ran);
-            // Cycle used to secure memory in case of overflow in the addition of the adrres
+            // Cycle used to secure memory in case of overflow in the addition of the address
             cycles_ran++;   
             break;
         case STA_IDY:
             byte_Value = FetchByte(cycles_ran, memory);
             word_Value = ReadWord(cycles_ran, byte_Value, memory);
             memory.WriteByte(word_Value + RegY, RegA, cycles_ran);
-            // Cycle used to secure memory in case of overflow in the addition of the adrres   
+            // Cycle used to secure memory in case of overflow in the addition of the address   
             cycles_ran++;
             break;
         case STX_ZP:
@@ -307,7 +333,7 @@ uint32_t CPU::Execute(uint32_t cycles_total, Memory& memory)
         case TSX:
             RegX = StackPointer;
             cycles_ran++;
-            LD_SetStatus(RegX);
+            SetStatus_NegvZero(RegX);
             break;
         case TXS:
             StackPointer = RegX;
@@ -321,7 +347,7 @@ uint32_t CPU::Execute(uint32_t cycles_total, Memory& memory)
             break;    
         case PLA:
             RegA = PopByte_Stack(cycles_ran, memory);
-            LD_SetStatus(RegA);
+            SetStatus_NegvZero(RegA);
             break; 
         case PLP:
             FlagStatus = PopByte_Stack(cycles_ran, memory);
@@ -329,164 +355,122 @@ uint32_t CPU::Execute(uint32_t cycles_total, Memory& memory)
         case AND_IM:
             byte_Value = FetchByte(cycles_ran, memory);
             RegA &= byte_Value;
-            LD_SetStatus(RegA);
+            SetStatus_NegvZero(RegA);
             break;
         case AND_ZP:
             byte_Value = FetchByte(cycles_ran, memory);
-            byte_Value = ReadByte(cycles_ran, byte_Value, memory);
-            RegA &= byte_Value;
-            LD_SetStatus(RegA);
+            Logical_Operate(cycles_ran, byte_Value, '&', memory);
             break; 
         case AND_ZPX:
             byte_Value = FetchByte(cycles_ran, memory);
             IncrementByRegister(cycles_ran, byte_Value, RegX);
-            byte_Value = ReadByte(cycles_ran, byte_Value, memory);
-            RegA &= byte_Value;
-            LD_SetStatus(RegA);
+            Logical_Operate(cycles_ran, byte_Value, '&', memory);
             break;
         case AND_AB:
             word_Value = FetchWord(cycles_ran, memory);
-            byte_Value = ReadByte(cycles_ran, word_Value, memory);
-            RegA &= byte_Value;
-            LD_SetStatus(RegA);
+            Logical_Operate(cycles_ran, word_Value, '&', memory);
             break;
         case AND_ABX:
             word_Value = FetchWord(cycles_ran, memory);
             Check_PageCross(cycles_ran, word_Value, RegX);
-            byte_Value = ReadByte(cycles_ran, word_Value, memory);
-            RegA &= byte_Value;
-            LD_SetStatus(RegA);
+            Logical_Operate(cycles_ran, word_Value, '&', memory);
             break;
         case AND_ABY:
             word_Value = FetchWord(cycles_ran, memory);
             Check_PageCross(cycles_ran, word_Value, RegY);
-            byte_Value = ReadByte(cycles_ran, word_Value, memory);
-            RegA &= byte_Value;
-            LD_SetStatus(RegA);
+            Logical_Operate(cycles_ran, word_Value, '&', memory);
             break; 
         case AND_IDX:
             byte_Value = FetchByte(cycles_ran, memory);
             IncrementByRegister(cycles_ran, byte_Value, RegX);
             word_Value = ReadWord(cycles_ran, byte_Value, memory);
-            byte_Value = ReadByte(cycles_ran, word_Value, memory);
-            RegA &= byte_Value;
-            LD_SetStatus(RegA);
+            Logical_Operate(cycles_ran, word_Value, '&', memory);
             break;
         case AND_IDY:
             byte_Value = FetchByte(cycles_ran, memory);
             word_Value = ReadWord(cycles_ran, byte_Value, memory);
             Check_PageCross(cycles_ran, word_Value, RegY);
-            byte_Value = ReadByte(cycles_ran, word_Value, memory);
-            RegA &= byte_Value;
-            LD_SetStatus(RegA);
+            Logical_Operate(cycles_ran, word_Value, '&', memory);
             break;
          case ORA_IM:
             byte_Value = FetchByte(cycles_ran, memory);
             RegA |= byte_Value;
-            LD_SetStatus(RegA);
+            SetStatus_NegvZero(RegA);
             break;
         case ORA_ZP:
             byte_Value = FetchByte(cycles_ran, memory);
-            byte_Value = ReadByte(cycles_ran, byte_Value, memory);
-            RegA |= byte_Value;
-            LD_SetStatus(RegA);
+            Logical_Operate(cycles_ran, byte_Value, '|', memory);
             break; 
         case ORA_ZPX:
             byte_Value = FetchByte(cycles_ran, memory);
             IncrementByRegister(cycles_ran, byte_Value, RegX);
-            byte_Value = ReadByte(cycles_ran, byte_Value, memory);
-            RegA |= byte_Value;
-            LD_SetStatus(RegA);
+            Logical_Operate(cycles_ran, byte_Value, '|', memory);
             break;
         case ORA_AB:
             word_Value = FetchWord(cycles_ran, memory);
-            byte_Value = ReadByte(cycles_ran, word_Value, memory);
-            RegA |= byte_Value;
-            LD_SetStatus(RegA);
+            Logical_Operate(cycles_ran, word_Value, '|', memory);
             break;
         case ORA_ABX:
             word_Value = FetchWord(cycles_ran, memory);
             Check_PageCross(cycles_ran, word_Value, RegX);
-            byte_Value = ReadByte(cycles_ran, word_Value, memory);
-            RegA |= byte_Value;
-            LD_SetStatus(RegA);
+            Logical_Operate(cycles_ran, word_Value, '|', memory);
             break;
         case ORA_ABY:
             word_Value = FetchWord(cycles_ran, memory);
             Check_PageCross(cycles_ran, word_Value, RegY);
-            byte_Value = ReadByte(cycles_ran, word_Value, memory);
-            RegA |= byte_Value;
-            LD_SetStatus(RegA);
+            Logical_Operate(cycles_ran, word_Value, '|', memory);
             break; 
         case ORA_IDX:
             byte_Value = FetchByte(cycles_ran, memory);
             IncrementByRegister(cycles_ran, byte_Value, RegX);
             word_Value = ReadWord(cycles_ran, byte_Value, memory);
-            byte_Value = ReadByte(cycles_ran, word_Value, memory);
-            RegA |= byte_Value;
-            LD_SetStatus(RegA);
+            Logical_Operate(cycles_ran, word_Value, '|', memory);
             break;
         case ORA_IDY:
             byte_Value = FetchByte(cycles_ran, memory);
             word_Value = ReadWord(cycles_ran, byte_Value, memory);
             Check_PageCross(cycles_ran, word_Value, RegY);
-            byte_Value = ReadByte(cycles_ran, word_Value, memory);
-            RegA |= byte_Value;
-            LD_SetStatus(RegA);
+            Logical_Operate(cycles_ran, word_Value, '|', memory);
             break;
          case EOR_IM:
             byte_Value = FetchByte(cycles_ran, memory);
             RegA ^= byte_Value;
-            LD_SetStatus(RegA);
+            SetStatus_NegvZero(RegA);
             break;
         case EOR_ZP:
             byte_Value = FetchByte(cycles_ran, memory);
-            byte_Value = ReadByte(cycles_ran, byte_Value, memory);
-            RegA ^= byte_Value;
-            LD_SetStatus(RegA);
+            Logical_Operate(cycles_ran, byte_Value, '^', memory);
             break; 
         case EOR_ZPX:
             byte_Value = FetchByte(cycles_ran, memory);
             IncrementByRegister(cycles_ran, byte_Value, RegX);
-            byte_Value = ReadByte(cycles_ran, byte_Value, memory);
-            RegA ^= byte_Value;
-            LD_SetStatus(RegA);
+            Logical_Operate(cycles_ran, byte_Value, '^', memory);
             break;
         case EOR_AB:
             word_Value = FetchWord(cycles_ran, memory);
-            byte_Value = ReadByte(cycles_ran, word_Value, memory);
-            RegA ^= byte_Value;
-            LD_SetStatus(RegA);
+            Logical_Operate(cycles_ran, word_Value, '^', memory);
             break;
         case EOR_ABX:
             word_Value = FetchWord(cycles_ran, memory);
             Check_PageCross(cycles_ran, word_Value, RegX);
-            byte_Value = ReadByte(cycles_ran, word_Value, memory);
-            RegA ^= byte_Value;
-            LD_SetStatus(RegA);
+            Logical_Operate(cycles_ran, word_Value, '^', memory);
             break;
         case EOR_ABY:
             word_Value = FetchWord(cycles_ran, memory);
             Check_PageCross(cycles_ran, word_Value, RegY);
-            byte_Value = ReadByte(cycles_ran, word_Value, memory);
-            RegA ^= byte_Value;
-            LD_SetStatus(RegA);
+            Logical_Operate(cycles_ran, word_Value, '^', memory);
             break; 
         case EOR_IDX:
             byte_Value = FetchByte(cycles_ran, memory);
             IncrementByRegister(cycles_ran, byte_Value, RegX);
             word_Value = ReadWord(cycles_ran, byte_Value, memory);
-            byte_Value = ReadByte(cycles_ran, word_Value, memory);
-            RegA ^= byte_Value;
-            LD_SetStatus(RegA);
+            Logical_Operate(cycles_ran, word_Value, '^', memory);
             break;
         case EOR_IDY:
             byte_Value = FetchByte(cycles_ran, memory);
             word_Value = ReadWord(cycles_ran, byte_Value, memory);
             Check_PageCross(cycles_ran, word_Value, RegY);
-            byte_Value = ReadByte(cycles_ran, word_Value, memory);
-            RegA ^= byte_Value;
-            LD_SetStatus(RegA);
+            Logical_Operate(cycles_ran, word_Value, '^', memory);
             break;
         case BIT_ZP:
             byte_Value = FetchByte(cycles_ran, memory);

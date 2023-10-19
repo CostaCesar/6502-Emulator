@@ -97,7 +97,6 @@ namespace Instruction
         BIT_ZP  = 0x24, // 3 cycles: Test bits in value from ZP memory and put it in Processor Flags
         BIT_AB  = 0x2C, // 4 cycles: Test bits in value from memory and put it in Processor Flags
 
-
         // >>>>> Stack <<<<<
         TSX     = 0xBA, // 2 cycles: Transfer Stack Pointer to Index X
         TXS     = 0x9A, // 2 cycles: Transfer Index X to Stack Register
