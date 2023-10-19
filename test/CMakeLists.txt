@@ -24,6 +24,7 @@ add_executable(Instruction_Test
   ORA_Test.cpp
   BIT_Test.cpp
   INC-DEC_Test.cpp
+  ShiftFamily_Test.cpp
 )
 target_link_libraries(Instruction_Test
   PRIVATE
