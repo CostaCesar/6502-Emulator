@@ -20,7 +20,7 @@ TEST_F(Stack_Test, TSX_Test_Basic)
     EXPECT_EQ(processor.RegX, VALUE);
     EXPECT_FALSE(processor.Flags.Zero);
     EXPECT_FALSE(processor.Flags.Negative);
-    VerifyUnusedFlags_LD(processor);
+    FlagsExcept_NegvZero(processor);
 };
 
 TEST_F(Stack_Test, TSX_Test_ZeroFlag)
@@ -41,7 +41,7 @@ TEST_F(Stack_Test, TSX_Test_ZeroFlag)
     EXPECT_EQ(processor.RegX, VALUE);
     EXPECT_TRUE(processor.Flags.Zero);
     EXPECT_FALSE(processor.Flags.Negative);
-    VerifyUnusedFlags_LD(processor);
+    FlagsExcept_NegvZero(processor);
 };
 
 TEST_F(Stack_Test, TSX_Test_NegativeFlag)
@@ -62,7 +62,7 @@ TEST_F(Stack_Test, TSX_Test_NegativeFlag)
     EXPECT_EQ(processor.RegX, VALUE);
     EXPECT_FALSE(processor.Flags.Zero);
     EXPECT_TRUE(processor.Flags.Negative);
-    VerifyUnusedFlags_LD(processor);
+    FlagsExcept_NegvZero(processor);
 };
 
 TEST_F(Stack_Test, TXS_Test)
@@ -79,7 +79,7 @@ TEST_F(Stack_Test, TXS_Test)
     // Execute
     EXPECT_EQ(cycles_executed, 2);
     EXPECT_EQ(processor.StackPointer, VALUE);
-    VerifyUnusedFlags_ST(processor);
+    FlagsExcept(processor);
 };
 
 TEST_F(Stack_Test, PHA_Test)
@@ -134,7 +134,7 @@ TEST_F(Stack_Test, PLA_Test)
     EXPECT_EQ(cycles_executed, CYCLES);
     EXPECT_EQ(processor.RegA, VALUE);
     EXPECT_EQ(processor.StackPointer, 0x00FF);
-    VerifyUnusedFlags_LD(processor);
+    FlagsExcept_NegvZero(processor);
 };
 
 TEST_F(Stack_Test, PLA_Test_ZeroFlag)
@@ -156,7 +156,7 @@ TEST_F(Stack_Test, PLA_Test_ZeroFlag)
     EXPECT_EQ(processor.StackPointer, 0x00FF);
     EXPECT_TRUE(processor.Flags.Zero);
     EXPECT_FALSE(processor.Flags.Negative);
-    VerifyUnusedFlags_LD(processor);
+    FlagsExcept_NegvZero(processor);
 };
 
 TEST_F(Stack_Test, PLA_Test_NegativeFlag)
@@ -178,7 +178,7 @@ TEST_F(Stack_Test, PLA_Test_NegativeFlag)
     EXPECT_EQ(processor.StackPointer, 0x00FF);
     EXPECT_FALSE(processor.Flags.Zero);
     EXPECT_TRUE(processor.Flags.Negative);
-    VerifyUnusedFlags_LD(processor);
+    FlagsExcept_NegvZero(processor);
 };
 
 

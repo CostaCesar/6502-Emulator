@@ -16,7 +16,7 @@ TEST_F(LDY_Test, LDY_Imediatate)
     EXPECT_EQ(processor.RegY, 0xA);
     EXPECT_FALSE(processor.Flags.Zero);
     EXPECT_FALSE(processor.Flags.Negative);
-    VerifyUnusedFlags_LD(processor);
+    FlagsExcept_NegvZero(processor);
 }
 
 TEST_F(LDY_Test, LDY_ZeroPage)
@@ -34,7 +34,7 @@ TEST_F(LDY_Test, LDY_ZeroPage)
     EXPECT_EQ(processor.RegY, 0xA);
     EXPECT_FALSE(processor.Flags.Zero);
     EXPECT_FALSE(processor.Flags.Negative);
-    VerifyUnusedFlags_LD(processor);
+    FlagsExcept_NegvZero(processor);
 }
 
 TEST_F(LDY_Test, LDY_ZeroPage_OffsetX)
@@ -53,7 +53,7 @@ TEST_F(LDY_Test, LDY_ZeroPage_OffsetX)
     EXPECT_EQ(processor.RegY, 0xA);
     EXPECT_FALSE(processor.Flags.Zero);
     EXPECT_FALSE(processor.Flags.Negative);
-    VerifyUnusedFlags_LD(processor);
+    FlagsExcept_NegvZero(processor);
 }
 
 TEST_F(LDY_Test, LDY_ZeroPage_OffsetX_Wrapping)
@@ -72,7 +72,7 @@ TEST_F(LDY_Test, LDY_ZeroPage_OffsetX_Wrapping)
     EXPECT_EQ(processor.RegY, 0xA);
     EXPECT_FALSE(processor.Flags.Zero);
     EXPECT_FALSE(processor.Flags.Negative);
-    VerifyUnusedFlags_LD(processor);
+    FlagsExcept_NegvZero(processor);
 }
 
 TEST_F(LDY_Test, LDY_Absolute)
@@ -91,7 +91,7 @@ TEST_F(LDY_Test, LDY_Absolute)
     EXPECT_EQ(processor.RegY, 0xA);
     EXPECT_FALSE(processor.Flags.Zero);
     EXPECT_FALSE(processor.Flags.Negative);
-    VerifyUnusedFlags_LD(processor);
+    FlagsExcept_NegvZero(processor);
 }
 
 TEST_F(LDY_Test, LDY_Absolute_OffsetX)
@@ -111,7 +111,7 @@ TEST_F(LDY_Test, LDY_Absolute_OffsetX)
     EXPECT_EQ(processor.RegY, 0xA);
     EXPECT_FALSE(processor.Flags.Zero);
     EXPECT_FALSE(processor.Flags.Negative);
-    VerifyUnusedFlags_LD(processor);
+    FlagsExcept_NegvZero(processor);
 }
 
 TEST_F(LDY_Test, LDY_Absolute_OffsetX_CrossPage)
@@ -131,5 +131,5 @@ TEST_F(LDY_Test, LDY_Absolute_OffsetX_CrossPage)
     EXPECT_EQ(processor.RegY, 0xA);
     EXPECT_FALSE(processor.Flags.Zero);
     EXPECT_FALSE(processor.Flags.Negative);
-    VerifyUnusedFlags_LD(processor);
+    FlagsExcept_NegvZero(processor);
 }

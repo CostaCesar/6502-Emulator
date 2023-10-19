@@ -17,7 +17,7 @@ TEST_F(STA_Test, STA_ZeroPage)
     // Execute
     EXPECT_EQ(cycles_executed, 3);
     EXPECT_EQ(memory[POSIT], VALUE);
-    VerifyUnusedFlags_ST(processor);
+    FlagsExcept(processor);
 }
 
 TEST_F(STA_Test, STA_ZeroPage_OffsetX)
@@ -37,7 +37,7 @@ TEST_F(STA_Test, STA_ZeroPage_OffsetX)
     // Execute
     EXPECT_EQ(cycles_executed, 4);
     EXPECT_EQ(memory[POSIT + OFSET], VALUE);
-    VerifyUnusedFlags_ST(processor);
+    FlagsExcept(processor);
 }
 
 TEST_F(STA_Test, STA_ZeroPage_OffsetX_Wrapping)
@@ -56,7 +56,7 @@ TEST_F(STA_Test, STA_ZeroPage_OffsetX_Wrapping)
     // Execute
     EXPECT_EQ(cycles_executed, 4);
     EXPECT_EQ(memory[(Byte) (POSIT + OFSET)], VALUE);
-    VerifyUnusedFlags_ST(processor);
+    FlagsExcept(processor);
 }
 
 TEST_F(STA_Test, STA_Absolute)
@@ -74,7 +74,7 @@ TEST_F(STA_Test, STA_Absolute)
     // Execute
     EXPECT_EQ(cycles_executed, 4);
     EXPECT_EQ(memory[0xA180], VALUE);
-    VerifyUnusedFlags_ST(processor);
+    FlagsExcept(processor);
 }
 
 TEST_F(STA_Test, STA_Absolute_OffsetX)
@@ -94,7 +94,7 @@ TEST_F(STA_Test, STA_Absolute_OffsetX)
     // Execute
     EXPECT_EQ(cycles_executed, 5);
     EXPECT_EQ(memory[0xBBAA + OFSET], VALUE);
-    VerifyUnusedFlags_ST(processor);
+    FlagsExcept(processor);
 }
 
 TEST_F(STA_Test, STA_Absolute_OffsetY)
@@ -114,7 +114,7 @@ TEST_F(STA_Test, STA_Absolute_OffsetY)
     // Execute
     EXPECT_EQ(cycles_executed, 5);
     EXPECT_EQ(memory[0xBBAA + OFSET], VALUE);
-    VerifyUnusedFlags_ST(processor);
+    FlagsExcept(processor);
 }
 
 TEST_F(STA_Test, STA_Indirect_OffsetX)
@@ -136,7 +136,7 @@ TEST_F(STA_Test, STA_Indirect_OffsetX)
     // Execute
     EXPECT_EQ(cycles_executed, 6);
     EXPECT_EQ(memory[0xDCBA], VALUE);
-    VerifyUnusedFlags_ST(processor);
+    FlagsExcept(processor);
 }
 
 TEST_F(STA_Test, STA_Indirect_OffsetY)
@@ -158,6 +158,6 @@ TEST_F(STA_Test, STA_Indirect_OffsetY)
     // Execute
     EXPECT_EQ(cycles_executed, 6);
     EXPECT_EQ(memory[0xDCBA+OFSET], VALUE);
-    VerifyUnusedFlags_ST(processor);
+    FlagsExcept(processor);
 }
 

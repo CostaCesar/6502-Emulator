@@ -4,6 +4,7 @@ class BIT_Test : public M6502 {};
 
 TEST_F(BIT_Test, BIT_ZeroPage)
 {
+    // Given
     const uint32_t CYCLES = 3;
     const Byte POSITION = 0x32;
     processor.RegA = 0xCC;

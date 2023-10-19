@@ -17,7 +17,7 @@ TEST_F(STX_Test, STX_ZeroPage)
     // Execute
     EXPECT_EQ(cycles_executed, 3);
     EXPECT_EQ(memory[POSIT], VALUE);
-    VerifyUnusedFlags_ST(processor);
+    FlagsExcept(processor);
 }
 
 TEST_F(STX_Test, STX_ZeroPage_OffsetY)
@@ -37,7 +37,7 @@ TEST_F(STX_Test, STX_ZeroPage_OffsetY)
     // Execute
     EXPECT_EQ(cycles_executed, 4);
     EXPECT_EQ(memory[POSIT + OFSET], VALUE);
-    VerifyUnusedFlags_ST(processor);
+    FlagsExcept(processor);
 }
 
 TEST_F(STX_Test, STX_ZeroPage_OffsetY_Wrapping)
@@ -56,7 +56,7 @@ TEST_F(STX_Test, STX_ZeroPage_OffsetY_Wrapping)
     // Execute
     EXPECT_EQ(cycles_executed, 4);
     EXPECT_EQ(memory[(Byte) (POSIT + OFSET)], VALUE);
-    VerifyUnusedFlags_ST(processor);
+    FlagsExcept(processor);
 }
 
 TEST_F(STX_Test, STX_Absolute)
@@ -74,5 +74,5 @@ TEST_F(STX_Test, STX_Absolute)
     // Execute
     EXPECT_EQ(cycles_executed, 4);
     EXPECT_EQ(memory[0xA180], VALUE);
-    VerifyUnusedFlags_ST(processor);
+    FlagsExcept(processor);
 }

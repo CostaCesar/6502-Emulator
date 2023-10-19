@@ -18,7 +18,7 @@ TEST_F(ORA_Test, ORA_Imediatate)
     EXPECT_EQ(processor.RegA, 0b01111111);
     EXPECT_FALSE(processor.Flags.Zero);
     EXPECT_FALSE(processor.Flags.Negative);
-    VerifyUnusedFlags_LD(processor);
+    FlagsExcept_NegvZero(processor);
 }
 TEST_F(ORA_Test, ORA_Imediatate_ZeroFlag)
 {
@@ -36,7 +36,7 @@ TEST_F(ORA_Test, ORA_Imediatate_ZeroFlag)
     EXPECT_EQ(processor.RegA, 0x00);
     EXPECT_TRUE(processor.Flags.Zero);
     EXPECT_FALSE(processor.Flags.Negative);
-    VerifyUnusedFlags_LD(processor);
+    FlagsExcept_NegvZero(processor);
 }
 TEST_F(ORA_Test, ORA_Imediatate_NegativeFlag)
 {
@@ -54,7 +54,7 @@ TEST_F(ORA_Test, ORA_Imediatate_NegativeFlag)
     EXPECT_EQ(processor.RegA, 0b11000000);
     EXPECT_FALSE(processor.Flags.Zero);
     EXPECT_TRUE(processor.Flags.Negative);
-    VerifyUnusedFlags_LD(processor);
+    FlagsExcept_NegvZero(processor);
 }
 
 TEST_F(ORA_Test, ORA_ZeroPage)
@@ -74,7 +74,7 @@ TEST_F(ORA_Test, ORA_ZeroPage)
     EXPECT_EQ(processor.RegA, 0b01111100);
     EXPECT_FALSE(processor.Flags.Zero);
     EXPECT_FALSE(processor.Flags.Negative);
-    VerifyUnusedFlags_LD(processor);
+    FlagsExcept_NegvZero(processor);
 }
 
 TEST_F(ORA_Test, ORA_ZeroPage_OffsetX)
@@ -95,7 +95,7 @@ TEST_F(ORA_Test, ORA_ZeroPage_OffsetX)
     EXPECT_EQ(processor.RegA, 0b11111110);
     EXPECT_FALSE(processor.Flags.Zero);
     EXPECT_TRUE(processor.Flags.Negative);
-    VerifyUnusedFlags_LD(processor);
+    FlagsExcept_NegvZero(processor);
 }
 
 TEST_F(ORA_Test, ORA_ZeroPage_OffsetX_Wrapping)
@@ -116,7 +116,7 @@ TEST_F(ORA_Test, ORA_ZeroPage_OffsetX_Wrapping)
     EXPECT_EQ(processor.RegA, 0b01111110);
     EXPECT_FALSE(processor.Flags.Zero);
     EXPECT_FALSE(processor.Flags.Negative);
-    VerifyUnusedFlags_LD(processor);
+    FlagsExcept_NegvZero(processor);
 }
 
 TEST_F(ORA_Test, ORA_Absolute)
@@ -137,7 +137,7 @@ TEST_F(ORA_Test, ORA_Absolute)
     EXPECT_EQ(processor.RegA, 0b01011010);
     EXPECT_FALSE(processor.Flags.Zero);
     EXPECT_FALSE(processor.Flags.Negative);
-    VerifyUnusedFlags_LD(processor);
+    FlagsExcept_NegvZero(processor);
 }
 
 TEST_F(ORA_Test, ORA_Absolute_OffsetX)
@@ -159,7 +159,7 @@ TEST_F(ORA_Test, ORA_Absolute_OffsetX)
     EXPECT_EQ(processor.RegA, 0b10111110);
     EXPECT_FALSE(processor.Flags.Zero);
     EXPECT_TRUE(processor.Flags.Negative);
-    VerifyUnusedFlags_LD(processor);
+    FlagsExcept_NegvZero(processor);
 }
 
 TEST_F(ORA_Test, ORA_Absolute_OffsetX_CrossPage)
@@ -181,7 +181,7 @@ TEST_F(ORA_Test, ORA_Absolute_OffsetX_CrossPage)
     EXPECT_EQ(processor.RegA, 0b00111110);
     EXPECT_FALSE(processor.Flags.Zero);
     EXPECT_FALSE(processor.Flags.Negative);
-    VerifyUnusedFlags_LD(processor);
+    FlagsExcept_NegvZero(processor);
 }
 
 TEST_F(ORA_Test, ORA_Absolute_OffsetY)
@@ -203,7 +203,7 @@ TEST_F(ORA_Test, ORA_Absolute_OffsetY)
     EXPECT_EQ(processor.RegA, 0b01011010);
     EXPECT_FALSE(processor.Flags.Zero);
     EXPECT_FALSE(processor.Flags.Negative);
-    VerifyUnusedFlags_LD(processor);
+    FlagsExcept_NegvZero(processor);
 }
 
 TEST_F(ORA_Test, ORA_Absolute_OffsetY_CrossPage)
@@ -225,7 +225,7 @@ TEST_F(ORA_Test, ORA_Absolute_OffsetY_CrossPage)
     EXPECT_EQ(processor.RegA, 0b10111110);
     EXPECT_FALSE(processor.Flags.Zero);
     EXPECT_TRUE(processor.Flags.Negative);
-    VerifyUnusedFlags_LD(processor);
+    FlagsExcept_NegvZero(processor);
 }
 
 TEST_F(ORA_Test, ORA_Indirect_OffsetX)
@@ -248,7 +248,7 @@ TEST_F(ORA_Test, ORA_Indirect_OffsetX)
     EXPECT_EQ(processor.RegA, 0b01000001);
     EXPECT_FALSE(processor.Flags.Zero);
     EXPECT_FALSE(processor.Flags.Negative);
-    VerifyUnusedFlags_LD(processor);
+    FlagsExcept_NegvZero(processor);
 }
 
 TEST_F(ORA_Test, ORA_Indirect_OffsetY)
@@ -271,7 +271,7 @@ TEST_F(ORA_Test, ORA_Indirect_OffsetY)
     EXPECT_EQ(processor.RegA, 0b11010011);
     EXPECT_FALSE(processor.Flags.Zero);
     EXPECT_TRUE(processor.Flags.Negative);
-    VerifyUnusedFlags_LD(processor);
+    FlagsExcept_NegvZero(processor);
 }
 
 TEST_F(ORA_Test, ORA_Indirect_OffsetY_CrossPage)
@@ -294,7 +294,7 @@ TEST_F(ORA_Test, ORA_Indirect_OffsetY_CrossPage)
     EXPECT_EQ(processor.RegA, 0b11111111);
     EXPECT_FALSE(processor.Flags.Zero);
     EXPECT_TRUE(processor.Flags.Negative);
-    VerifyUnusedFlags_LD(processor);
+    FlagsExcept_NegvZero(processor);
 }
 
 

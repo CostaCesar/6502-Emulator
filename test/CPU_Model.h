@@ -21,7 +21,7 @@ public:
     }
 };
 
-static void VerifyUnusedFlags_LD(const CPU&processor)
+static void FlagsExcept_NegvZero(const CPU&processor)
 {
     EXPECT_EQ(processor.Flags.Break, 0);
     EXPECT_EQ(processor.Flags.Interupt, 0);
@@ -29,7 +29,7 @@ static void VerifyUnusedFlags_LD(const CPU&processor)
     EXPECT_EQ(processor.Flags.Carry, 0);
     EXPECT_EQ(processor.Flags.OverFlow, 0);
 }
-static void VerifyUnusedFlags_ST(const CPU&processor)
+static void FlagsExcept(const CPU&processor)
 {
     EXPECT_EQ(processor.Flags.Break, 0);
     EXPECT_EQ(processor.Flags.Zero, 0);
