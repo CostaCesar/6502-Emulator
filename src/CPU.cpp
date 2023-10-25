@@ -552,12 +552,34 @@ uint32_t CPU::Execute(uint32_t cycles_total, Memory& memory)
             Shift_Value_WithZero(cycles_ran, RegA, '<');
             break;
         case ASL_ZP:
+            byte_Value = FetchByte(cycles_ran, memory);
+            word_Value = (Word) byte_Value;
+            byte_Value = ReadByte(cycles_ran, word_Value, memory);
+            Shift_Value_WithZero(cycles_ran, byte_Value, '<');
+            memory.WriteByte(word_Value, byte_Value, cycles_ran);
             break;
         case ASL_ZPX:
+            byte_Value = FetchByte(cycles_ran, memory);
+            word_Value = (Word) byte_Value;
+            IncrementByRegister(cycles_ran, word_Value, RegX);
+            byte_Value = ReadByte(cycles_ran, (Byte) word_Value, memory);
+            Shift_Value_WithZero(cycles_ran, byte_Value, '<');
+            memory.WriteByte((Byte) word_Value, byte_Value, cycles_ran);
             break;
         case ASL_AB:
+            word_Value = FetchWord(cycles_ran, memory);
+            byte_Value = ReadByte(cycles_ran, word_Value, memory);
+            Shift_Value_WithZero(cycles_ran, byte_Value, '<');
+            memory.WriteByte(word_Value, byte_Value, cycles_ran);
             break;
         case ASL_ABX:
+            word_Value = FetchWord(cycles_ran, memory);
+            IncrementByRegister(cycles_ran, word_Value, RegX);
+            byte_Value = ReadByte(cycles_ran, word_Value, memory);
+            Shift_Value_WithZero(cycles_ran, byte_Value, '<');
+            memory.WriteByte(word_Value, byte_Value, cycles_ran);
+            break;
+        case 1111:
             break;
         default:
             printf("Unknow instruction \"%#x\" ", instruction);
