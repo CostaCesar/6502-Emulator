@@ -25,6 +25,7 @@ add_executable(Instruction_Test
   BIT_Test.cpp
   INC-DEC_Test.cpp
   ASL_Test.cpp
+  LSR_Test.cpp
 )
 target_link_libraries(Instruction_Test
   PRIVATE
