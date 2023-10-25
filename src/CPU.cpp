@@ -118,6 +118,25 @@ void CPU::Shift_Value_WithZero(uint32_t& cycles, Byte& value, char direc)
     cycles++;
     SetStatus_NegvZero(value);
 }
+void CPU::Shift_Value_Carring(uint32_t& cycles, Byte& value, char direc)
+{
+    Byte NewCarry = 0;
+    NewCarry = Flags.Carry;
+    if(direc == '<')
+    {
+        Flags.Carry = (value & 0b10000000) != 0;
+        value = value << 1;
+        value |= NewCarry;
+    }
+    else if(direc == '>')
+    {
+        Flags.Carry = (value & 0b00000001) != 0;
+        value = value >> 1;
+        value |= NewCarry << 7;
+    }
+    cycles++;
+    SetStatus_NegvZero(value);
+}
 
 Byte CPU::PopByte_Stack(uint32_t& cycles, const Memory& memory)
 {
@@ -608,6 +627,11 @@ uint32_t CPU::Execute(uint32_t cycles_total, Memory& memory)
             byte_Value = ReadByte(cycles_ran, word_Value, memory);
             Shift_Value_WithZero(cycles_ran, byte_Value, '>');
             memory.WriteByte(word_Value, byte_Value, cycles_ran);
+            break;
+        case ROL_RGA:
+            Shift_Value_Carring(cycles_ran, RegA, '<');
+            break;
+        case ROR_RGA:
             break;
         default:
             printf("Unknow instruction \"%#x\" ", instruction);
