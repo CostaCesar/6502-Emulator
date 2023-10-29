@@ -110,18 +110,18 @@ namespace Instruction
         BIT_AB  = 0x2C, // 4 cycles: Test bits in value from memory and put it in Processor Flags
 
         // > ASL
-        ASL_RGA = 0x0A, // 2 cycles: Shifts 1 bit left in the RegA. Push 0 to the empty bit.
-        ASL_ZP  = 0x06, // 5 cycles: Shifts 1 bit left in ZP-memory address. Push 0 to the empty bit.
-        ASL_ZPX = 0x16, // 6 cycles: Shifts 1 bit left in ZP-memory address + offset from RegX. Push 0 to the empty bit.
-        ASL_AB  = 0x0E, // 6 cycles: Shifts 1 bit left in memory address. Push 0 to the empty bit.
-        ASL_ABX = 0x1E, // 7 cycles: Shifts 1 bit left in memory address + offset from RegX. Push 0 to the empty bit.
+        ASL_RGA = 0x0A, // 2 cycles: Shifts 1 bit left in the RegA. Push 0 to the empty bit
+        ASL_ZP  = 0x06, // 5 cycles: Shifts 1 bit left in ZP-memory address. Push 0 to the empty bit
+        ASL_ZPX = 0x16, // 6 cycles: Shifts 1 bit left in ZP-memory address + offset from RegX. Push 0 to the empty bit
+        ASL_AB  = 0x0E, // 6 cycles: Shifts 1 bit left in memory address. Push 0 to the empty bit
+        ASL_ABX = 0x1E, // 7 cycles: Shifts 1 bit left in memory address + offset from RegX. Push 0 to the empty bit
         
         // > LSR
-        LSR_RGA = 0x4A, // 2 cycles: Shifts 1 bit right in the RegA. Push 0 to the empty bit.
-        LSR_ZP  = 0x46, // 5 cycles: Shifts 1 bit right in ZP-memory address. Push 0 to the empty bit.
-        LSR_ZPX = 0x56, // 6 cycles: Shifts 1 bit right in ZP-memory address + offset from RegX. Push 0 to the empty bit.
-        LSR_AB  = 0x4E, // 6 cycles: Shifts 1 bit right in memory address. Push 0 to the empty bit.
-        LSR_ABX = 0x5E, // 7 cycles: Shifts 1 bit right in memory address + offset from RegX. Push 0 to the empty bit.
+        LSR_RGA = 0x4A, // 2 cycles: Shifts 1 bit right in the RegA. Push 0 to the empty bit
+        LSR_ZP  = 0x46, // 5 cycles: Shifts 1 bit right in ZP-memory address. Push 0 to the empty bit
+        LSR_ZPX = 0x56, // 6 cycles: Shifts 1 bit right in ZP-memory address + offset from RegX. Push 0 to the empty bit
+        LSR_AB  = 0x4E, // 6 cycles: Shifts 1 bit right in memory address. Push 0 to the empty bit
+        LSR_ABX = 0x5E, // 7 cycles: Shifts 1 bit right in memory address + offset from RegX. Push 0 to the empty bit
         
         // > ROL
         ROL_RGA = 0x2A, // 2 cycles: Shifts 1 bit left in the RegA. Push Carry to the empty bit 
@@ -141,10 +141,15 @@ namespace Instruction
         TXS     = 0x9A, // 2 cycles: Transfer Index X to Stack Register
         PHA     = 0x48, // 3 cycles: Push Accumulator on Stack
         PHP     = 0x08, // 3 cycles: Push Processor Status on Stack
-                        // The status register will be pushed with the break flag and bit 5 set to 1.
+                        // The status register will be pushed with the break flag and bit 5 set to 1
         PLA     = 0x68, // 4 cycles: Pull Accumulator from Stack
-        PLP     = 0x28  // 4 cycles: Pull Processor Status from Stack
-                        // The status register will be pulled with the break flag and bit 5 ignored              
+        PLP     = 0x28, // 4 cycles: Pull Processor Status from Stack
+                        // The status register will be pulled with the break flag and bit 5 ignored        
+
+        // >>>>> Special <<<<<
+        BRK     = 0x00, // 7 cycles: Forces an interrupt of the CPU. Sets the break Flag
+        RTI     = 0x40, // 6 cycles: Retrieves Program Counter and Processor Flags after an interrupt
+        NOP     = 0xEA  // 2 cycles: Does nothing, just takes 2 cycles of CPU runtime
     };  
 }
 
