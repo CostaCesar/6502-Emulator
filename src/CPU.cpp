@@ -118,7 +118,7 @@ void CPU::Shift_Value_WithZero(uint32_t& cycles, Byte& value, char direc)
     cycles++;
     SetStatus_NegvZero(value);
 }
-void CPU::Shift_Value_Carring(uint32_t& cycles, Byte& value, char direc)
+void CPU::Shift_Value_Carrying(uint32_t& cycles, Byte& value, char direc)
 {
     Byte NewCarry = 0;
     NewCarry = Flags.Carry;
@@ -629,9 +629,66 @@ uint32_t CPU::Execute(uint32_t cycles_total, Memory& memory)
             memory.WriteByte(word_Value, byte_Value, cycles_ran);
             break;
         case ROL_RGA:
-            Shift_Value_Carring(cycles_ran, RegA, '<');
+            Shift_Value_Carrying(cycles_ran, RegA, '<');
+            break;
+        case ROL_ZP:
+            byte_Value = FetchByte(cycles_ran, memory);
+            word_Value = (Word) byte_Value;
+            byte_Value = ReadByte(cycles_ran, word_Value, memory);
+            Shift_Value_Carrying(cycles_ran, byte_Value, '<');
+            memory.WriteByte(word_Value, byte_Value, cycles_ran);
+            break;
+        case ROL_ZPX:
+            byte_Value = FetchByte(cycles_ran, memory);
+            word_Value = (Word) byte_Value;
+            IncrementByRegister(cycles_ran, word_Value, RegX);
+            byte_Value = ReadByte(cycles_ran, (Byte) word_Value, memory);
+            Shift_Value_Carrying(cycles_ran, byte_Value, '<');
+            memory.WriteByte((Byte) word_Value, byte_Value, cycles_ran);
+            break;
+        case ROL_AB:
+            word_Value = FetchWord(cycles_ran, memory);
+            byte_Value = ReadByte(cycles_ran, word_Value, memory);
+            Shift_Value_Carrying(cycles_ran, byte_Value, '<');
+            memory.WriteByte(word_Value, byte_Value, cycles_ran);
+            break;
+        case ROL_ABX:
+            word_Value = FetchWord(cycles_ran, memory);
+            IncrementByRegister(cycles_ran, word_Value, RegX);
+            byte_Value = ReadByte(cycles_ran, word_Value, memory);
+            Shift_Value_Carrying(cycles_ran, byte_Value, '<');
+            memory.WriteByte(word_Value, byte_Value, cycles_ran);
             break;
         case ROR_RGA:
+            Shift_Value_Carrying(cycles_ran, RegA, '>');
+            break;
+        case ROR_ZP:
+            byte_Value = FetchByte(cycles_ran, memory);
+            word_Value = (Word) byte_Value;
+            byte_Value = ReadByte(cycles_ran, word_Value, memory);
+            Shift_Value_Carrying(cycles_ran, byte_Value, '>');
+            memory.WriteByte(word_Value, byte_Value, cycles_ran);
+            break;
+        case ROR_ZPX:
+            byte_Value = FetchByte(cycles_ran, memory);
+            word_Value = (Word) byte_Value;
+            IncrementByRegister(cycles_ran, word_Value, RegX);
+            byte_Value = ReadByte(cycles_ran, (Byte) word_Value, memory);
+            Shift_Value_Carrying(cycles_ran, byte_Value, '>');
+            memory.WriteByte((Byte) word_Value, byte_Value, cycles_ran);
+            break;
+        case ROR_AB:
+            word_Value = FetchWord(cycles_ran, memory);
+            byte_Value = ReadByte(cycles_ran, word_Value, memory);
+            Shift_Value_Carrying(cycles_ran, byte_Value, '>');
+            memory.WriteByte(word_Value, byte_Value, cycles_ran);
+            break;
+        case ROR_ABX:
+            word_Value = FetchWord(cycles_ran, memory);
+            IncrementByRegister(cycles_ran, word_Value, RegX);
+            byte_Value = ReadByte(cycles_ran, word_Value, memory);
+            Shift_Value_Carrying(cycles_ran, byte_Value, '>');
+            memory.WriteByte(word_Value, byte_Value, cycles_ran);
             break;
         default:
             printf("Unknow instruction \"%#x\" ", instruction);

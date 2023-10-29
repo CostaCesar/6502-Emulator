@@ -55,7 +55,7 @@ struct CPU
     void Bit_Test(uint32_t& cycles, Word address, const Memory& memory);
     void Memory_Increment(uint32_t& cycles, Word address, Byte value, Memory& memory);
     void Shift_Value_WithZero(uint32_t& cycles, Byte& value, char direc);
-    void Shift_Value_Carring(uint32_t& cycles, Byte& value, char direc);
+    void Shift_Value_Carrying(uint32_t& cycles, Byte& value, char direc);
     
     void SetStatus_NegvZero(Byte cpu_register);
 
