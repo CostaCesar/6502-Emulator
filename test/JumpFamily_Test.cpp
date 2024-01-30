@@ -30,7 +30,7 @@ TEST_F(Jump_Test, RTS_Test)
     const uint16_t VALUE = 0x40;
     const uint32_t POSIT = 0x10;
     memory[0xFF00] = Instruction::JSR;
-    memory[0xFF01] = POSIT;
+    memory.WriteWord(0xFF01, POSIT);
     memory[POSIT] = Instruction::RTS;
     memory[0xFF03] = Instruction::LDA_IM;
     memory[0xFF04] = VALUE;

@@ -37,8 +37,10 @@ struct CPU
 
     void PushByte_Stack(uint32_t& cycles, Byte value, Memory& memory);
     Byte PopByte_Stack(uint32_t& cycles, const Memory& memory);
-    void PushWord_Stack(uint32_t& cycles, Memory& memory);
-    Word PopWord_Stack(uint32_t& cycles, Memory& memory);
+    void PushWord_Stack(uint32_t& cycles, Word value, Memory& memory);
+    Word PopWord_Stack(uint32_t& cycles, const Memory& memory);
+    void Push_ProgCount_Stack(uint32_t& cycles, Memory& memory);
+    Word Pop_PC_Stack(uint32_t& cycles, Memory& memory);
     Word Stack_AsWord() const;  
 
     Byte ReadByte(uint32_t& cycles, Word address, const Memory& memory);

@@ -28,6 +28,7 @@ add_executable(Instruction_Test
   LSR_Test.cpp
   ROL_Test.cpp
   ROR_Test.cpp
+  BRK-RTI_Test.cpp
 )
 target_link_libraries(Instruction_Test
   PRIVATE

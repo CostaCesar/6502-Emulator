@@ -142,16 +142,29 @@ Byte CPU::PopByte_Stack(uint32_t& cycles, const Memory& memory)
 {
     Byte output = ReadByte(cycles, Stack_AsWord() + 1, memory);
     StackPointer++;
-    cycles += 2;
+    cycles++;
     return output;
 }
-
 void CPU::PushByte_Stack(uint32_t& cycles, Byte value, Memory& memory)
 {
     memory.WriteByte(Stack_AsWord(), value, cycles);
     StackPointer--;
     cycles++;
     return;
+}
+void CPU::PushWord_Stack(uint32_t& cycles, Word value, Memory& memory)
+{
+    memory.WriteWord(Stack_AsWord(), value, cycles);
+    StackPointer -= 2;
+    cycles++;
+    return;
+}
+Word CPU::PopWord_Stack(uint32_t& cycles, const Memory& memory)
+{
+    Word output = ReadWord(cycles, Stack_AsWord() + 1, memory);
+    StackPointer += 2;
+    cycles++;
+    return output;
 }
 
 /* Increment data by value from register, using up 1 cycle for it */
@@ -175,14 +188,13 @@ void CPU::Check_PageCross(uint32_t& cycles, Word& address, Byte offset)
 }
 
 /* Write current Program Counter (-1) to the Stack*/
-void CPU::PushWord_Stack(uint32_t& cycles, Memory& memory)
+void CPU::Push_ProgCount_Stack(uint32_t& cycles, Memory& memory)
 {
     memory.WriteWord(Stack_AsWord() - 1, ProgramCounter, cycles);
-    cycles++;
     StackPointer -= 2;
 }
 /* Get previous Program Counter from the Stack*/
-Word CPU::PopWord_Stack(uint32_t& cycles, Memory& memory)
+Word CPU::Pop_PC_Stack(uint32_t& cycles, Memory& memory)
 {
     Word output = ReadWord(cycles, Stack_AsWord() + 1, memory);
     cycles += 3;
@@ -352,11 +364,12 @@ uint32_t CPU::Execute(uint32_t cycles_total, Memory& memory)
             break; 
         case JSR:
             word_Value = FetchWord(cycles_ran, memory);
-            PushWord_Stack(cycles_ran, memory);
+            Push_ProgCount_Stack(cycles_ran, memory);
             ProgramCounter = word_Value;
+            cycles_ran++;
             break;
         case RTS:
-            ProgramCounter = PopWord_Stack(cycles_ran, memory);
+            ProgramCounter = Pop_PC_Stack(cycles_ran, memory);
             break;
         case JMP_AB:
             word_Value = FetchWord(cycles_ran, memory);
@@ -390,9 +403,11 @@ uint32_t CPU::Execute(uint32_t cycles_total, Memory& memory)
         case PLA:
             RegA = PopByte_Stack(cycles_ran, memory);
             SetStatus_NegvZero(RegA);
+            cycles_ran++;
             break; 
         case PLP:
             FlagStatus = PopByte_Stack(cycles_ran, memory);
+            cycles_ran++;
             break;
         case AND_IM:
             byte_Value = FetchByte(cycles_ran, memory);
@@ -690,8 +705,22 @@ uint32_t CPU::Execute(uint32_t cycles_total, Memory& memory)
             Shift_Value_Carrying(cycles_ran, byte_Value, '>');
             memory.WriteByte(word_Value, byte_Value, cycles_ran);
             break;
+        case BRK:
+            // ProgramCounter++;
+            Push_ProgCount_Stack(cycles_ran, memory);
+            PushByte_Stack(cycles_ran, FlagStatus, memory);
+            ProgramCounter = ReadWord(cycles_ran, 0xFFFE, memory);
+            Flags.Break = 1;
+            break;
+        case RTI:
+            FlagStatus = PopByte_Stack(cycles_ran, memory);
+            ProgramCounter = PopWord_Stack(cycles_ran, memory) + 1;
+            break;
+        case NOP:
+            cycles_ran += 2;
+            break;
         default:
-            printf("Unknow instruction \"%#x\" ", instruction);
+            fprintf(stderr, "Unknow instruction \"%#x\" ", instruction);
             return cycles_ran;
         }
     }
