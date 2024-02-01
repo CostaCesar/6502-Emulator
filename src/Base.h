@@ -71,6 +71,27 @@ namespace Instruction
         JMP_AB  = 0x4C, // 3 cycles: Jump to position in memory directly
         JMP_ID  = 0x6C, // 3 cycles: Jump to position in memory pointed by another position
 
+        // >>>>> Math <<<<<
+        // > ADC
+        ADC_IM  = 0x69, // 2 Cycles:                        Add to RegA an imediate value
+        ADC_ZP  = 0x65, // 3 Cycles:                        Add to RegA a ZP-memory (0x0000 -> 0x00FF) value
+        ADC_ZPX = 0x75, // 4 Cycles:                        Add to RegA a ZP-memory + offset from RegX value
+        ADC_AB  = 0x6D, // 4 Cycles:                        Add to RegA a value from memory
+        ADC_ABX = 0x7D, // 4 Cycles (+1 if cross boundary): Add to RegA a value from memory + offset from RegX
+        ADC_ABY = 0x79, // 4 Cycles (+1 if cross boundary): Add to RegA a value from memory + offset from RegY
+        ADC_IDX = 0x61, // 6 Cycles:                        Add to RegA a value from position pointed by [ZP-memory + offset from RegX]
+        ADC_IDY = 0x71, // 5 Cycles (+1 if cross boundary): Add to RegA a value from position ZP-memory + offset from RegY
+
+        // > SBC
+        SBC_IM  = 0xE9, // 2 Cycles:                        Subtract to RegA an imediate value
+        SBC_ZP  = 0xE5, // 3 Cycles:                        Subtract to RegA a ZP-memory (0x0000 -> 0x00FF) value
+        SBC_ZPX = 0xF5, // 4 Cycles:                        Subtract to RegA a ZP-memory + offset from RegX value
+        SBC_AB  = 0xED, // 4 Cycles:                        Subtract to RegA a value from memory
+        SBC_ABX = 0xFD, // 4 Cycles (+1 if cross boundary): Subtract to RegA a value from memory + offset from RegX
+        SBC_ABY = 0xF9, // 4 Cycles (+1 if cross boundary): Subtract to RegA a value from memory + offset from RegY
+        SBC_IDX = 0xE1, // 6 Cycles:                        Subtract to RegA a value from position pointed by [ZP-memory + offset from RegX]
+        SBC_IDY = 0xF1, // 5 Cycles (+1 if cross boundary): Subtract to RegA a value from position ZP-memory + offset from RegY
+
         // >>>>> Logical <<<<<
         // > AND
         AND_IM  = 0x29, // 2 cycles: Use imediate value to AND with RegA
