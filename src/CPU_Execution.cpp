@@ -503,6 +503,68 @@ uint32_t CPU::Execute(uint32_t cycles_total, Memory& memory)
         case NOP:
             cycles_ran += 2;
             break;
+        case ADC_IM:
+            byte_Value = FetchByte(cycles_ran, memory);
+            Math_Add(cycles_ran, byte_Value);
+            break;
+        case ADC_ZP:
+            byte_Value = FetchByte(cycles_ran, memory);
+            byte_Value = ReadByte(cycles_ran, (Word) byte_Value, memory);
+            Math_Add(cycles_ran, byte_Value);
+            break;
+        case ADC_ZPX:
+            byte_Value = FetchByte(cycles_ran, memory);
+            IncrementByRegister(cycles_ran, byte_Value, RegX);
+            byte_Value = ReadByte(cycles_ran, (Word) byte_Value, memory);
+            Math_Add(cycles_ran, byte_Value);
+            break;
+        case ADC_AB:
+            word_Value = FetchWord(cycles_ran, memory);
+            byte_Value = ReadByte(cycles_ran, word_Value, memory);
+            Math_Add(cycles_ran, byte_Value);
+            break;
+        case ADC_ABX:
+            word_Value = FetchWord(cycles_ran, memory);
+            Check_PageCross(cycles_ran, word_Value, RegX);
+            byte_Value = ReadByte(cycles_ran, word_Value, memory);
+            Math_Add(cycles_ran, byte_Value);
+            break;
+        case ADC_ABY:
+            word_Value = FetchWord(cycles_ran, memory);
+            Check_PageCross(cycles_ran, word_Value, RegY);
+            byte_Value = ReadByte(cycles_ran, word_Value, memory);
+            Math_Add(cycles_ran, byte_Value);
+            break;
+        case ADC_IDX:
+            byte_Value = FetchByte(cycles_ran, memory);
+            IncrementByRegister(cycles_ran, byte_Value, RegX);
+            word_Value = ReadWord(cycles_ran, byte_Value, memory);
+            byte_Value = ReadByte(cycles_ran, word_Value, memory);
+            Math_Add(cycles_ran, byte_Value);
+            break;
+        case ADC_IDY:
+            byte_Value = FetchByte(cycles_ran, memory);
+            word_Value = ReadWord(cycles_ran, byte_Value, memory);
+            Check_PageCross(cycles_ran, word_Value, RegY);
+            byte_Value = ReadByte(cycles_ran, word_Value, memory);
+            Math_Add(cycles_ran, byte_Value);
+            break;
+        case SBC_IM:
+            break;
+        case SBC_ZP:
+            break;
+        case SBC_ZPX:
+            break;
+        case SBC_AB:
+            break;
+        case SBC_ABX:
+            break;
+        case SBC_ABY:
+            break;
+        case SBC_IDX:
+            break;
+        case SBC_IDY:
+            break;
         default:
             fprintf(stderr, "Unknow instruction \"%#x\" ", instruction);
             return cycles_ran;

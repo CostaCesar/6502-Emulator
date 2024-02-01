@@ -212,3 +212,24 @@ Word CPU::FetchByte_AsWord(uint32_t &cycles, const Memory &memory)
 {
     return (Word) FetchByte(cycles, memory);
 }
+
+void CPU::Math_Add(uint32_t &cycles, Byte value)
+{
+    Byte previous_Value = RegA;
+    if((RegA & 0b10000000) == (value & 0b10000000) && (RegA & 0b10000000) != ((RegA + value + Flags.Carry) & 0b10000000))
+        Flags.OverFlow = true;
+
+    RegA += value + Flags.Carry;
+    
+    if(previous_Value + value + Flags.Carry > 256)
+        Flags.Carry = true;
+    
+    if(RegA & 0b10000000 == 1)
+        Flags.Negative = true;
+    if(RegA == 0)
+        Flags.Zero = true;
+}
+void CPU::Math_Sub(uint32_t &cycles, Byte value)
+{
+    Math_Add(cycles, ~value);
+}

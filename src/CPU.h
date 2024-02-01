@@ -63,7 +63,9 @@ private:
     void Shift_Value_Carrying(uint32_t& cycles, Byte& value, char direc);
     
     void SetStatus_NegvZero(Byte cpu_register);
-
+    void Math_Add(uint32_t& cycles, Byte value);
+    void Math_Sub(uint32_t& cycles, Byte value);
+    
 };
 
 #endif
