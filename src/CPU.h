@@ -31,20 +31,23 @@ struct CPU
     };
     
     CPU(Variant chip_Model, Memory& memory, Word start_from);
-
+    
+    uint32_t Execute(uint32_t cycles, Memory& memory);
     void Reset(Memory& memory);
     void Reset(Word address, Memory& memory);
+    Word Stack_AsWord() const;  
 
+private:
     void PushByte_Stack(uint32_t& cycles, Byte value, Memory& memory);
     Byte PopByte_Stack(uint32_t& cycles, const Memory& memory);
     void PushWord_Stack(uint32_t& cycles, Word value, Memory& memory);
     Word PopWord_Stack(uint32_t& cycles, const Memory& memory);
     void Push_ProgCount_Stack(uint32_t& cycles, Memory& memory);
     Word Pop_PC_Stack(uint32_t& cycles, Memory& memory);
-    Word Stack_AsWord() const;  
 
     Byte ReadByte(uint32_t& cycles, Word address, const Memory& memory);
     Byte FetchByte(uint32_t& cycles, const Memory& memory);
+    Word FetchByte_AsWord(uint32_t &cycles, const Memory &memory);
     Word ReadWord(uint32_t& cycles, Word address, const Memory& memory);
     Word FetchWord(uint32_t& cycles, const Memory& memory);
     Instruction::Opcode FetchInstruction(uint32_t& cycles, const Memory& memory);
@@ -61,7 +64,6 @@ struct CPU
     
     void SetStatus_NegvZero(Byte cpu_register);
 
-    uint32_t Execute(uint32_t cycles, Memory& memory);
 };
 
 #endif
