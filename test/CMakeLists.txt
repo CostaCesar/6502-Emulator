@@ -10,25 +10,10 @@ FetchContent_MakeAvailable(googletest)
 add_library(GTest::GTest INTERFACE IMPORTED)
 target_link_libraries(GTest::GTest INTERFACE gtest_main)
 
+FILE(GLOB_RECURSE Ins_Sources Instructions/*.cpp)
+
 add_executable(Instruction_Test
-  LDA_Test.cpp
-  LDX_Test.cpp
-  LDY_Test.cpp
-  STA_Test.cpp
-  STX_Test.cpp
-  STY_Test.cpp
-  JumpFamily_Test.cpp
-  StackFamily_Test.cpp
-  AND_Test.cpp
-  EOR_Test.cpp
-  ORA_Test.cpp
-  BIT_Test.cpp
-  INC-DEC_Test.cpp
-  ASL_Test.cpp
-  LSR_Test.cpp
-  ROL_Test.cpp
-  ROR_Test.cpp
-  BRK-RTI_Test.cpp
+  ${Ins_Sources}
 )
 target_link_libraries(Instruction_Test
   PRIVATE

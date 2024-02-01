@@ -1,11 +1,11 @@
-#include "CPU_Model.h"
+#include "../CPU_Model.h"
 
-class LDY_Test : public M6502 {};
+class LDX_Test : public M6502 {};
 
-TEST_F(LDY_Test, LDY_Imediatate)
+TEST_F(LDX_Test, LDX_Imediatate)
 {
     // Given
-    memory[0xFFFC] = Instruction::LDY_IM;
+    memory[0xFFFC] = Instruction::LDX_IM;
     memory[0xFFFD] = 0xA;
 
     // When
@@ -13,16 +13,16 @@ TEST_F(LDY_Test, LDY_Imediatate)
 
     // Execute
     EXPECT_EQ(cycles_executed, 2);
-    EXPECT_EQ(processor.RegY, 0xA);
+    EXPECT_EQ(processor.RegX, 0xA);
     EXPECT_FALSE(processor.Flags.Zero);
     EXPECT_FALSE(processor.Flags.Negative);
     FlagsExcept_NegvZero(processor);
 }
 
-TEST_F(LDY_Test, LDY_ZeroPage)
+TEST_F(LDX_Test, LDX_ZeroPage)
 {
     // Given
-    memory[0xFFFC] = Instruction::LDY_ZP;
+    memory[0xFFFC] = Instruction::LDX_ZP;
     memory[0xFFFD] = 0x10;
     memory[0x0010] = 0xA;
 
@@ -31,17 +31,17 @@ TEST_F(LDY_Test, LDY_ZeroPage)
 
     // Execute
     EXPECT_EQ(cycles_executed, 3);
-    EXPECT_EQ(processor.RegY, 0xA);
+    EXPECT_EQ(processor.RegX, 0xA);
     EXPECT_FALSE(processor.Flags.Zero);
     EXPECT_FALSE(processor.Flags.Negative);
     FlagsExcept_NegvZero(processor);
 }
 
-TEST_F(LDY_Test, LDY_ZeroPage_OffsetX)
+TEST_F(LDX_Test, LDX_ZeroPage_OffsetY)
 {
     // Given
-    processor.RegX = 0x5;
-    memory[0xFFFC] = Instruction::LDY_ZPX;
+    processor.RegY = 0x5;
+    memory[0xFFFC] = Instruction::LDX_ZPY;
     memory[0xFFFD] = 0x10;
     memory[0x0015] = 0xA;
 
@@ -50,17 +50,17 @@ TEST_F(LDY_Test, LDY_ZeroPage_OffsetX)
 
     // Execute
     EXPECT_EQ(cycles_executed, 4);
-    EXPECT_EQ(processor.RegY, 0xA);
+    EXPECT_EQ(processor.RegX, 0xA);
     EXPECT_FALSE(processor.Flags.Zero);
     EXPECT_FALSE(processor.Flags.Negative);
     FlagsExcept_NegvZero(processor);
 }
 
-TEST_F(LDY_Test, LDY_ZeroPage_OffsetX_Wrapping)
+TEST_F(LDX_Test, LDX_ZeroPage_OffsetY_Wrapping)
 {
     // Given
-    processor.RegX = 0xFF;
-    memory[0xFFFC] = Instruction::LDY_ZPX;
+    processor.RegY = 0xFF;
+    memory[0xFFFC] = Instruction::LDX_ZPY;
     memory[0xFFFD] = 0x80;
     memory[0x007F] = 0xA;
 
@@ -69,16 +69,16 @@ TEST_F(LDY_Test, LDY_ZeroPage_OffsetX_Wrapping)
 
     // Execute
     EXPECT_EQ(cycles_executed, 4);
-    EXPECT_EQ(processor.RegY, 0xA);
+    EXPECT_EQ(processor.RegX, 0xA);
     EXPECT_FALSE(processor.Flags.Zero);
     EXPECT_FALSE(processor.Flags.Negative);
     FlagsExcept_NegvZero(processor);
 }
 
-TEST_F(LDY_Test, LDY_Absolute)
+TEST_F(LDX_Test, LDX_Absolute)
 {
     // Given
-    memory[0xFFFC] = Instruction::LDY_AB;
+    memory[0xFFFC] = Instruction::LDX_AB;
     memory[0xFFFD] = 0x80;
     memory[0xFFFE] = 0xA1;
     memory[0xA180] = 0xA;
@@ -88,17 +88,17 @@ TEST_F(LDY_Test, LDY_Absolute)
 
     // Execute
     EXPECT_EQ(cycles_executed, 4);
-    EXPECT_EQ(processor.RegY, 0xA);
+    EXPECT_EQ(processor.RegX, 0xA);
     EXPECT_FALSE(processor.Flags.Zero);
     EXPECT_FALSE(processor.Flags.Negative);
     FlagsExcept_NegvZero(processor);
 }
 
-TEST_F(LDY_Test, LDY_Absolute_OffsetX)
+TEST_F(LDX_Test, LDX_Absolute_OffsetY)
 {
     // Given
-    processor.RegX = 0x32;
-    memory[0xFFFC] = Instruction::LDY_ABX;
+    processor.RegY = 0x32;
+    memory[0xFFFC] = Instruction::LDX_ABY;
     memory[0xFFFD] = 0xBB;
     memory[0xFFFE] = 0xAA;
     memory[0xAAED] = 0xA;
@@ -108,17 +108,17 @@ TEST_F(LDY_Test, LDY_Absolute_OffsetX)
 
     // Execute
     EXPECT_EQ(cycles_executed, 4);
-    EXPECT_EQ(processor.RegY, 0xA);
+    EXPECT_EQ(processor.RegX, 0xA);
     EXPECT_FALSE(processor.Flags.Zero);
     EXPECT_FALSE(processor.Flags.Negative);
     FlagsExcept_NegvZero(processor);
 }
 
-TEST_F(LDY_Test, LDY_Absolute_OffsetX_CrossPage)
+TEST_F(LDX_Test, LDX_Absolute_OffsetY_CrossPage)
 {
     // Given
-    processor.RegX = 0xFF;
-    memory[0xFFFC] = Instruction::LDY_ABX;
+    processor.RegY = 0xFF;
+    memory[0xFFFC] = Instruction::LDX_ABY;
     memory[0xFFFD] = 0xBB;
     memory[0xFFFE] = 0xAA;
     memory[0xABBA] = 0xA;
@@ -128,7 +128,7 @@ TEST_F(LDY_Test, LDY_Absolute_OffsetX_CrossPage)
 
     // Execute
     EXPECT_EQ(cycles_executed, 5);
-    EXPECT_EQ(processor.RegY, 0xA);
+    EXPECT_EQ(processor.RegX, 0xA);
     EXPECT_FALSE(processor.Flags.Zero);
     EXPECT_FALSE(processor.Flags.Negative);
     FlagsExcept_NegvZero(processor);

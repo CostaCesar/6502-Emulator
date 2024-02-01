@@ -2,8 +2,8 @@
 #define CPU_MODEL_H
 
 #include <gtest/gtest.h>
-#include "../src/Memory.h"
-#include "../src/CPU.h"
+#include "../../src/Memory.h"
+#include "../../src/CPU.h"
 
 class M6502 : public testing::Test
 {

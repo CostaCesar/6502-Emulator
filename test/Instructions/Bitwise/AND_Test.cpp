@@ -1,4 +1,4 @@
-#include "CPU_Model.h"
+#include "../CPU_Model.h"
 
 class AND_Test : public M6502 {};
 

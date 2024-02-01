@@ -1,4 +1,4 @@
-#include "CPU_Model.h"
+#include "../CPU_Model.h"
 
 class INC_DEC_Test : public M6502 {};
 

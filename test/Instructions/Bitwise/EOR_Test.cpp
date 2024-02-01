@@ -1,4 +1,4 @@
-#include "CPU_Model.h"
+#include "../CPU_Model.h"
 
 class EOR_Test : public M6502 {};
 
