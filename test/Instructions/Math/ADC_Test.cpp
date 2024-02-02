@@ -226,8 +226,8 @@ TEST_F(ADC_Test, ADC_ABY_PageCross_Test)
     const uint32_t CYCLES = 5;
     const Word POSITION = 0x00F1;
     const Byte OFFSET = 0x22;
-    const Byte VALUE_1 = 0b01010010;
-    const Byte VALUE_2 = 0b10011011;
+    const Byte VALUE_1 = 72;
+    const Byte VALUE_2 = 18;
     
     processor.RegA = VALUE_1;
     processor.RegY = OFFSET;
