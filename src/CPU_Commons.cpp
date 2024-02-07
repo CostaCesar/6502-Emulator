@@ -215,11 +215,21 @@ Word CPU::FetchByte_AsWord(uint32_t &cycles, const Memory &memory)
 
 void CPU::Math_Add(uint32_t &cycles, Byte value)
 {
-    Byte previous_Value = RegA;
-    RegA += value + Flags.Carry;
+    Word previous_Value = RegA;
+    Word sum = 0;
     
-    Flags.OverFlow = (~(previous_Value ^ value)) & (previous_Value ^ RegA) & 0b10000000;
-    Flags.Carry = (Word) (previous_Value + value + Flags.Carry) > 0xFF;
+    if(Flags.Decimal == 1)
+    {
+        RegA = (((RegA & 0b11110000) >> 4) * 10) + (RegA & 0b00001111);
+        value = (((value & 0b11110000) >> 4) * 10) + (value & 0b00001111);
+    }
+
+    sum = RegA + value + Flags.Carry;
+    RegA = (Byte) sum;
+
+    Flags.Carry = Flags.Decimal ? sum > 99 : sum > 0xFF;
+    Flags.OverFlow = (~(previous_Value ^ value)) & (previous_Value ^ sum) & 0b10000000; // sum might be RegA, check later
+    
     SetStatus_NegvZero(RegA);
 }
 void CPU::Math_Sub(uint32_t &cycles, Byte value)

@@ -8,8 +8,6 @@
                 "-fdiagnostics-color=always",
                 "-g",
                 "${file}",
-                "src/Memory.cpp",
-                "src/CPU.cpp",
                 "-o",
                 "${fileDirname}\\${fileBasenameNoExtension}.exe"
             ],
