@@ -35,9 +35,6 @@ namespace AddressMode
     };
 }
 
-std::map<string, std::map<AddressMode::Mode, Byte>> opcodes;
-std::map<string, Byte> ops;
-
 Word ConvertFromBase(string value, Byte base)
 {
     Word output = 0;
@@ -52,7 +49,7 @@ Word ConvertFromBase(string value, Byte base)
     return output;
 }
 
-void LoadInstructions()
+void LoadInstructions(std::map<string, std::map<AddressMode::Mode, Byte>> &opcodes)
 {
     opcodes["LDA"][AddressMode::Immediate] = 0xA9; 
     opcodes["LDA"][AddressMode::ZeroPage ] = 0xA5; 
@@ -172,107 +169,149 @@ void LoadInstructions()
     return;
 }
 
+void CloseFiles(std::ifstream &inFile, std::ofstream &outFile)
+{
+    if(inFile.is_open())
+        inFile.close();
+    if(outFile.is_open())
+        outFile.close();
+    return;
+}
+
 int main(int argc, char ** argv)
 {
-    std::ifstream file(argv[1]);
-    std::ofstream code(argv[2], std::ios::binary);
-
     string line;
-    string command;
-    Word value;
-   
-    AddressMode::Mode mode;
-    NumberMode::Mode base;
-
-    while(getline(file, line))
+    
+    if(argc < 2)
     {
-        size_t atChar = 0, mode = AddressMode::Default;
-        line = line.substr(0, line.find(';'));
+        std::cout << "ERROR: No input file specified!" << std::endl;
+        return 1;
+    }
+    if(argc == 3) line = argv[2];
+    else line = "a.bin";
+    
+    std::ifstream inFile(argv[1]);
+    if(!inFile.is_open())
+    {
+        std::cout << "ERROR: Could not open file \"" << argv[1] << "\"" << std::endl;
+        return 1;
+    }
+
+    std::ofstream outFile(line, std::ios::binary);
+    if(!outFile.is_open())
+    {
+        std::cout << "ERROR: Could not create file \"" << argv[2] << "\"" << std::endl;
+        CloseFiles(inFile, outFile);
+        return 1;
+    }
+
+    std::map<string, std::map<AddressMode::Mode, Byte>> opcodes;
+    LoadInstructions(opcodes);
+
+    string command;
+   
+
+    while(getline(inFile, line))
+    {
+        AddressMode::Mode mode = AddressMode::Default;
+        NumberMode::Mode base = NumberMode::Decimal;
+        Word value = 0;
+        size_t atChar = 0;
         
+        line = line.substr(0, line.find(';'));
         if(line.empty())
             continue;
         
         command = line.substr(0, line.find_first_of(' '));
-        string args = line.substr(line.find_first_of(' ') + 1, line.length()-1) + '*';
+        line = line.substr(line.find_first_of(' ') + 1, line.length()-1) + '*';
 
         if(opcodes.find(command) == opcodes.end())
         {
             std::cout << "ERROR: Invalid command!" << std::endl;
-            return 1;
+            CloseFiles(inFile, outFile);
+            return 2;
         }
         
-        if(args.empty())
+        if(line.empty())
             continue;
 
-        if(args[atChar] == '#')
+        if(line[atChar] == '#')
         {
             mode = AddressMode::Immediate;
             atChar++;
         }
-        else if(args[atChar] == '(')
+        else if(line[atChar] == '(')
         {
-            if(args.find('X') != string::npos)
+            if(line.find('X') != string::npos)
                 mode = AddressMode::IndirectX;
-            else if(args.find('Y') != string::npos)
+            else if(line.find('Y') != string::npos)
                 mode = AddressMode::IndirectY;
             else if(command.compare("JMP")) // (JMP only)
                 mode = AddressMode::Absolute;
-            else throw -1;
+            else
+            {
+                std::cout << "ERROR: Invalid argument!" << std::endl;
+                CloseFiles(inFile, outFile);
+                return 2;
+            };
             atChar++;
         }
         
-        switch (args[atChar])
+        switch (line[atChar])
         {
         case '%':
             base = NumberMode::Binary;
+            atChar++;
             break;
         // Implement Octal base in the future
         case '$':
             base = NumberMode::HexaDec;
+            atChar++;
+            break;
+        case '0': case '1': case '2': case '3': case '4':
+        case '5': case '6': case '7': case '8': case '9':
+            base = NumberMode::Decimal;
             break;
         default:
-            base = NumberMode::Decimal;
-            atChar--;
-            break;
+            std::cout << "ERROR: Invalid argument!" << std::endl;
+            CloseFiles(inFile, outFile);
+            return 2;
         }
-        atChar++;
 
-        value = ConvertFromBase(args.substr(atChar, args.length()), base);
+        value = ConvertFromBase(line.substr(atChar, line.length()), base);
         if(mode == AddressMode::Default)
         {
             if(value < 256) // ZeroPage (Byte)
             {
-                if(args.find(',') == string::npos)
+                if(line.find(',') == string::npos)
                     mode = AddressMode::ZeroPage;
-                else if(args.find('X') != string::npos)
+                else if(line.find('X') != string::npos)
                     mode = AddressMode::ZeroPageX;
             }
             else // Absolute (Word)
             {
-                if(args.find(',') == string::npos)
+                if(line.find(',') == string::npos)
                     mode = AddressMode::Absolute;
-                else if(args.find('X') != string::npos)
+                else if(line.find('X') != string::npos)
                     mode = AddressMode::AbsoluteX;
-                else if(args.find('Y') != string::npos)
+                else if(line.find('Y') != string::npos)
                     mode = AddressMode::AbsoluteY;
             }
         }
 
         if(opcodes[command].find((AddressMode::Mode) mode) == opcodes[command].end())
         {
-            std::cout << "ERROR: Invalid arguments!" << std::endl;
+            std::cout << "ERROR: Invalid argument for instruction!" << std::endl;
+            CloseFiles(inFile, outFile);
             return 2;
         }
 
-        code.write((char*) &opcodes[command][(AddressMode::Mode) mode], sizeof(Byte));
+        outFile.write((char*) &opcodes[command][(AddressMode::Mode) mode], sizeof(Byte));
         if(value > 255)
-            code.write((char*) &value, sizeof(Word));
+            outFile.write((char*) &value, sizeof(Word));
         else
-            code.write((char*) &value, sizeof(Byte));
+            outFile.write((char*) &value, sizeof(Byte));
     }
-    
-    file.close();
-    code.close();
-
+    CloseFiles(inFile, outFile);
     return 0;
 }
