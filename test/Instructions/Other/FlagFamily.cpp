@@ -15,7 +15,7 @@ TEST_F(Flag_Test, CLC_Test)
 
     // Execute
     EXPECT_EQ(cycles_executed, CYCLES);
-    EXPECT_FALSE(processor.Flags.Break);
+    EXPECT_FALSE(processor.Flags.Carry);
 }
 
 TEST_F(Flag_Test, SEC_Test)
@@ -31,14 +31,14 @@ TEST_F(Flag_Test, SEC_Test)
 
     // Execute
     EXPECT_EQ(cycles_executed, CYCLES);
-    EXPECT_TRUE(processor.Flags.Break);
+    EXPECT_TRUE(processor.Flags.Carry);
 }
 TEST_F(Flag_Test, CLD_Test)
 {
     // Given
     const uint32_t CYCLES = 2;
     
-    processor.Flags.Carry = 1;
+    processor.Flags.Decimal = 1;
     memory[0xFFFC] = Instruction::CLD;
 
     // When
@@ -54,8 +54,8 @@ TEST_F(Flag_Test, SED_Test)
     // Given
     const uint32_t CYCLES = 2;
     
-    processor.Flags.Carry = 0;
-    memory[0xFFFC] = Instruction::SEC;
+    processor.Flags.Decimal = 0;
+    memory[0xFFFC] = Instruction::SED;
 
     // When
     uint32_t cycles_executed = processor.Execute(CYCLES, memory);
@@ -86,7 +86,7 @@ TEST_F(Flag_Test, SEI_Test)
     const uint32_t CYCLES = 2;
     
     processor.Flags.Carry = 0;
-    memory[0xFFFC] = Instruction::SEC;
+    memory[0xFFFC] = Instruction::SEI;
 
     // When
     uint32_t cycles_executed = processor.Execute(CYCLES, memory);
@@ -102,9 +102,9 @@ TEST_F(Flag_Test, CLV_Test)
     const uint32_t CYCLES_1 = 2;
     const uint32_t CYCLES_2 = 2;
     
-    processor.RegA = 0xA0;
+    processor.RegA = 0x70;
     memory[0xFFFC] = Instruction::ADC_IM;
-    memory[0xFFFD] = 0xA0;
+    memory[0xFFFD] = 0x30;
     memory[0xFFFE] = Instruction::CLV;
 
     // First

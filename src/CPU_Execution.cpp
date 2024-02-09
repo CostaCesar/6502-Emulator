@@ -595,6 +595,27 @@ uint32_t CPU::Execute(uint32_t cycles_total, Memory& memory)
             byte_Value = ReadByte(cycles_ran, word_Value, memory);
             Math_Sub(cycles_ran, byte_Value);
             break;
+        case CLC:
+            Flags.Carry = 0, cycles_ran++;
+            break;
+        case SEC:
+            Flags.Carry = 1, cycles_ran++;
+            break;
+        case CLD:
+            Flags.Decimal = 0, cycles_ran++;
+            break;
+        case SED:
+            Flags.Decimal = 1, cycles_ran++;
+            break;
+        case CLI:
+            Flags.Interupt = 0, cycles_ran++;
+            break;
+        case SEI:
+            Flags.Interupt = 1, cycles_ran++;
+            break;
+        case CLV:
+            Flags.OverFlow = 0, cycles_ran++;
+            break;
         default:
             fprintf(stderr, "Unknow instruction \"%#x\" ", instruction);
             return cycles_ran;
