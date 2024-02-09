@@ -1,8 +1,8 @@
 #include "../CPU_Model.h"
 
-class BRK_RTI : public M6502 {};
+class BRK_RTI_Test : public M6502 {};
 
-TEST_F(BRK_RTI, BRK_Test)
+TEST_F(BRK_RTI_Test, BRK_Test)
 {
     // Given
     const uint32_t CYCLES = 7;
@@ -22,7 +22,7 @@ TEST_F(BRK_RTI, BRK_Test)
     EXPECT_TRUE(processor.Flags.Break);
 }
 
-TEST_F(BRK_RTI, BRK_StackValues_Test)
+TEST_F(BRK_RTI_Test, BRK_StackValues_Test)
 {
     // Given
     const uint32_t CYCLES = 7;
@@ -47,7 +47,7 @@ TEST_F(BRK_RTI, BRK_StackValues_Test)
     EXPECT_TRUE(processor.Flags.Break);
 }
 
-TEST_F(BRK_RTI, RTI_Test)
+TEST_F(BRK_RTI_Test, RTI_Test)
 {
     // Given
     const Word CPU_START = 0xFF00;
