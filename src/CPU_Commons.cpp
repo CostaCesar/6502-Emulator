@@ -214,7 +214,7 @@ Word CPU::FetchByte_AsWord(uint32_t &cycles, const Memory &memory)
 
 void CPU::Math_Add(uint32_t &cycles, Byte value)
 {
-    Word previous_Value = RegA;
+    Byte previous_Value = RegA;
     Word sum = 0;
     
     if(Flags.Decimal == 1)
@@ -227,7 +227,7 @@ void CPU::Math_Add(uint32_t &cycles, Byte value)
     RegA = (Byte) sum;
 
     Flags.Carry = Flags.Decimal ? sum > 99 : sum > 0xFF;
-    Flags.OverFlow = (~(previous_Value ^ value)) & (previous_Value ^ sum) & 0b10000000; // sum might be RegA, check later
+    Flags.OverFlow = ((previous_Value ^ RegA) & (value ^ RegA) & 0x80) == 0x80 ? 1 : 0; // sum might be RegA, check later
     
     SetStatus_NegvZero(RegA);
 }
