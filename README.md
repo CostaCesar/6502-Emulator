@@ -36,11 +36,16 @@ It's planned to have:
   - BIT
 - An Assembler to convert 6502 assembly into machine code (binary file)
   - Example usage
-  > Assembler <input_file_path> <output_file_path>
+  ``` console
+  Assembler <input_file_path> <output_file_path*>
+  ```
+  - **optional (the output file will be called "a.bin", in the same directory of the program)*
   - *Not fully tested yet!*
 - An Emulator to run the binary code
   - Example usage
-  > Emulator <input_file_path> <chip_variant_number>*
+  ``` console
+  Emulator <input_file_path> <chip_variant_number*>
+  ```
   - **optional (will assum base 6502 chip). See more in the "Base.h" file*
 
 In summary, the project is in pre alhpa stage, with almost all instructions completed, and a basic interface to run programs
