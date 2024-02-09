@@ -34,19 +34,21 @@ Está planejado para o projeto:
   - JSR, JMP, RTI, RTS, BRK, NOP
   - TSX, TXS, PHA, PHP **(oh não)**, PLA, PLP
   - BIT
+
 - Um Assembler para converter o texto em assembly do 6502 em código de máquina (arquivo binário)
-  - Formato de uso
+  Formato de uso
   ``` console
   Assembler <arquivo_de_entrada> <arquivo_de_saida*>
   ```
-  - **opcional (o arquivo de saída será "a.bin", no mesmo diretório do programa)*
-  - *Testes em andamento!*
+  **opcional (o arquivo de saída será "a.bin", no mesmo diretório do programa)*
+  *Testes em andamento!*
+  
 - Um Emulador para executar o código
-  - Formato de uso
+  Formato de uso
   ``` console
   Emulator <arquivo_de_entrada> <variante_do_chip*>
   ```
-  - **opcional (será assumido o chip 6502 base). Veja mais no arquivo "Base.h"*
+  **opcional (será assumido o chip 6502 base). Veja mais no arquivo "Base.h"*
 
 Em resumo, o projeto está um um estágio pré-incial, com quase todas as instruções completas, e uma interface básica para os programas
 

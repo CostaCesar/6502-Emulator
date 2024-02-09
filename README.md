@@ -34,19 +34,21 @@ It's planned to have:
   - JSR, JMP, RTI, RTS, BRK, NOP
   - TSX, TXS, PHA, PHP **(oh no)**, PLA, PLP
   - BIT
+
 - An Assembler to convert 6502 assembly into machine code (binary file)
-  - Example usage
+  Example usage
   ``` console
   Assembler <input_file_path> <output_file_path*>
   ```
-  - **optional (the output file will be called "a.bin", in the same directory of the program)*
-  - *Not fully tested yet!*
+  **optional (the output file will be called "a.bin", in the same directory of the program)*
+  *Not fully tested yet!*
+
 - An Emulator to run the binary code
-  - Example usage
+  Example usage
   ``` console
   Emulator <input_file_path> <chip_variant_number*>
   ```
-  - **optional (will assum base 6502 chip). See more in the "Base.h" file*
+  **optional (will assum base 6502 chip). See more in the "Base.h" file*
 
 In summary, the project is in pre alhpa stage, with almost all instructions completed, and a basic interface to run programs
 
