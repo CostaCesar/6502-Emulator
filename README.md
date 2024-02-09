@@ -2,7 +2,7 @@
 
 [![pt](https://img.shields.io/badge/Ver_em_portugu%C3%AAs-green)](https://github.com/CostaCesar/6502-Emulator/blob/main/README.pt-br.md)
 
-![Static Badge](https://img.shields.io/badge/Status-Prototyping-yellow)
+![Static Badge](https://img.shields.io/badge/Status-Pre%20Alpha-yellow)
 ![Static Badge](https://img.shields.io/badge/Made_with-C%2B%2B-blue)
 ![Static Badge](https://img.shields.io/badge/Tests-GoogleTest-orange)
 ![Static Badge](https://img.shields.io/badge/Build-CMake-red)
@@ -19,21 +19,31 @@ while also creating a starting point to a full-scale emulation of a 6502-based c
 It's planned to have:
 - A fast emulator writen in C++
 - The 6502 processor, with all of the base instructions
-- 64 Kb of accessible memory (no ROM or I/O predefined)
+- 64 Kb of accessible memory (no ROM or I/O predefined), with
+  - 0x0000 -> 0x00FF as Zero Page
+  - 0x0100 -> 0x01FF as the Stack
 - A program to load Assembly code into the emulator
 - An (maybe graphical) interface to visualize the system
 - Test suites, to verify the emulation fidelity
 
 ## Status
-- Instructions suported:
-  - LDA
-  - LDX
-  - LDY
-  - STA
-  - STX
-  - STY
+- Instructions suported (all modes):
+  - LDA, LDX, LDY, STA, STX, STY, INC, DEC
+  - ADC, SBC AND, ORA, EOR, ASL, LSR, ROL, ROR
+  - CLC, SEC, CLD, SED, CLI, SEI, CLV
+  - JSR, JMP, RTI, RTS, BRK, NOP
+  - TSX, TXS, PHA, PHP **(oh no)**, PLA, PLP
+  - BIT
+- An Assembler to convert 6502 assembly into machine code (binary file)
+  - Example usage
+  > Assembler <input_file_path> <output_file_path>
+  - *Not fully tested yet!*
+- An Emulator to run the binary code
+  - Example usage
+  > Emulator <input_file_path> <chip_variant_number>*
+  - **optional (will assum base 6502 chip). See more in the "Base.h" file*
 
-In summary, the project is in a very early stage, with almost no instructions available and no real interface with the user
+In summary, the project is in pre alhpa stage, with almost all instructions completed, and a basic interface to run programs
 
 ## Credits
 Excluding the GoogleTest library (obviously), all of the code in this project was written by me, CostaCesar. That said, as I made clear in the [about](#about) section, the idea for this
