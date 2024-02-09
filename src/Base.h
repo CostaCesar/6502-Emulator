@@ -157,6 +157,22 @@ namespace Instruction
         ROR_AB  = 0x6E, // 6 cycles: Shifts 1 bit right in memory address. Push Carry to the empty bit  
         ROR_ABX = 0x7E, // 7 cycles: Shifts 1 bit right in memory address + offset from RegX. Push Carry to the empty bit 
 
+        // >>>>> Flags <<<<<
+        // > Carry
+        CLC     = 0x18, // 2 cycles: Clears the Carry Flag
+        SEC     = 0x38, // 2 cycles: Sets the Carry Flag
+
+        // > Decimal
+        CLD     = 0xD8, // 2 cycles: Clears the Decimal Flag
+        SED     = 0xF8, // 2 cycles: Sets the Decimal Flag
+
+        // > Interrupt
+        CLI     = 0x58, // 2 cycles: Clears the Interrupt Flag
+        SEI     = 0x78, // 2 cycles: Sets the Interrupt Flag
+
+        // > Overflow
+        CLV     = 0xB8, // 2 cycles: Clears the Overflow Flag
+
         // >>>>> Stack <<<<<
         TSX     = 0xBA, // 2 cycles: Transfer Stack Pointer to Index X
         TXS     = 0x9A, // 2 cycles: Transfer Index X to Stack Register
