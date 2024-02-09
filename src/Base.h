@@ -176,8 +176,8 @@ namespace Instruction
 
 enum Variant : Byte
 {
-    CHIP_STANDART = 1,
-    CHIP_65SC02 = 2
+    CHIP_STANDART = 0,
+    CHIP_65SC02 = 1
 };
 
 #endif
