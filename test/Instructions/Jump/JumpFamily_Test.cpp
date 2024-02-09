@@ -26,7 +26,7 @@ TEST_F(Jump_Test, JSR_Test)
 TEST_F(Jump_Test, RTS_Test)
 {
     // Given
-    processor.Reset(0xFF00, memory);
+    processor.Reset(0xFF00);
     const uint16_t VALUE = 0x40;
     const uint32_t POSIT = 0x10;
     memory[0xFF00] = Instruction::JSR;
@@ -48,7 +48,7 @@ TEST_F(Jump_Test, RTS_Test)
 TEST_F(Jump_Test, JMP_AB_Test)
 {
     // Given
-    processor.Reset(0xFF00, memory);
+    processor.Reset(0xFF00);
     const uint16_t VALUE = 0x40;
     const uint32_t POSIT = 0x1010;
     memory[0xFF00] = Instruction::JMP_AB;
@@ -70,7 +70,7 @@ TEST_F(Jump_Test, JMP_AB_Test)
 TEST_F(Jump_Test, JMP_ID_Test)
 {
     // Given
-    processor.Reset(0xFF00, memory);
+    processor.Reset(0xFF00);
     processor.ChipModel = CHIP_STANDART;
     const uint16_t VALUE = 0x40;
     const uint32_t POSIT_1 = 0x1010;
@@ -95,7 +95,7 @@ TEST_F(Jump_Test, JMP_ID_Test)
 TEST_F(Jump_Test, JMP_ID_StandartChip_PageCross)
 {
     // Given
-    processor.Reset(0xFF00, memory);
+    processor.Reset(0xFF00);
     processor.ChipModel = CHIP_STANDART;
     const uint16_t VALUE = 0x40;
     const uint32_t POSIT_1 = 0x10FF;
@@ -121,7 +121,7 @@ TEST_F(Jump_Test, JMP_ID_StandartChip_PageCross)
 TEST_F(Jump_Test, JMP_ID_65SC02Chip_PageCross)
 {
     // Given
-    processor.Reset(0xFF00, memory);
+    processor.Reset(0xFF00);
     processor.ChipModel = CHIP_65SC02;
     const uint16_t VALUE = 0x40;
     const uint32_t POSIT_1 = 0x1010;

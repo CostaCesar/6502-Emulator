@@ -52,7 +52,7 @@ TEST_F(BRK_RTI, RTI_Test)
     // Given
     const Word CPU_START = 0xFF00;
 
-    processor.Reset(CPU_START, memory);
+    processor.Reset(CPU_START);
     const uint32_t CYCLES = 7 + 6;
     const Word PC_VALUE = 0x6000;
     const Byte PS_VALUE = 0b11010000;

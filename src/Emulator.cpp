@@ -26,7 +26,8 @@ int main(int argc, char **argv)
     Memory Ram;
     Word Address = 0x1000;
 
-    CPU Processor(Chip, Ram, Address);
+    Ram.Initialise();
+    CPU Processor(Chip, Address);
 
     for(; inFile.peek() != EOF; Address++)
     {

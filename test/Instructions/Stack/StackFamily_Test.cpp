@@ -5,7 +5,7 @@ class Stack_Test : public M6502 {};
 TEST_F(Stack_Test, TSX_Test_Basic)
 {
     // Given
-    processor.Reset(memory);
+    processor.Reset();
     const uint16_t VALUE = 0x01;
     processor.RegX = 0x00;
     processor.StackPointer = VALUE;
@@ -26,7 +26,7 @@ TEST_F(Stack_Test, TSX_Test_Basic)
 TEST_F(Stack_Test, TSX_Test_ZeroFlag)
 {
     // Given
-    processor.Reset(memory);
+    processor.Reset();
     const uint16_t VALUE = 0x00;
     processor.RegX = 0x00;
     processor.StackPointer = VALUE;
@@ -47,7 +47,7 @@ TEST_F(Stack_Test, TSX_Test_ZeroFlag)
 TEST_F(Stack_Test, TSX_Test_NegativeFlag)
 {
     // Given
-    processor.Reset(memory);
+    processor.Reset();
     const uint16_t VALUE = 0xF1;
     processor.RegX = 0x00;
     processor.StackPointer = VALUE;
@@ -68,7 +68,7 @@ TEST_F(Stack_Test, TSX_Test_NegativeFlag)
 TEST_F(Stack_Test, TXS_Test)
 {
     // Given
-    processor.Reset(memory);
+    processor.Reset();
     const uint16_t VALUE = 0xF1;
     processor.RegX = VALUE;
     memory[0xFFFC] = Instruction::TXS;
@@ -85,7 +85,7 @@ TEST_F(Stack_Test, TXS_Test)
 TEST_F(Stack_Test, PHA_Test)
 {
     // Given
-    processor.Reset(memory);
+    processor.Reset();
     const uint32_t CYCLES = 3;
     const uint8_t VALUE = 0x64;
     processor.RegA = VALUE;
@@ -103,7 +103,7 @@ TEST_F(Stack_Test, PHA_Test)
 TEST_F(Stack_Test, PHP_Test) // Oh no, PHP is invading the system!
 {
     // Given
-    processor.Reset(memory);
+    processor.Reset();
     const uint32_t CYCLES = 3;
     const uint8_t VALUE = 0b10101010;
     processor.FlagStatus = VALUE;
@@ -120,7 +120,7 @@ TEST_F(Stack_Test, PHP_Test) // Oh no, PHP is invading the system!
 TEST_F(Stack_Test, PLA_Test)
 {
     // Given
-    processor.Reset(memory);
+    processor.Reset();
     const uint32_t CYCLES = 4;
     const uint8_t VALUE = 0x64;
     memory[processor.Stack_AsWord()] = VALUE;
@@ -140,7 +140,7 @@ TEST_F(Stack_Test, PLA_Test)
 TEST_F(Stack_Test, PLA_Test_ZeroFlag)
 {
     // Given
-    processor.Reset(memory);
+    processor.Reset();
     const uint32_t CYCLES = 4;
     const uint8_t VALUE = 0x00;
     memory[processor.Stack_AsWord()] = VALUE;
@@ -162,7 +162,7 @@ TEST_F(Stack_Test, PLA_Test_ZeroFlag)
 TEST_F(Stack_Test, PLA_Test_NegativeFlag)
 {
     // Given
-    processor.Reset(memory);
+    processor.Reset();
     const uint32_t CYCLES = 4;
     const uint8_t VALUE = 0xF1;
     memory[processor.Stack_AsWord()] = VALUE;
@@ -185,7 +185,7 @@ TEST_F(Stack_Test, PLA_Test_NegativeFlag)
 TEST_F(Stack_Test, PLP_Test)
 {
     // Given
-    processor.Reset(memory);
+    processor.Reset();
     const uint32_t CYCLES = 4;
     const uint8_t VALUE = 0b10101010;
     memory[processor.Stack_AsWord()] = VALUE;

@@ -1,23 +1,22 @@
 #include "CPU.h"
 using namespace Instruction;
 
-CPU::CPU(Variant chip_Model, Memory& memory, Word start_from)
+CPU::CPU(Variant chip_Model, Word start_from)
 {
     ChipModel = chip_Model;
-    Reset(start_from, memory);
+    Reset(start_from);
 }
 
-void CPU::Reset(Memory& memory)
+void CPU::Reset()
 {
-    Reset(0xFFFC, memory);
+    Reset(0xFFFC);
 }
-void CPU::Reset(Word address, Memory& memory)
+void CPU::Reset(Word address = 0xFFFC)
 {
     ProgramCounter = address;
     StackPointer = 0x00FF;
     FlagStatus = 0;
     RegA = RegY = RegX = 0;
-    memory.Initialise();
 }
 
 /* Read 1 byte from memory */

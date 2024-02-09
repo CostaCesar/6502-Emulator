@@ -9,10 +9,11 @@ class M6502 : public testing::Test
 {
 public:
     Memory memory;
-    CPU processor = CPU(CHIP_STANDART, memory, 0xFFFC);
+    CPU processor = CPU(CHIP_STANDART, 0xFFFC);
 
     virtual void SetUp()
     {
+        memory.Initialise();
     }
 
     virtual void TearDown()

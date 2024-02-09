@@ -30,11 +30,11 @@ struct CPU
         CPU_Flags Flags;
     };
     
-    CPU(Variant chip_Model, Memory& memory, Word start_from);
+    CPU(Variant chip_Model, Word start_from);
     
     uint32_t Execute(uint32_t cycles, Memory& memory);
-    void Reset(Memory& memory);
-    void Reset(Word address, Memory& memory);
+    void Reset();
+    void Reset(Word address);
     Word Stack_AsWord() const;  
 
 private:
