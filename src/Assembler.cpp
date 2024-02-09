@@ -1,8 +1,8 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <filesystem>
 #include <map>
-#include <math.h>
 #include "Base.h"
 
 using std::string;
@@ -181,6 +181,7 @@ void CloseFiles(std::ifstream &inFile, std::ofstream &outFile)
 int main(int argc, char ** argv)
 {
     string line;
+    string command;
     
     if(argc < 2)
     {
@@ -197,6 +198,17 @@ int main(int argc, char ** argv)
         return 1;
     }
 
+    if(std::filesystem::exists(line))
+    {   
+        std::cout << "WARNING: A file with the name \"" << line << "\" already exists! Overwrite [y/N]? " << std::endl;
+        command = getchar();
+        if (command == "n" || command == "N" || command == "\n")
+        {
+            inFile.close();
+            return 0;
+        }
+        
+    }
     std::ofstream outFile(line, std::ios::binary);
     if(!outFile.is_open())
     {
@@ -207,9 +219,6 @@ int main(int argc, char ** argv)
 
     std::map<string, std::map<AddressMode::Mode, Byte>> opcodes;
     LoadInstructions(opcodes);
-
-    string command;
-   
 
     while(getline(inFile, line))
     {

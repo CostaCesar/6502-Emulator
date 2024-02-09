@@ -3,9 +3,9 @@ using namespace Instruction;
 
 uint32_t CPU::Execute(uint32_t cycles_total, Memory& memory)
 {
-    uint32_t cycles_ran = 0;
+    uint32_t cycles_ran;
     
-    for(cycles_ran; cycles_ran < cycles_total;)
+    for(cycles_ran = 0; cycles_ran < cycles_total;)
     {
         Opcode instruction = FetchInstruction(cycles_ran, memory);
         Byte byte_Value = 0;
