@@ -616,6 +616,46 @@ uint32_t CPU::Execute(uint32_t cycles_total, Memory& memory)
         case CLV:
             Flags.OverFlow = 0, cycles_ran++;
             break;
+        case TAX:
+            RegX = RegA;
+            cycles_ran++;
+            SetStatus_NegvZero(RegX);
+            break;
+        case TAY:
+            RegY = RegA;
+            cycles_ran++;
+            SetStatus_NegvZero(RegY);
+            break;
+        case TXA:
+            RegA = RegX;
+            cycles_ran++;
+            SetStatus_NegvZero(RegA);
+            break;
+        case TYA:
+            RegA = RegY;
+            cycles_ran++;
+            SetStatus_NegvZero(RegA);
+            break;
+        case DEX:
+            RegX--;
+            cycles_ran++;
+            SetStatus_NegvZero(RegX);
+            break;
+        case DEY:
+            RegY--;
+            cycles_ran++;
+            SetStatus_NegvZero(RegY);
+            break;
+        case INX:
+            RegX++;
+            cycles_ran++;
+            SetStatus_NegvZero(RegX);
+            break;
+        case INY:
+            RegY++;
+            cycles_ran++;
+            SetStatus_NegvZero(RegY);
+            break;
         default:
             fprintf(stderr, "Unknow instruction \"%#x\" ", instruction);
             return cycles_ran;

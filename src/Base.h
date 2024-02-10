@@ -173,6 +173,16 @@ namespace Instruction
         // > Overflow
         CLV     = 0xB8, // 2 cycles: Clears the Overflow Flag
 
+        // >>>>> Register <<<<<
+        TAX     = 0xAA, // 2 Cycles: Transfer RegA to RegX
+        TAY     = 0xA8, // 2 Cycles: Transfer RegA to RegY
+        TXA     = 0x8A, // 2 Cycles: Transfer RegX to RegA
+        TYA     = 0x98, // 2 Cycles: Transfer RegY to RegA
+        DEX     = 0xCA, // 2 Cycles: Decrement RegX
+        DEY     = 0x88, // 2 Cycles: Decrement RegY
+        INX     = 0xE8, // 2 Cycles: Increment RegX
+        INY     = 0xC8, // 2 Cycles: Increment RegY
+
         // >>>>> Stack <<<<<
         TSX     = 0xBA, // 2 cycles: Transfer Stack Pointer to Index X
         TXS     = 0x9A, // 2 cycles: Transfer Index X to Stack Register
