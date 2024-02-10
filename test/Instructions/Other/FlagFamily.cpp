@@ -2,7 +2,7 @@
 
 class Flag_Test : public M6502 {};
 
-TEST_F(Flag_Test, CLC_Test)
+TEST_F(Flag_Test, CLC)
 {
     // Given
     const uint32_t CYCLES = 2;
@@ -18,7 +18,7 @@ TEST_F(Flag_Test, CLC_Test)
     EXPECT_FALSE(processor.Flags.Carry);
 }
 
-TEST_F(Flag_Test, SEC_Test)
+TEST_F(Flag_Test, SEC)
 {
     // Given
     const uint32_t CYCLES = 2;
@@ -33,7 +33,7 @@ TEST_F(Flag_Test, SEC_Test)
     EXPECT_EQ(cycles_executed, CYCLES);
     EXPECT_TRUE(processor.Flags.Carry);
 }
-TEST_F(Flag_Test, CLD_Test)
+TEST_F(Flag_Test, CLD)
 {
     // Given
     const uint32_t CYCLES = 2;
@@ -49,7 +49,7 @@ TEST_F(Flag_Test, CLD_Test)
     EXPECT_FALSE(processor.Flags.Decimal);
 }
 
-TEST_F(Flag_Test, SED_Test)
+TEST_F(Flag_Test, SED)
 {
     // Given
     const uint32_t CYCLES = 2;
@@ -64,7 +64,7 @@ TEST_F(Flag_Test, SED_Test)
     EXPECT_EQ(cycles_executed, CYCLES);
     EXPECT_TRUE(processor.Flags.Decimal);
 }
-TEST_F(Flag_Test, CLI_Test)
+TEST_F(Flag_Test, CLI)
 {
     // Given
     const uint32_t CYCLES = 2;
@@ -80,7 +80,7 @@ TEST_F(Flag_Test, CLI_Test)
     EXPECT_FALSE(processor.Flags.Interupt);
 }
 
-TEST_F(Flag_Test, SEI_Test)
+TEST_F(Flag_Test, SEI)
 {
     // Given
     const uint32_t CYCLES = 2;
@@ -96,7 +96,7 @@ TEST_F(Flag_Test, SEI_Test)
     EXPECT_TRUE(processor.Flags.Interupt);
 }
 
-TEST_F(Flag_Test, CLV_Test)
+TEST_F(Flag_Test, CLV)
 {
     // Given
     const uint32_t CYCLES_1 = 2;

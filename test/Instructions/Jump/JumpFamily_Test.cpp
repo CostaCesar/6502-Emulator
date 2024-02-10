@@ -2,9 +2,10 @@
 
 class Jump_Test : public M6502 {};
 
-TEST_F(Jump_Test, JSR_Test)
+TEST_F(Jump_Test, JSR)
 {
     // Given
+    const uint32_t CYCLES = 8;
     const uint16_t VALUE = 0x40;
     const uint32_t POSIT = 0x10;
     memory[POSIT] = Instruction::LDA_IM;
@@ -13,22 +14,24 @@ TEST_F(Jump_Test, JSR_Test)
     memory[0xFFFD] = POSIT;
 
     // When
-    uint32_t cycles_executed = processor.Execute(8, memory);
+    uint32_t cycles_executed = processor.Execute(CYCLES, memory);
 
     // Execute
-    EXPECT_EQ(cycles_executed, 8);
+    EXPECT_EQ(cycles_executed, CYCLES);
     EXPECT_EQ(processor.RegA, VALUE);
     EXPECT_EQ(processor.StackPointer, 0x00FF - 2);
     EXPECT_EQ(processor.ProgramCounter, POSIT + 2);
     EXPECT_EQ(processor.FlagStatus, 0x0000);
 }
 
-TEST_F(Jump_Test, RTS_Test)
+TEST_F(Jump_Test, RTS)
 {
     // Given
-    processor.Reset(0xFF00);
+    const uint32_t CYCLES = 6 + 6 + 2;
     const uint16_t VALUE = 0x40;
     const uint32_t POSIT = 0x10;
+
+    processor.Reset(0xFF00);
     memory[0xFF00] = Instruction::JSR;
     memory.WriteWord(0xFF01, POSIT);
     memory[POSIT] = Instruction::RTS;
@@ -36,45 +39,50 @@ TEST_F(Jump_Test, RTS_Test)
     memory[0xFF04] = VALUE;
 
     // When
-    uint32_t cycles_executed = processor.Execute(14, memory);
+    uint32_t cycles_executed = processor.Execute(CYCLES, memory);
 
     // Execute
-    EXPECT_EQ(cycles_executed, 14);
+    EXPECT_EQ(cycles_executed, CYCLES);
     EXPECT_EQ(processor.RegA, VALUE);
     EXPECT_EQ(processor.StackPointer, 0x00FF);
     EXPECT_EQ(processor.FlagStatus, 0x0000);
 }
 
-TEST_F(Jump_Test, JMP_AB_Test)
+TEST_F(Jump_Test, JMP_AB)
 {
     // Given
-    processor.Reset(0xFF00);
+    const uint32_t CYCLES = 5;
     const uint16_t VALUE = 0x40;
     const uint32_t POSIT = 0x1010;
+
+    processor.Reset(0xFF00);
     memory[0xFF00] = Instruction::JMP_AB;
     memory.WriteWord(0xFF01, POSIT);
     memory[POSIT] = Instruction::LDA_IM;
     memory[POSIT+1] = VALUE;
 
     // When
-    uint32_t cycles_executed = processor.Execute(5, memory);
+    uint32_t cycles_executed = processor.Execute(CYCLES, memory);
 
     // Execute
-    EXPECT_EQ(cycles_executed, 5);
+    EXPECT_EQ(cycles_executed, CYCLES);
     EXPECT_EQ(processor.RegA, VALUE);
     EXPECT_EQ(processor.ProgramCounter, POSIT+2);
     EXPECT_EQ(processor.StackPointer, 0x00FF);
     EXPECT_EQ(processor.FlagStatus, 0x0000);
 }
 
-TEST_F(Jump_Test, JMP_ID_Test)
+TEST_F(Jump_Test, JMP_ID)
 {
     // Given
-    processor.Reset(0xFF00);
-    processor.ChipModel = CHIP_STANDART;
+    const uint32_t CYCLES = 7;
     const uint16_t VALUE = 0x40;
     const uint32_t POSIT_1 = 0x1010;
     const uint32_t POSIT_2 = 0xFF20;
+    
+    processor.Reset(0xFF00);
+    processor.ChipModel = CHIP_STANDART;
+    
     memory[0xFF00] = Instruction::JMP_ID;
     memory.WriteWord(0xFF01, POSIT_1);
     memory.WriteWord(POSIT_1, POSIT_2);
@@ -82,10 +90,10 @@ TEST_F(Jump_Test, JMP_ID_Test)
     memory[POSIT_2+1] = VALUE;
 
     // When
-    uint32_t cycles_executed = processor.Execute(7, memory);
+    uint32_t cycles_executed = processor.Execute(CYCLES, memory);
 
     // Execute
-    EXPECT_EQ(cycles_executed, 7);
+    EXPECT_EQ(cycles_executed, CYCLES);
     EXPECT_EQ(processor.RegA, VALUE);
     EXPECT_EQ(processor.ProgramCounter, POSIT_2+2);
     EXPECT_EQ(processor.StackPointer, 0x00FF);
@@ -95,11 +103,14 @@ TEST_F(Jump_Test, JMP_ID_Test)
 TEST_F(Jump_Test, JMP_ID_StandartChip_PageCross)
 {
     // Given
-    processor.Reset(0xFF00);
-    processor.ChipModel = CHIP_STANDART;
+    const uint32_t CYCLES = 7;
     const uint16_t VALUE = 0x40;
     const uint32_t POSIT_1 = 0x10FF;
     const uint32_t POSIT_2 = 0xFF20;
+
+    processor.Reset(0xFF00);
+    processor.ChipModel = CHIP_STANDART;
+
     memory[0xFF00] = Instruction::JMP_ID;
     memory.WriteWord(0xFF01, POSIT_1);
     memory[POSIT_1] = 0x0020;
@@ -108,10 +119,10 @@ TEST_F(Jump_Test, JMP_ID_StandartChip_PageCross)
     memory[POSIT_2+1] = VALUE;
 
     // When
-    uint32_t cycles_executed = processor.Execute(7, memory);
+    uint32_t cycles_executed = processor.Execute(CYCLES, memory);
 
     // Execute
-    EXPECT_EQ(cycles_executed, 7);
+    EXPECT_EQ(cycles_executed, CYCLES);
     EXPECT_EQ(processor.RegA, VALUE);
     EXPECT_EQ(processor.ProgramCounter, POSIT_2+2);
     EXPECT_EQ(processor.StackPointer, 0x00FF);
@@ -121,11 +132,14 @@ TEST_F(Jump_Test, JMP_ID_StandartChip_PageCross)
 TEST_F(Jump_Test, JMP_ID_65SC02Chip_PageCross)
 {
     // Given
-    processor.Reset(0xFF00);
-    processor.ChipModel = CHIP_65SC02;
+    const uint32_t CYCLES = 7;
     const uint16_t VALUE = 0x40;
     const uint32_t POSIT_1 = 0x1010;
     const uint32_t POSIT_2 = 0xFF20;
+
+    processor.Reset(0xFF00);
+    processor.ChipModel = CHIP_65SC02;
+
     memory[0xFF00] = Instruction::JMP_ID;
     memory.WriteWord(0xFF01, POSIT_1);
     memory.WriteWord(POSIT_1, POSIT_2);
@@ -133,10 +147,10 @@ TEST_F(Jump_Test, JMP_ID_65SC02Chip_PageCross)
     memory[POSIT_2+1] = VALUE;
 
     // When
-    uint32_t cycles_executed = processor.Execute(7, memory);
+    uint32_t cycles_executed = processor.Execute(CYCLES, memory);
 
     // Execute
-    EXPECT_EQ(cycles_executed, 7);
+    EXPECT_EQ(cycles_executed, CYCLES);
     EXPECT_EQ(processor.RegA, VALUE);
     EXPECT_EQ(processor.ProgramCounter, POSIT_2+2);
     EXPECT_EQ(processor.StackPointer, 0x00FF);

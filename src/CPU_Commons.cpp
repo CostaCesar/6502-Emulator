@@ -182,7 +182,7 @@ void CPU::IncrementByRegister(uint32_t& cycles, Word& value, Byte cpu_register)
 /* Handles the additional cycle when a load instruction crosses the page border */
 void CPU::Check_PageCross(uint32_t& cycles, Word& address, Byte offset)
 {
-    if((int) (address / 0xFF) < (int) (address + offset) / 0xFF)
+    if((int) (address / 0x100) < (int) (address + offset) / 0x100)
         cycles++;
     address += offset;
 }

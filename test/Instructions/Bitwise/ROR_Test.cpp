@@ -2,7 +2,7 @@
 
 class ROR_Test : public M6502 {};
 
-TEST_F(ROR_Test, ROR_RegA_Test)
+TEST_F(ROR_Test, ROR_RegA)
 {
     // Given
     const uint32_t CYCLES = 2;
@@ -21,7 +21,7 @@ TEST_F(ROR_Test, ROR_RegA_Test)
     EXPECT_FALSE(processor.Flags.Zero);
     FlagsExcept_NegvZeroCarry(processor);
 }
-TEST_F(ROR_Test, ROR_RegA_Test_NegvFlag)
+TEST_F(ROR_Test, ROR_RegA_NegvFlag)
 {
     // Given
     const uint32_t CYCLES = 2;
@@ -41,7 +41,7 @@ TEST_F(ROR_Test, ROR_RegA_Test_NegvFlag)
     EXPECT_FALSE(processor.Flags.Zero);
     FlagsExcept_NegvZeroCarry(processor);
 }
-TEST_F(ROR_Test, ROR_RegA_Test_ZeroFlag)
+TEST_F(ROR_Test, ROR_RegA_ZeroFlag)
 {
     // Given
     const uint32_t CYCLES = 2;
@@ -61,7 +61,7 @@ TEST_F(ROR_Test, ROR_RegA_Test_ZeroFlag)
     FlagsExcept_NegvZeroCarry(processor);
 }
 
-TEST_F(ROR_Test, ROR_RegA_Test_CarryFlag)
+TEST_F(ROR_Test, ROR_RegA_CarryFlag)
 {
     // Given
     const uint32_t CYCLES = 2;

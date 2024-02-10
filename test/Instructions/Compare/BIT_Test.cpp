@@ -7,10 +7,14 @@ TEST_F(BIT_Test, BIT_ZeroPage)
     // Given
     const uint32_t CYCLES = 3;
     const Byte POSITION = 0x32;
-    processor.RegA = 0xCC;
+    const Byte VALUE_1 = 0xCC;
+    const Byte VALUE_2 = 0xCC;
+
+    processor.RegA = VALUE_1;
+
     memory[0xFFFC] = Instruction::BIT_ZP;
     memory[0xFFFD] = POSITION;
-    memory[POSITION] = 0xCC;
+    memory[POSITION] = VALUE_2;
 
     // When
     uint32_t cycles_executed = processor.Execute(CYCLES, memory);
@@ -31,10 +35,14 @@ TEST_F(BIT_Test, BIT_ZeroPage_ZeroFlag)
 {
     const uint32_t CYCLES = 3;
     const Byte POSITION = 0x22;
-    processor.RegA = 0x00;
+    const Byte VALUE_1 = 0x00;
+    const Byte VALUE_2 = 0x00;
+
+    processor.RegA = VALUE_1;
+
     memory[0xFFFC] = Instruction::BIT_ZP;
     memory[0xFFFD] = POSITION;
-    memory[POSITION] = 0x00;
+    memory[POSITION] = VALUE_2;
 
     // When
     uint32_t cycles_executed = processor.Execute(CYCLES, memory);
@@ -55,10 +63,14 @@ TEST_F(BIT_Test, BIT_ZeroPage_NegativeFlag)
 {
     const uint32_t CYCLES = 3;
     const Byte POSITION = 0x39;
-    processor.RegA = 0b10110010;
+    const Byte VALUE_1 = 0b10110010;
+    const Byte VALUE_2 = 0b10010110;
+
+    processor.RegA = VALUE_1;
+
     memory[0xFFFC] = Instruction::BIT_ZP;
     memory[0xFFFD] = POSITION;
-    memory[POSITION] = 0b10010110;
+    memory[POSITION] = VALUE_2;
 
     // When
     uint32_t cycles_executed = processor.Execute(CYCLES, memory);
@@ -79,10 +91,14 @@ TEST_F(BIT_Test, BIT_ZeroPage_OverflowFlag)
 {
     const uint32_t CYCLES = 3;
     const Byte POSITION = 0x30;
-    processor.RegA = 0b11110010;
+    const Byte VALUE_1 = 0b11110010;
+    const Byte VALUE_2 = 0b01010110;
+
+    processor.RegA = VALUE_1;
+
     memory[0xFFFC] = Instruction::BIT_ZP;
     memory[0xFFFD] = POSITION;
-    memory[POSITION] = 0b01010110;
+    memory[POSITION] = VALUE_2;
 
     // When
     uint32_t cycles_executed = processor.Execute(CYCLES, memory);
@@ -102,11 +118,15 @@ TEST_F(BIT_Test, BIT_ZeroPage_OverflowFlag)
 TEST_F(BIT_Test, BIT_Absolute)
 {
     const uint32_t CYCLES = 4;
-    processor.RegA = 0xCC;
+    const Byte VALUE_1 = 0xCC;
+    const Byte VALUE_2 = 0xCC;
+    const Word POSITION = 0xCDAB;
+
+    processor.RegA = VALUE_1;
+
     memory[0xFFFC] = Instruction::BIT_AB;
-    memory[0xFFFD] = 0xAB;
-    memory[0xFFFE] = 0xCD;
-    memory[0xCDAB] = 0xCC;
+    memory.WriteWord(0XFFFD, POSITION);
+    memory[POSITION] = VALUE_2;
 
     // When
     uint32_t cycles_executed = processor.Execute(CYCLES, memory);
@@ -126,11 +146,14 @@ TEST_F(BIT_Test, BIT_Absolute)
 TEST_F(BIT_Test, BIT_Absolute_ZeroFlag)
 {
     const uint32_t CYCLES = 4;
-    processor.RegA = 0b01110111;
+    const Byte VALUE_1 = 0b01110111;
+    const Byte VALUE_2 = 0b00001000;
+    const Word POSITION = 0xCDBA;
+
+    processor.RegA = VALUE_1;
     memory[0xFFFC] = Instruction::BIT_AB;
-    memory[0xFFFD] = 0xAB;
-    memory[0xFFFE] = 0xCD;
-    memory[0xCDAB] = 0b00001000;
+    memory.WriteWord(0xFFFD, POSITION);
+    memory[POSITION] = VALUE_2;
 
     // When
     uint32_t cycles_executed = processor.Execute(CYCLES, memory);
@@ -150,11 +173,15 @@ TEST_F(BIT_Test, BIT_Absolute_ZeroFlag)
 TEST_F(BIT_Test, BIT_Absolute_NegativeFlag)
 {
     const uint32_t CYCLES = 4;
-    processor.RegA = 0b11111111;
+    const Byte VALUE_1 = 0b11111111;
+    const Byte VALUE_2 = 0b10000000;
+    const Word POSITION = 0x6502;
+
+    processor.RegA = VALUE_1;
+
     memory[0xFFFC] = Instruction::BIT_AB;
-    memory[0xFFFD] = 0xAB;
-    memory[0xFFFE] = 0xCD;
-    memory[0xCDAB] = 0b10000000;
+    memory.WriteWord(0xFFFD, POSITION);
+    memory[POSITION] = VALUE_2;
 
     // When
     uint32_t cycles_executed = processor.Execute(CYCLES, memory);
@@ -174,11 +201,15 @@ TEST_F(BIT_Test, BIT_Absolute_NegativeFlag)
 TEST_F(BIT_Test, BIT_Absolute_OverflowFlag)
 {
     const uint32_t CYCLES = 4;
-    processor.RegA = 0b01111111;
+    const Byte VALUE_1 = 0b01111111;
+    const Byte VALUE_2 = 0b01000000;
+    const Word POSITION = 0x4004;
+
+    processor.RegA = VALUE_1;
+
     memory[0xFFFC] = Instruction::BIT_AB;
-    memory[0xFFFD] = 0xAB;
-    memory[0xFFFE] = 0xCD;
-    memory[0xCDAB] = 0b01000000;
+    memory.WriteWord(0xFFFD, POSITION);
+    memory[POSITION] = VALUE_2;
 
     // When
     uint32_t cycles_executed = processor.Execute(CYCLES, memory);

@@ -2,7 +2,7 @@
 
 class ROL_Test : public M6502 {};
 
-TEST_F(ROL_Test, ROL_RegA_Test)
+TEST_F(ROL_Test, ROL_RegA)
 {
     // Given
     const uint32_t CYCLES = 2;
@@ -23,7 +23,7 @@ TEST_F(ROL_Test, ROL_RegA_Test)
     FlagsExcept_NegvZeroCarry(processor);
 }
 
-TEST_F(ROL_Test, ROL_RegA_Test_NegvFlag)
+TEST_F(ROL_Test, ROL_RegA_NegvFlag)
 {
     // Given
     const uint32_t CYCLES = 2;
@@ -43,7 +43,7 @@ TEST_F(ROL_Test, ROL_RegA_Test_NegvFlag)
     FlagsExcept_NegvZeroCarry(processor);
 }
 
-TEST_F(ROL_Test, ROL_RegA_Test_ZeroFlag)
+TEST_F(ROL_Test, ROL_RegA_ZeroFlag)
 {
     // Given
     const uint32_t CYCLES = 2;
@@ -63,7 +63,7 @@ TEST_F(ROL_Test, ROL_RegA_Test_ZeroFlag)
     FlagsExcept_NegvZeroCarry(processor);
 }
 
-TEST_F(ROL_Test, ROL_RegA_Test_RollOver)
+TEST_F(ROL_Test, ROL_RegA_RollOver)
 {
     // Given
     const uint32_t CYCLES = 4;
@@ -84,7 +84,7 @@ TEST_F(ROL_Test, ROL_RegA_Test_RollOver)
     FlagsExcept_NegvZeroCarry(processor);
 }
 
-TEST_F(ROL_Test, ROL_RegA_Test_CarryFlag)
+TEST_F(ROL_Test, ROL_RegA_CarryFlag)
 {
     // Given
     const uint32_t CYCLES = 2;

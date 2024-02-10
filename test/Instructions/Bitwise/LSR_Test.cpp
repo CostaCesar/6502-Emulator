@@ -2,7 +2,7 @@
 
 class LSR_Test : public M6502 {};
 
-TEST_F(LSR_Test, LSR_RegA_Test)
+TEST_F(LSR_Test, LSR_RegA)
 {
     // Given
     const uint32_t CYCLES = 2;
@@ -21,7 +21,7 @@ TEST_F(LSR_Test, LSR_RegA_Test)
     EXPECT_FALSE(processor.Flags.Zero);
     FlagsExcept_NegvZeroCarry(processor);
 }
-TEST_F(LSR_Test, LSR_RegA_Test_ZeroFlag)
+TEST_F(LSR_Test, LSR_RegA_ZeroFlag)
 {
     // Given
     const uint32_t CYCLES = 4;
@@ -42,7 +42,7 @@ TEST_F(LSR_Test, LSR_RegA_Test_ZeroFlag)
     FlagsExcept_NegvZeroCarry(processor);
 }
 
-TEST_F(LSR_Test, LSR_RegA_Test_CarryFlag)
+TEST_F(LSR_Test, LSR_RegA_CarryFlag)
 {
     // Given
     const uint32_t CYCLES = 2;

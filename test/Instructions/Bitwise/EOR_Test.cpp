@@ -5,8 +5,10 @@ class EOR_Test : public M6502 {};
 TEST_F(EOR_Test, EOR_Imediatate)
 {
     // Given
-    uint32_t CYCLES = 2;
+    const uint32_t CYCLES = 2;
+
     processor.RegA = 0b00101010;
+
     memory[0xFFFC] = Instruction::EOR_IM;
     memory[0xFFFD] = 0b01010101;
 
@@ -23,8 +25,10 @@ TEST_F(EOR_Test, EOR_Imediatate)
 TEST_F(EOR_Test, EOR_Imediatate_ZeroFlag)
 {
     // Given
-    uint32_t CYCLES = 2;
+    const uint32_t CYCLES = 2;
+
     processor.RegA = 0x00;
+
     memory[0xFFFC] = Instruction::EOR_IM;
     memory[0xFFFD] = 0x00;
 
@@ -41,8 +45,10 @@ TEST_F(EOR_Test, EOR_Imediatate_ZeroFlag)
 TEST_F(EOR_Test, EOR_Imediatate_NegativeFlag)
 {
     // Given
-    uint32_t CYCLES = 2;
+    const uint32_t CYCLES = 2;
+
     processor.RegA = 0b01000000;
+
     memory[0xFFFC] = Instruction::EOR_IM;
     memory[0xFFFD] = 0b10000000;
 
@@ -60,8 +66,10 @@ TEST_F(EOR_Test, EOR_Imediatate_NegativeFlag)
 TEST_F(EOR_Test, EOR_ZeroPage)
 {
     // Given
-    uint32_t CYCLES = 3;
+    const uint32_t CYCLES = 3;
+
     processor.RegA = 0b01110000;
+
     memory[0xFFFC] = Instruction::EOR_ZP;
     memory[0xFFFD] = 0x10;
     memory[0x0010] = 0b00011100;
@@ -80,12 +88,16 @@ TEST_F(EOR_Test, EOR_ZeroPage)
 TEST_F(EOR_Test, EOR_ZeroPage_OffsetX)
 {
     // Given
-    uint32_t CYCLES = 4;
-    processor.RegX = 0x05;
+    const uint32_t CYCLES = 4;
+    const Byte OFFSET = 0x05;
+    const Word POSITION = 0x10;
+
+    processor.RegX = OFFSET;
     processor.RegA = 0b10111100;
+
     memory[0xFFFC] = Instruction::EOR_ZPX;
-    memory[0xFFFD] = 0x10;
-    memory[0x0015] = 0b01100110;
+    memory[0xFFFD] = POSITION;
+    memory[POSITION + OFFSET] = 0b01100110;
 
     // When
     uint32_t cycles_executed = processor.Execute(CYCLES, memory);
@@ -101,12 +113,16 @@ TEST_F(EOR_Test, EOR_ZeroPage_OffsetX)
 TEST_F(EOR_Test, EOR_ZeroPage_OffsetX_Wrapping)
 {
     // Given
-    uint32_t CYCLES = 4;
-    processor.RegX = 0xFF;
+    const uint32_t CYCLES = 4;
+    const Byte OFFSET = 0xFF;
+    const Byte POSITION = 0x80;
+
+    processor.RegX = OFFSET;
     processor.RegA = 0b00111100;
+
     memory[0xFFFC] = Instruction::EOR_ZPX;
-    memory[0xFFFD] = 0x80;
-    memory[0x007F] = 0b01100110;
+    memory[0xFFFD] = POSITION;
+    memory[(Byte) (POSITION + OFFSET)] = 0b01100110;
 
     // When
     uint32_t cycles_executed = processor.Execute(CYCLES, memory);
@@ -122,11 +138,12 @@ TEST_F(EOR_Test, EOR_ZeroPage_OffsetX_Wrapping)
 TEST_F(EOR_Test, EOR_Absolute)
 {
     // Given
-    uint32_t CYCLES = 4;
+    const uint32_t CYCLES = 4;
+    const Word POSITION = 0x3264;
+
     processor.RegA = 0b01011000;
     memory[0xFFFC] = Instruction::EOR_AB;
-    memory[0xFFFD] = 0x64;
-    memory[0xFFFE] = 0x32;
+    memory.WriteWord(0xFFFD, POSITION);
     memory[0x3264] = 0b01000010;
 
     // When
@@ -143,13 +160,16 @@ TEST_F(EOR_Test, EOR_Absolute)
 TEST_F(EOR_Test, EOR_Absolute_OffsetX)
 {
     // Given
-    uint32_t CYCLES = 4;
-    processor.RegX = 0x64;
+    const uint32_t CYCLES = 4;
+    const Byte OFFSET = 0x16;
+    const Word POSITION = 0xBBAA;
+
+    processor.RegX = OFFSET;
     processor.RegA = 0b00111100;
+
     memory[0xFFFC] = Instruction::EOR_ABX;
-    memory[0xFFFD] = 0xAA;
-    memory[0xFFFE] = 0xBB;
-    memory[0xBC0E] = 0b10010010;
+    memory.WriteWord(0xFFFD, POSITION);
+    memory[POSITION + OFFSET] = 0b10010010;
 
     // When
     uint32_t cycles_executed = processor.Execute(CYCLES, memory);
@@ -165,13 +185,16 @@ TEST_F(EOR_Test, EOR_Absolute_OffsetX)
 TEST_F(EOR_Test, EOR_Absolute_OffsetX_CrossPage)
 {
     // Given
-    uint32_t CYCLES = 4 + 1;
-    processor.RegX = 0xCC;
+    const uint32_t CYCLES = 4 + 1;
+    const Byte OFFSET = 0xCC;
+    const Word POSITION = 0x0BDD;
+
+    processor.RegX = OFFSET;
     processor.RegA = 0b00111100;
+
     memory[0xFFFC] = Instruction::EOR_ABX;
-    memory[0xFFFD] = 0xAA;
-    memory[0xFFFE] = 0xBB;
-    memory[0xBC76] = 0b00010010;
+    memory.WriteWord(0xFFFD, POSITION);
+    memory[POSITION + OFFSET] = 0b00010010;
 
     // When
     uint32_t cycles_executed = processor.Execute(CYCLES, memory);
@@ -187,13 +210,16 @@ TEST_F(EOR_Test, EOR_Absolute_OffsetX_CrossPage)
 TEST_F(EOR_Test, EOR_Absolute_OffsetY)
 {
     /// Given
-    uint32_t CYCLES = 4;
-    processor.RegY = 0x64;
+    const uint32_t CYCLES = 4;
+    const Byte OFFSET = 0x64;
+    const Word POSITION = 0x1103;
+
+    processor.RegY = OFFSET;
     processor.RegA = 0b01000010;
+
     memory[0xFFFC] = Instruction::EOR_ABY;
-    memory[0xFFFD] = 0xAA;
-    memory[0xFFFE] = 0xBB;
-    memory[0xBC0E] = 0b01011000;
+    memory.WriteWord(0xFFFD, POSITION);
+    memory[POSITION + OFFSET] = 0b01011000;
 
     // When
     uint32_t cycles_executed = processor.Execute(CYCLES, memory);
@@ -209,13 +235,16 @@ TEST_F(EOR_Test, EOR_Absolute_OffsetY)
 TEST_F(EOR_Test, EOR_Absolute_OffsetY_CrossPage)
 {
     // Given
-    uint32_t CYCLES = 4 + 1;
-    processor.RegY = 0xCC;
+    const uint32_t CYCLES = 4 + 1;
+    const Byte OFFSET = 0xCC;
+    const Word POSITION = 0x10F3;
+
+    processor.RegY = OFFSET;
     processor.RegA = 0b10111100;
+
     memory[0xFFFC] = Instruction::EOR_ABY;
-    memory[0xFFFD] = 0xAA;
-    memory[0xFFFE] = 0xBB;
-    memory[0xBC76] = 0b00010010;
+    memory.WriteWord(0xFFFD, POSITION);
+    memory[POSITION + OFFSET] = 0b00010010;
 
     // When
     uint32_t cycles_executed = processor.Execute(CYCLES, memory);
@@ -231,14 +260,18 @@ TEST_F(EOR_Test, EOR_Absolute_OffsetY_CrossPage)
 TEST_F(EOR_Test, EOR_Indirect_OffsetX)
 {
     // Given
-    uint32_t CYCLES = 6;
+    const uint32_t CYCLES = 6;
+    const Byte OFFSET = 0x10;
+    const Word POSITION_1 = 0x54;
+    const Word POSITION_2 = 0xBBAA;
+
     processor.RegA = 0b01000001;
-    processor.RegX = 0x10;
+    processor.RegX = OFFSET;
+
     memory[0xFFFC] = Instruction::EOR_IDX;
-    memory[0xFFFD] = 0x54;
-    memory[0x0064] = 0xAA;
-    memory[0x0065] = 0xBB;
-    memory[0xBBAA] = 0b01000001;
+    memory[0xFFFD] = POSITION_1;
+    memory.WriteWord(POSITION_1 + OFFSET, POSITION_2);
+    memory[POSITION_2] = 0b01000001;
 
     // When
     uint32_t cycles_executed = processor.Execute(CYCLES, memory);
@@ -254,14 +287,18 @@ TEST_F(EOR_Test, EOR_Indirect_OffsetX)
 TEST_F(EOR_Test, EOR_Indirect_OffsetY)
 {
     // Given
-    uint32_t CYCLES = 5;
+    const uint32_t CYCLES = 5;
+    const Byte OFFSET = 0xAC;
+    const Word POSITION_1 = 0x4C;
+    const Word POSITION_2 = 0x0C41;
+
     processor.RegA = 0b01000001;
-    processor.RegY = 0xAC;
+    processor.RegY = OFFSET;
+
     memory[0xFFFC] = Instruction::EOR_IDY;
-    memory[0xFFFD] = 0x4C;
-    memory[0x004C] = 0x41;
-    memory[0x004D] = 0x0C;
-    memory[0x0CED] = 0b10010010;
+    memory[0xFFFD] = POSITION_1;
+    memory.WriteWord(POSITION_1, POSITION_2);
+    memory[POSITION_2 + OFFSET] = 0b10010010;
 
     // When
     uint32_t cycles_executed = processor.Execute(CYCLES, memory);
@@ -277,14 +314,18 @@ TEST_F(EOR_Test, EOR_Indirect_OffsetY)
 TEST_F(EOR_Test, EOR_Indirect_OffsetY_CrossPage)
 {
     // Given
-    uint32_t CYCLES = 5 + 1;
+    const uint32_t CYCLES = 5 + 1;
+    const Byte OFFSET = 0xF0;
+    const Word POSITION_1 = 0x4C;
+    const Word POSITION_2 = 0x0C81;
+
     processor.RegA = 0b11111111;
-    processor.RegY = 0xE1;
+    processor.RegY = OFFSET;
+
     memory[0xFFFC] = Instruction::EOR_IDY;
-    memory[0xFFFD] = 0x4C;
-    memory[0x004C] = 0x41;
-    memory[0x004D] = 0x0C;
-    memory[0x0D22] = 0b01111111;
+    memory[0xFFFD] = POSITION_1;
+    memory.WriteWord(POSITION_1, POSITION_2);
+    memory[POSITION_2 + OFFSET] = 0b01111111;
 
     // When
     uint32_t cycles_executed = processor.Execute(CYCLES, memory);

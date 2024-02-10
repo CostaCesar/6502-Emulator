@@ -2,7 +2,7 @@
 
 class ADC_Test : public M6502 {};
 
-TEST_F(ADC_Test, ADC_IM_Test)
+TEST_F(ADC_Test, ADC_IM)
 {
     // Given
     const uint32_t CYCLES = 2;
@@ -27,7 +27,7 @@ TEST_F(ADC_Test, ADC_IM_Test)
     EXPECT_FALSE(processor.Flags.OverFlow);
 }
 
-TEST_F(ADC_Test, ADC_ZP_Test)
+TEST_F(ADC_Test, ADC_ZP)
 {
     // Given
     const uint32_t CYCLES = 3;
@@ -53,7 +53,7 @@ TEST_F(ADC_Test, ADC_ZP_Test)
     EXPECT_FALSE(processor.Flags.Zero);
     EXPECT_FALSE(processor.Flags.OverFlow);
 }
-TEST_F(ADC_Test, ADC_ZPX_Test)
+TEST_F(ADC_Test, ADC_ZPX)
 {
     // Given
     const uint32_t CYCLES = 4;
@@ -82,7 +82,7 @@ TEST_F(ADC_Test, ADC_ZPX_Test)
     EXPECT_FALSE(processor.Flags.OverFlow);
 }
 
-TEST_F(ADC_Test, ADC_ZPX_Wrapping_Test)
+TEST_F(ADC_Test, ADC_ZPX_Wrapping)
 {
     // Given
     const uint32_t CYCLES = 4;
@@ -110,7 +110,7 @@ TEST_F(ADC_Test, ADC_ZPX_Wrapping_Test)
     EXPECT_FALSE(processor.Flags.Zero);
     EXPECT_FALSE(processor.Flags.OverFlow);
 }
-TEST_F(ADC_Test, ADC_AB_Test)
+TEST_F(ADC_Test, ADC_AB)
 {
     // Given
     const uint32_t CYCLES = 4;
@@ -136,7 +136,7 @@ TEST_F(ADC_Test, ADC_AB_Test)
     EXPECT_FALSE(processor.Flags.Zero);
     EXPECT_FALSE(processor.Flags.OverFlow);
 }
-TEST_F(ADC_Test, ADC_ABX_Test)
+TEST_F(ADC_Test, ADC_ABX)
 {
     // Given
     const uint32_t CYCLES = 4;
@@ -164,7 +164,7 @@ TEST_F(ADC_Test, ADC_ABX_Test)
     EXPECT_FALSE(processor.Flags.Zero);
     EXPECT_FALSE(processor.Flags.OverFlow);
 }
-TEST_F(ADC_Test, ADC_ABX_PageCross_Test)
+TEST_F(ADC_Test, ADC_ABX_PageCross)
 {
     // Given
     const uint32_t CYCLES = 5;
@@ -192,7 +192,7 @@ TEST_F(ADC_Test, ADC_ABX_PageCross_Test)
     EXPECT_FALSE(processor.Flags.Zero);
     EXPECT_FALSE(processor.Flags.OverFlow);
 }
-TEST_F(ADC_Test, ADC_ABY_Test)
+TEST_F(ADC_Test, ADC_ABY)
 {
     // Given
     const uint32_t CYCLES = 4;
@@ -220,7 +220,7 @@ TEST_F(ADC_Test, ADC_ABY_Test)
     EXPECT_FALSE(processor.Flags.Zero);
     EXPECT_FALSE(processor.Flags.OverFlow);
 }
-TEST_F(ADC_Test, ADC_ABY_PageCross_Test)
+TEST_F(ADC_Test, ADC_ABY_PageCross)
 {
     // Given
     const uint32_t CYCLES = 5;
@@ -248,7 +248,7 @@ TEST_F(ADC_Test, ADC_ABY_PageCross_Test)
     EXPECT_FALSE(processor.Flags.Zero);
     EXPECT_FALSE(processor.Flags.OverFlow);
 }
-TEST_F(ADC_Test, ADC_IDX_Test)
+TEST_F(ADC_Test, ADC_IDX)
 {
     // Given
     const uint32_t CYCLES = 6;
@@ -278,7 +278,7 @@ TEST_F(ADC_Test, ADC_IDX_Test)
     EXPECT_FALSE(processor.Flags.Zero);
     EXPECT_FALSE(processor.Flags.OverFlow);
 }
-TEST_F(ADC_Test, ADC_IDY_Test)
+TEST_F(ADC_Test, ADC_IDY)
 {
     // Given
     const uint32_t CYCLES = 5;
@@ -308,7 +308,7 @@ TEST_F(ADC_Test, ADC_IDY_Test)
     EXPECT_FALSE(processor.Flags.Zero);
     EXPECT_FALSE(processor.Flags.OverFlow);
 }
-TEST_F(ADC_Test, ADC_IDY_PageCros_Test)
+TEST_F(ADC_Test, ADC_IDY_PageCros)
 {
     // Given
     const uint32_t CYCLES = 6;

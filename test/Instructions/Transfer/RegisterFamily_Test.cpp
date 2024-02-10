@@ -2,12 +2,13 @@
 
 class Register_Test : public M6502 {};
 
-TEST_F(Register_Test, TAX_Test)
+TEST_F(Register_Test, TAX)
 {
     // Given
-    processor.Reset();
     const uint32_t CYCLES = 2;
     const uint16_t VALUE = 0x16;
+    
+    processor.Reset();
     processor.RegA = VALUE;
 
     memory[0xFFFC] = Instruction::TAX;
@@ -16,18 +17,19 @@ TEST_F(Register_Test, TAX_Test)
     uint32_t cycles_executed = processor.Execute(2, memory);
 
     // Execute
-    EXPECT_EQ(cycles_executed, 2);
+    EXPECT_EQ(cycles_executed, CYCLES);
     EXPECT_EQ(processor.RegX, VALUE);
     EXPECT_FALSE(processor.Flags.Zero);
     EXPECT_FALSE(processor.Flags.Negative);
     FlagsExcept_NegvZero(processor);
 }
-TEST_F(Register_Test, TAY_Test)
+TEST_F(Register_Test, TAY)
 {
     // Given
-    processor.Reset();
     const uint32_t CYCLES = 2;
     const uint16_t VALUE = 0x81;
+    
+    processor.Reset();
     processor.RegA = VALUE;
 
     memory[0xFFFC] = Instruction::TAY;
@@ -36,18 +38,19 @@ TEST_F(Register_Test, TAY_Test)
     uint32_t cycles_executed = processor.Execute(2, memory);
 
     // Execute
-    EXPECT_EQ(cycles_executed, 2);
+    EXPECT_EQ(cycles_executed, CYCLES);
     EXPECT_EQ(processor.RegY, VALUE);
     EXPECT_FALSE(processor.Flags.Zero);
     EXPECT_TRUE(processor.Flags.Negative);
     FlagsExcept_NegvZero(processor);
 }
-TEST_F(Register_Test, TXA_Test)
+TEST_F(Register_Test, TXA)
 {
     // Given
-    processor.Reset();
     const uint32_t CYCLES = 2;
     const uint16_t VALUE = 0x17;
+
+    processor.Reset();
     processor.RegX = VALUE;
 
     memory[0xFFFC] = Instruction::TXA;
@@ -56,108 +59,113 @@ TEST_F(Register_Test, TXA_Test)
     uint32_t cycles_executed = processor.Execute(2, memory);
 
     // Execute
-    EXPECT_EQ(cycles_executed, 2);
+    EXPECT_EQ(cycles_executed, CYCLES);
     EXPECT_EQ(processor.RegA, VALUE);
     EXPECT_FALSE(processor.Flags.Zero);
     EXPECT_FALSE(processor.Flags.Negative);
     FlagsExcept_NegvZero(processor);
 }
-TEST_F(Register_Test, TYA_Test)
+TEST_F(Register_Test, TYA)
 {
     // Given
-    processor.Reset();
     const uint32_t CYCLES = 2;
     const uint16_t VALUE = 0x00;
 
+    processor.Reset();
     processor.RegA = 0x10;
     processor.RegY = VALUE;
+
     memory[0xFFFC] = Instruction::TYA;
 
     // When
     uint32_t cycles_executed = processor.Execute(2, memory);
 
     // Execute
-    EXPECT_EQ(cycles_executed, 2);
+    EXPECT_EQ(cycles_executed, CYCLES);
     EXPECT_EQ(processor.RegA, VALUE);
     EXPECT_TRUE(processor.Flags.Zero);
     EXPECT_FALSE(processor.Flags.Negative);
     FlagsExcept_NegvZero(processor);
 }
-TEST_F(Register_Test, DEX_Test)
+TEST_F(Register_Test, DEX)
 {
     // Given
-    processor.Reset();
     const uint32_t CYCLES = 2;
     const uint16_t VALUE = 0x11;
 
+    processor.Reset();
     processor.RegX = VALUE;
+
     memory[0xFFFC] = Instruction::DEX;
 
     // When
     uint32_t cycles_executed = processor.Execute(2, memory);
 
     // Execute
-    EXPECT_EQ(cycles_executed, 2);
+    EXPECT_EQ(cycles_executed, CYCLES);
     EXPECT_EQ(processor.RegX, VALUE - 1);
     EXPECT_FALSE(processor.Flags.Zero);
     EXPECT_FALSE(processor.Flags.Negative);
     FlagsExcept_NegvZero(processor);
 }
-TEST_F(Register_Test, DEY_Test)
+TEST_F(Register_Test, DEY)
 {
     // Given
-    processor.Reset();
     const uint32_t CYCLES = 2;
     const uint16_t VALUE = 0x00;
 
+    processor.Reset();
     processor.RegY = VALUE;
+
     memory[0xFFFC] = Instruction::DEY;
 
     // When
     uint32_t cycles_executed = processor.Execute(2, memory);
 
     // Execute
-    EXPECT_EQ(cycles_executed, 2);
+    EXPECT_EQ(cycles_executed, CYCLES);
     EXPECT_EQ(processor.RegY, (Byte) (VALUE - 1));
     EXPECT_FALSE(processor.Flags.Zero);
     EXPECT_TRUE(processor.Flags.Negative);
     FlagsExcept_NegvZero(processor);
 }
-TEST_F(Register_Test, INX_Test)
+TEST_F(Register_Test, INX)
 {
     // Given
-    processor.Reset();
     const uint32_t CYCLES = 2;
     const uint16_t VALUE = (Byte) -1;
 
+    processor.Reset();
     processor.RegX = VALUE;
+
     memory[0xFFFC] = Instruction::INX;
 
     // When
     uint32_t cycles_executed = processor.Execute(2, memory);
 
     // Execute
-    EXPECT_EQ(cycles_executed, 2);
+    EXPECT_EQ(cycles_executed, CYCLES);
     EXPECT_EQ(processor.RegX, (Byte) (VALUE + 1));
     EXPECT_TRUE(processor.Flags.Zero);
     EXPECT_FALSE(processor.Flags.Negative);
     FlagsExcept_NegvZero(processor);
 }
-TEST_F(Register_Test, INY_Test)
+TEST_F(Register_Test, INY)
 {
     // Given
-    processor.Reset();
     const uint32_t CYCLES = 2;
     const uint16_t VALUE = 0x64;
 
+    processor.Reset();
     processor.RegY = VALUE;
+    
     memory[0xFFFC] = Instruction::INY;
 
     // When
     uint32_t cycles_executed = processor.Execute(2, memory);
 
     // Execute
-    EXPECT_EQ(cycles_executed, 2);
+    EXPECT_EQ(cycles_executed, CYCLES);
     EXPECT_EQ(processor.RegY, (Byte) (VALUE + 1));
     EXPECT_FALSE(processor.Flags.Zero);
     EXPECT_FALSE(processor.Flags.Negative);
