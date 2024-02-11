@@ -73,23 +73,23 @@ namespace Instruction
 
         // >>>>> Math <<<<<
         // > ADC
-        ADC_IM  = 0x69, // 2 Cycles:                        Add to RegA an imediate value
-        ADC_ZP  = 0x65, // 3 Cycles:                        Add to RegA a ZP-memory (0x0000 -> 0x00FF) value
-        ADC_ZPX = 0x75, // 4 Cycles:                        Add to RegA a ZP-memory + offset from RegX value
-        ADC_AB  = 0x6D, // 4 Cycles:                        Add to RegA a value from memory
+        ADC_IM  = 0x69, // 2 Cycles: Add to RegA an imediate value
+        ADC_ZP  = 0x65, // 3 Cycles: Add to RegA a ZP-memory (0x0000 -> 0x00FF) value
+        ADC_ZPX = 0x75, // 4 Cycles: Add to RegA a ZP-memory + offset from RegX value
+        ADC_AB  = 0x6D, // 4 Cycles: Add to RegA a value from memory
         ADC_ABX = 0x7D, // 4 Cycles (+1 if cross boundary): Add to RegA a value from memory + offset from RegX
         ADC_ABY = 0x79, // 4 Cycles (+1 if cross boundary): Add to RegA a value from memory + offset from RegY
-        ADC_IDX = 0x61, // 6 Cycles:                        Add to RegA a value from position pointed by [ZP-memory + offset from RegX]
+        ADC_IDX = 0x61, // 6 Cycles: Add to RegA a value from position pointed by [ZP-memory + offset from RegX]
         ADC_IDY = 0x71, // 5 Cycles (+1 if cross boundary): Add to RegA a value from position ZP-memory + offset from RegY
 
         // > SBC
-        SBC_IM  = 0xE9, // 2 Cycles:                        Subtract to RegA an imediate value
-        SBC_ZP  = 0xE5, // 3 Cycles:                        Subtract to RegA a ZP-memory (0x0000 -> 0x00FF) value
-        SBC_ZPX = 0xF5, // 4 Cycles:                        Subtract to RegA a ZP-memory + offset from RegX value
-        SBC_AB  = 0xED, // 4 Cycles:                        Subtract to RegA a value from memory
+        SBC_IM  = 0xE9, // 2 Cycles: Subtract to RegA an imediate value
+        SBC_ZP  = 0xE5, // 3 Cycles: Subtract to RegA a ZP-memory (0x0000 -> 0x00FF) value
+        SBC_ZPX = 0xF5, // 4 Cycles: Subtract to RegA a ZP-memory + offset from RegX value
+        SBC_AB  = 0xED, // 4 Cycles: Subtract to RegA a value from memory
         SBC_ABX = 0xFD, // 4 Cycles (+1 if cross boundary): Subtract to RegA a value from memory + offset from RegX
         SBC_ABY = 0xF9, // 4 Cycles (+1 if cross boundary): Subtract to RegA a value from memory + offset from RegY
-        SBC_IDX = 0xE1, // 6 Cycles:                        Subtract to RegA a value from position pointed by [ZP-memory + offset from RegX]
+        SBC_IDX = 0xE1, // 6 Cycles: Subtract to RegA a value from position pointed by [ZP-memory + offset from RegX]
         SBC_IDY = 0xF1, // 5 Cycles (+1 if cross boundary): Subtract to RegA a value from position ZP-memory + offset from RegY
 
         // >>>>> Logical <<<<<
@@ -182,6 +182,25 @@ namespace Instruction
         DEY     = 0x88, // 2 Cycles: Decrement RegY
         INX     = 0xE8, // 2 Cycles: Increment RegX
         INY     = 0xC8, // 2 Cycles: Increment RegY
+
+        // >>>>> Compare <<<<<
+        // > CMP
+        CMP_IM  = 0xC9, // 2 Cycles: Compare RegA to imediate value
+        CMP_ZP  = 0xC5, // 3 Cycles: Compare RegA to value in ZP-memory
+        CMP_ZPX = 0xD5, // 4 Cycles: Compare RegA to value in ZP-memory + RegX offset
+        CMP_AB  = 0xCD, // 4 Cycles: Compare RegA to value in memory
+        CMP_ABX = 0xDD, // 4 Cycles (+1 if cross boundary): Compare RegA to value in memory + RegX offset
+        CMP_ABY = 0xD9, // 4 Cycles (+1 if cross boundary): Compare RegA to value in memory + RegX offset
+        CMP_IDX = 0xC1, // 6 Cycles: Compare RegA to value in position pointed by [ZP-memory + RegX offset]
+        CMP_IDY = 0xD1, // 5 Cycles (+1 if cross boundary): Compare RegA to value in position pointed by [ZP-memory] + RegY offset
+
+        CPX_IM  = 0xE0, // 2 Cycles: Compare RegX to imediate value
+        CPX_ZP  = 0xE4, // 3 Cycles: Compare RegX to ZP-memory value
+        CPX_AB  = 0xEC, // 4 Cycles: Compare RegX to value in memory
+
+        CPY_IM  = 0xC0, // 2 Cycles: Compare RegY to imediate value
+        CPY_ZP  = 0xC4, // 3 Cycles: Compare RegY to ZP-memory value
+        CPY_AB  = 0xCC, // 4 Cycles: Compare RegY to value in memory
 
         // >>>>> Stack <<<<<
         TSX     = 0xBA, // 2 cycles: Transfer Stack Pointer to Index X
