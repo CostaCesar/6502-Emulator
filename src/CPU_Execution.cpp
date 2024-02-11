@@ -175,7 +175,7 @@ uint32_t CPU::Execute(uint32_t cycles_total, Memory& memory)
             word_Value = FetchWord(cycles_ran, memory);
             if(ChipModel == CHIP_STANDART && (word_Value + 1) % 0x0100 == 0)
             {
-                byte_Value = ReadByte(cycles_ran, ((int) word_Value - 0x00FF), memory);
+                byte_Value = ReadByte(cycles_ran, (Word) ((int) word_Value - 0x00FF), memory);
                 word_Value = (byte_Value << 8) + ReadByte(cycles_ran, word_Value, memory);
             }
             else word_Value = ReadWord(cycles_ran, word_Value, memory);
@@ -656,6 +656,80 @@ uint32_t CPU::Execute(uint32_t cycles_total, Memory& memory)
             cycles_ran++;
             SetStatus_NegvZero(RegY);
             break;
+        case CMP_IM:
+            byte_Value = FetchByte(cycles_ran, memory);
+            Compare(cycles_ran, byte_Value, RegA);
+            break; 
+        case CMP_ZP:
+            byte_Value = FetchByte(cycles_ran, memory);
+            byte_Value = ReadByte(cycles_ran, byte_Value, memory);
+            Compare(cycles_ran, byte_Value, RegA);
+            break; 
+        case CMP_ZPX:
+            byte_Value = FetchByte(cycles_ran, memory);
+            IncrementByRegister(cycles_ran, byte_Value, RegX);
+            byte_Value = ReadByte(cycles_ran, byte_Value, memory);
+            Compare(cycles_ran, byte_Value, RegA);
+            break;
+        case CMP_AB:
+            word_Value = FetchWord(cycles_ran, memory);
+            byte_Value = ReadByte(cycles_ran, word_Value, memory);
+            Compare(cycles_ran, byte_Value, RegA);
+            break; 
+        case CMP_ABX:
+            word_Value = FetchWord(cycles_ran, memory);
+            Check_PageCross(cycles_ran, word_Value, RegX);
+            byte_Value = ReadByte(cycles_ran, word_Value, memory);
+            Compare(cycles_ran, byte_Value, RegA);
+            break; 
+        case CMP_ABY:
+            word_Value = FetchWord(cycles_ran, memory);
+            Check_PageCross(cycles_ran, word_Value, RegY);
+            byte_Value = ReadByte(cycles_ran, word_Value, memory);
+            Compare(cycles_ran, byte_Value, RegA);
+            break; 
+        case CMP_IDX:
+            byte_Value = FetchByte(cycles_ran, memory);
+            IncrementByRegister(cycles_ran, byte_Value, RegX);
+            word_Value = ReadWord(cycles_ran, byte_Value, memory);
+            byte_Value = ReadByte(cycles_ran, word_Value, memory);
+            Compare(cycles_ran, byte_Value, RegA);
+            break;
+        case CMP_IDY:
+            byte_Value = FetchByte(cycles_ran, memory);
+            word_Value = ReadWord(cycles_ran, byte_Value, memory);
+            Check_PageCross(cycles_ran, word_Value, RegY);
+            byte_Value = ReadByte(cycles_ran, word_Value, memory);
+            Compare(cycles_ran, byte_Value, RegA);
+            break;
+        case CPX_IM:
+            byte_Value = FetchByte(cycles_ran, memory);
+            Compare(cycles_ran, byte_Value, RegX);
+            break; 
+        case CPX_ZP:
+            byte_Value = FetchByte(cycles_ran, memory);
+            byte_Value = ReadByte(cycles_ran, byte_Value, memory);
+            Compare(cycles_ran, byte_Value, RegX);
+            break; 
+        case CPX_AB:
+            word_Value = FetchWord(cycles_ran, memory);
+            byte_Value = ReadByte(cycles_ran, word_Value, memory);
+            Compare(cycles_ran, byte_Value, RegX);
+            break; 
+        case CPY_IM:
+            byte_Value = FetchByte(cycles_ran, memory);
+            Compare(cycles_ran, byte_Value, RegY);
+            break; 
+        case CPY_ZP:
+            byte_Value = FetchByte(cycles_ran, memory);
+            byte_Value = ReadByte(cycles_ran, byte_Value, memory);
+            Compare(cycles_ran, byte_Value, RegY);
+            break; 
+        case CPY_AB:
+            word_Value = FetchWord(cycles_ran, memory);
+            byte_Value = ReadByte(cycles_ran, word_Value, memory);
+            Compare(cycles_ran, byte_Value, RegY);
+            break; 
         default:
             fprintf(stderr, "Unknow instruction \"%#x\" ", instruction);
             return cycles_ran;

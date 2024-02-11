@@ -46,6 +46,7 @@ private:
     Word Pop_PC_Stack(uint32_t& cycles, Memory& memory);
 
     Byte ReadByte(uint32_t& cycles, Word address, const Memory& memory);
+    Byte ReadByte(uint32_t& cycles, Byte address, const Memory& memory);
     Byte FetchByte(uint32_t& cycles, const Memory& memory);
     Word FetchByte_AsWord(uint32_t &cycles, const Memory &memory);
     Word ReadWord(uint32_t& cycles, Word address, const Memory& memory);
@@ -65,6 +66,7 @@ private:
     void SetStatus_NegvZero(Byte cpu_register);
     void Math_Add(uint32_t& cycles, Byte value);
     void Math_Sub(uint32_t& cycles, Byte value);
+    void Compare(uint32_t& cycles, Byte value, Byte cpu_register);
     
 };
 

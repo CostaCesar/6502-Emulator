@@ -26,6 +26,12 @@ Byte CPU::ReadByte(uint32_t& cycles, Word address, const Memory& memory)
     cycles++;
     return data;
 }
+Byte CPU::ReadByte(uint32_t& cycles, Byte address, const Memory& memory)
+{
+    Byte data = memory[address];
+    cycles++;
+    return data;
+}
 
 /* Read 1 byte from memory AND increment program counter */
 Byte CPU::FetchByte(uint32_t& cycles, const Memory& memory)
@@ -139,7 +145,7 @@ void CPU::Shift_Value_Carrying(uint32_t& cycles, Byte& value, char direc)
 
 Byte CPU::PopByte_Stack(uint32_t& cycles, const Memory& memory)
 {
-    Byte output = ReadByte(cycles, Stack_AsWord() + 1, memory);
+    Byte output = ReadByte(cycles, (Word) (Stack_AsWord() + 1), memory);
     StackPointer++;
     cycles++;
     return output;
@@ -234,4 +240,9 @@ void CPU::Math_Add(uint32_t &cycles, Byte value)
 void CPU::Math_Sub(uint32_t &cycles, Byte value)
 {
     Math_Add(cycles, ~value + 1);
+}
+void CPU::Compare(uint32_t& cycles, Byte value, Byte cpu_register)
+{
+    Flags.Carry = value <= cpu_register;
+    SetStatus_NegvZero(cpu_register - value);
 }
