@@ -344,7 +344,7 @@ TEST_F(CMP_Test, CMP_Indirect_OffsetY)
 
     EXPECT_FALSE(processor.Flags.Zero);
     EXPECT_FALSE(processor.Flags.OverFlow);
-    EXPECT_TRUE(processor.Flags.Negative);
+    EXPECT_FALSE(processor.Flags.Negative);
     EXPECT_FALSE(processor.Flags.Break);
     EXPECT_FALSE(processor.Flags.Carry);
     EXPECT_FALSE(processor.Flags.Interupt);
@@ -378,7 +378,7 @@ TEST_F(CMP_Test, CMP_Indirect_OffsetY_CrossPage)
 
     EXPECT_FALSE(processor.Flags.Zero);
     EXPECT_FALSE(processor.Flags.OverFlow);
-    EXPECT_FALSE(processor.Flags.Negative);
+    EXPECT_TRUE(processor.Flags.Negative);
     EXPECT_FALSE(processor.Flags.Break);
     EXPECT_TRUE(processor.Flags.Carry);
     EXPECT_FALSE(processor.Flags.Interupt);

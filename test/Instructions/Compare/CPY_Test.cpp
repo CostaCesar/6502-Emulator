@@ -35,7 +35,7 @@ TEST_F(CPY_Test, CPY_ZeroPage)
     // Given
     const uint32_t CYCLES = 3;
     const Byte VALUE_1 = 0xCC;
-    const Byte VALUE_2 = 0xDC;
+    const Byte VALUE_2 = 0xCC;
     const Byte POSITION = 0x10;
 
     processor.RegY = VALUE_1;
@@ -50,7 +50,7 @@ TEST_F(CPY_Test, CPY_ZeroPage)
     // Execute
     EXPECT_EQ(cycles_executed, CYCLES);
     EXPECT_EQ(processor.RegY, VALUE_1);
-    EXPECT_EQ(memory[0xFFFD], VALUE_2);
+    EXPECT_EQ(memory[POSITION], VALUE_2);
 
     EXPECT_TRUE(processor.Flags.Zero);
     EXPECT_FALSE(processor.Flags.OverFlow);
@@ -80,7 +80,7 @@ TEST_F(CPY_Test, CPY_Absolute)
     // Execute
     EXPECT_EQ(cycles_executed, CYCLES);
     EXPECT_EQ(processor.RegY, VALUE_1);
-    EXPECT_EQ(memory[0xFFFD], VALUE_2);
+    EXPECT_EQ(memory[POSITION], VALUE_2);
 
     EXPECT_FALSE(processor.Flags.Zero);
     EXPECT_FALSE(processor.Flags.OverFlow);
