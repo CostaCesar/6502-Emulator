@@ -202,6 +202,16 @@ namespace Instruction
         CPY_ZP  = 0xC4, // 3 Cycles: Compare RegY to ZP-memory value
         CPY_AB  = 0xCC, // 4 Cycles: Compare RegY to value in memory
 
+        // >>>>> Branch <<<<<
+        BPL     = 0x10, // 2 Cycles (+1 if it branches, +1 if cross boundary): Branches to address when Negative flag is clear
+        BMI     = 0x30, // 2 Cycles (+1 if it branches, +1 if cross boundary): Branches to address when Negative flag is set
+        BVC     = 0x50, // 2 Cycles (+1 if it branches, +1 if cross boundary): Branches to address when Overflow flag is clear
+        BVS     = 0x70, // 2 Cycles (+1 if it branches, +1 if cross boundary): Branches to address when Overflow flag is set
+        BCC     = 0x90, // 2 Cycles (+1 if it branches, +1 if cross boundary): Branches to address when Carry flag is clear
+        BCS     = 0xB0, // 2 Cycles (+1 if it branches, +1 if cross boundary): Branches to address when Carry flag is set
+        BNE     = 0xD0, // 2 Cycles (+1 if it branches, +1 if cross boundary): Branches to address when Zero flag is clear
+        BEQ     = 0xF0, // 2 Cycles (+1 if it branches, +1 if cross boundary): Branches to address when Zero flag is set
+
         // >>>>> Stack <<<<<
         TSX     = 0xBA, // 2 cycles: Transfer Stack Pointer to Index X
         TXS     = 0x9A, // 2 cycles: Transfer Index X to Stack Register
