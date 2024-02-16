@@ -637,23 +637,19 @@ uint32_t CPU::Execute(uint32_t cycles_total, Memory& memory)
             SetStatus_NegvZero(RegA);
             break;
         case DEX:
-            RegX--;
-            cycles_ran++;
+            IncrementByRegister(cycles_ran, RegX, -1);
             SetStatus_NegvZero(RegX);
             break;
         case DEY:
-            RegY--;
-            cycles_ran++;
+            IncrementByRegister(cycles_ran, RegY, -1);
             SetStatus_NegvZero(RegY);
             break;
         case INX:
-            RegX++;
-            cycles_ran++;
+            IncrementByRegister(cycles_ran, RegX, 1);
             SetStatus_NegvZero(RegX);
             break;
         case INY:
-            RegY++;
-            cycles_ran++;
+            IncrementByRegister(cycles_ran, RegY, 1);;
             SetStatus_NegvZero(RegY);
             break;
         case CMP_IM:
