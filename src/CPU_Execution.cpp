@@ -730,6 +730,38 @@ uint32_t CPU::Execute(uint32_t cycles_total, Memory& memory)
             byte_Value = ReadByte(cycles_ran, word_Value, memory);
             Compare(cycles_ran, byte_Value, RegY);
             break; 
+        case BPL:
+            byte_Value = FetchByte(cycles_ran, memory);
+            Branch(cycles_ran, byte_Value, Flags.Negative == 0);
+            break;
+        case BMI:
+            byte_Value = FetchByte(cycles_ran, memory);
+            Branch(cycles_ran, byte_Value, Flags.Negative == 1);
+            break;
+        case BVC:
+            byte_Value = FetchByte(cycles_ran, memory);
+            Branch(cycles_ran, byte_Value, Flags.OverFlow == 0);
+            break;
+        case BVS:
+            byte_Value = FetchByte(cycles_ran, memory);
+            Branch(cycles_ran, byte_Value, Flags.OverFlow == 1);
+            break;
+        case BCC:
+            byte_Value = FetchByte(cycles_ran, memory);
+            Branch(cycles_ran, byte_Value, Flags.Carry == 0);
+            break;
+        case BCS:
+            byte_Value = FetchByte(cycles_ran, memory);
+            Branch(cycles_ran, byte_Value, Flags.Carry == 1);
+            break;
+        case BNE:
+            byte_Value = FetchByte(cycles_ran, memory);
+            Branch(cycles_ran, byte_Value, Flags.Zero == 0);
+            break;
+        case BEQ:
+            byte_Value = FetchByte(cycles_ran, memory);
+            Branch(cycles_ran, byte_Value, Flags.Zero == 1);
+            break;
         default:
             fprintf(stderr, "Unknow instruction \"%#x\" ", instruction);
             return cycles_ran;

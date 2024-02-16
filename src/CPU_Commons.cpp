@@ -188,7 +188,14 @@ void CPU::IncrementByRegister(uint32_t& cycles, Word& value, Byte cpu_register)
 /* Handles the additional cycle when a load instruction crosses the page border */
 void CPU::Check_PageCross(uint32_t& cycles, Word& address, Byte offset)
 {
-    if((int) (address / 0x100) < (int) (address + offset) / 0x100)
+    if((int) (address / 0x100) != (int) (address + offset) / 0x100)
+        cycles++;
+    address += offset;
+}
+/* Handles the additional cycle when a load instruction crosses the page border. Offset can be negative */
+void CPU::Check_PageCross(uint32_t& cycles, Word& address, int8_t offset)
+{
+    if((int) (address / 0x100) != (int) (address + offset) / 0x100)
         cycles++;
     address += offset;
 }
@@ -245,4 +252,14 @@ void CPU::Compare(uint32_t& cycles, Byte value, Byte cpu_register)
 {
     Flags.Carry = value <= cpu_register;
     SetStatus_NegvZero(cpu_register - value);
+}
+void CPU::Branch(uint32_t& cycles, Byte offset, bool condition)
+{
+    if(condition)
+    {
+        offset -= offset > 0x7F ? 0 : 1;
+        Check_PageCross(cycles, ProgramCounter, (int8_t) offset);
+        cycles++;
+    }
+    return;
 }

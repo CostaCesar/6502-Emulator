@@ -54,6 +54,7 @@ private:
     Instruction::Opcode FetchInstruction(uint32_t& cycles, const Memory& memory);
 
     void Check_PageCross(uint32_t& cycles, Word& adrress, Byte offset);
+    void Check_PageCross(uint32_t& cycles, Word& adrress, int8_t offset);
     void IncrementByRegister(uint32_t& cycles, Byte& value, Byte cpu_register);
     void IncrementByRegister(uint32_t& cycles, Word& value, Byte cpu_register);
     void Load_Register(uint32_t& cycles, Byte& cpu_register, Word address, const Memory& memory);
@@ -67,6 +68,7 @@ private:
     void Math_Add(uint32_t& cycles, Byte value);
     void Math_Sub(uint32_t& cycles, Byte value);
     void Compare(uint32_t& cycles, Byte value, Byte cpu_register);
+    void Branch(uint32_t& cycles, Byte offset, bool condition);
     
 };
 
