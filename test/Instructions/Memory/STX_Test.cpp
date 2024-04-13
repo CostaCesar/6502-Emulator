@@ -1,6 +1,6 @@
 #include "../CPU_Model.h"
 
-class STX_Test : public M6502 {};
+class STX_Test : public INS_6502 {};
 
 TEST_F(STX_Test, STX_ZeroPage)
 {
@@ -11,7 +11,7 @@ TEST_F(STX_Test, STX_ZeroPage)
 
     processor.RegX = VALUE;
 
-    memory[0xFFFC] = Instruction::STX_ZP;
+    memory[0xFFFC] = Set_6502::STX_ZP;
     memory[0xFFFD] = POSIT;
 
     // When
@@ -34,7 +34,7 @@ TEST_F(STX_Test, STX_ZeroPage_OffsetY)
     processor.RegX = VALUE;
     processor.RegY = OFSET;
 
-    memory[0xFFFC] = Instruction::STX_ZPY;
+    memory[0xFFFC] = Set_6502::STX_ZPY;
     memory[0xFFFD] = POSIT;
 
     // When
@@ -57,7 +57,7 @@ TEST_F(STX_Test, STX_ZeroPage_OffsetY_Wrapping)
     processor.RegX = VALUE;
     processor.RegY = OFSET;
 
-    memory[0xFFFC] = Instruction::STX_ZPY;
+    memory[0xFFFC] = Set_6502::STX_ZPY;
     memory[0xFFFD] = POSIT;
     // When
     uint32_t cycles_executed = processor.Execute(CYCLES, memory);
@@ -76,7 +76,7 @@ TEST_F(STX_Test, STX_Absolute)
 
     processor.RegX = VALUE;
 
-    memory[0xFFFC] = Instruction::STX_AB;
+    memory[0xFFFC] = Set_6502::STX_AB;
     memory[0xFFFD] = 0x80;
     memory[0xFFFE] = 0xA1;
 

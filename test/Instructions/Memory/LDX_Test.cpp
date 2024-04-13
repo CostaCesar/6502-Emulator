@@ -1,6 +1,6 @@
 #include "../CPU_Model.h"
 
-class LDX_Test : public M6502 {};
+class LDX_Test : public INS_6502 {};
 
 TEST_F(LDX_Test, LDX_Imediatate)
 {
@@ -8,7 +8,7 @@ TEST_F(LDX_Test, LDX_Imediatate)
     const uint32_t CYCLES = 2;
     const Byte VALUE = 0xA;
 
-    memory[0xFFFC] = Instruction::LDX_IM;
+    memory[0xFFFC] = Set_6502::LDX_IM;
     memory[0xFFFD] = VALUE;
 
     // When
@@ -29,7 +29,7 @@ TEST_F(LDX_Test, LDX_ZeroPage)
     const Byte VALUE = 0xA;
     const Byte POSITION = 0x10;
 
-    memory[0xFFFC] = Instruction::LDX_ZP;
+    memory[0xFFFC] = Set_6502::LDX_ZP;
     memory[0xFFFD] = POSITION;
     memory[POSITION] = VALUE;
 
@@ -54,7 +54,7 @@ TEST_F(LDX_Test, LDX_ZeroPage_OffsetY)
 
     processor.RegY = 0x5;
 
-    memory[0xFFFC] = Instruction::LDX_ZPY;
+    memory[0xFFFC] = Set_6502::LDX_ZPY;
     memory[0xFFFD] = POSITION;
     memory[POSITION + OFFSET] = VALUE;
 
@@ -79,7 +79,7 @@ TEST_F(LDX_Test, LDX_ZeroPage_OffsetY_Wrapping)
 
     processor.RegY = OFFSET;
 
-    memory[0xFFFC] = Instruction::LDX_ZPY;
+    memory[0xFFFC] = Set_6502::LDX_ZPY;
     memory[0xFFFD] = POSITION;
     memory[(Byte) (POSITION + OFFSET)] = VALUE;
 
@@ -101,7 +101,7 @@ TEST_F(LDX_Test, LDX_Absolute)
     const Byte VALUE = 0xA;
     const Word POSITION = 0x1010;
 
-    memory[0xFFFC] = Instruction::LDX_AB;
+    memory[0xFFFC] = Set_6502::LDX_AB;
     memory.WriteWord(0xFFFD, POSITION);
     memory[POSITION] = VALUE;
 
@@ -126,7 +126,7 @@ TEST_F(LDX_Test, LDX_Absolute_OffsetY)
 
     processor.RegY = OFFSET;
     
-    memory[0xFFFC] = Instruction::LDX_ABY;
+    memory[0xFFFC] = Set_6502::LDX_ABY;
     memory.WriteWord(0xFFFD, POSITION);
     memory[POSITION + OFFSET] = VALUE;
 
@@ -151,7 +151,7 @@ TEST_F(LDX_Test, LDX_Absolute_OffsetY_CrossPage)
 
     processor.RegY = OFFSET;
     
-    memory[0xFFFC] = Instruction::LDX_ABY;
+    memory[0xFFFC] = Set_6502::LDX_ABY;
     memory.WriteWord(0xFFFD, POSITION);
     memory[POSITION + OFFSET] = VALUE;
 

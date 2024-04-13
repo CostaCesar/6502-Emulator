@@ -1,11 +1,11 @@
-#ifndef CPU_MODEL_H
-#define CPU_MODEL_H
+#ifndef CPU_INS_MODEL_H
+#define CPU_INS_MODEL_H
 
 #include <gtest/gtest.h>
 #include "../../src/Memory.h"
 #include "../../src/CPU.h"
 
-class M6502 : public testing::Test
+class INS_6502 : public testing::Test
 {
 public:
     Memory memory;

@@ -1,6 +1,6 @@
 #include "../CPU_Model.h"
 
-class Jump_Test : public M6502 {};
+class Jump_Test : public INS_6502 {};
 
 TEST_F(Jump_Test, JSR)
 {
@@ -8,9 +8,9 @@ TEST_F(Jump_Test, JSR)
     const uint32_t CYCLES = 8;
     const uint16_t VALUE = 0x40;
     const uint32_t POSIT = 0x10;
-    memory[POSIT] = Instruction::LDA_IM;
+    memory[POSIT] = Set_6502::LDA_IM;
     memory[POSIT+1] = VALUE;
-    memory[0xFFFC] = Instruction::JSR;
+    memory[0xFFFC] = Set_6502::JSR;
     memory[0xFFFD] = POSIT;
 
     // When
@@ -32,10 +32,10 @@ TEST_F(Jump_Test, RTS)
     const uint32_t POSIT = 0x10;
 
     processor.Reset(0xFF00);
-    memory[0xFF00] = Instruction::JSR;
+    memory[0xFF00] = Set_6502::JSR;
     memory.WriteWord(0xFF01, POSIT);
-    memory[POSIT] = Instruction::RTS;
-    memory[0xFF03] = Instruction::LDA_IM;
+    memory[POSIT] = Set_6502::RTS;
+    memory[0xFF03] = Set_6502::LDA_IM;
     memory[0xFF04] = VALUE;
 
     // When
@@ -56,9 +56,9 @@ TEST_F(Jump_Test, JMP_AB)
     const uint32_t POSIT = 0x1010;
 
     processor.Reset(0xFF00);
-    memory[0xFF00] = Instruction::JMP_AB;
+    memory[0xFF00] = Set_6502::JMP_AB;
     memory.WriteWord(0xFF01, POSIT);
-    memory[POSIT] = Instruction::LDA_IM;
+    memory[POSIT] = Set_6502::LDA_IM;
     memory[POSIT+1] = VALUE;
 
     // When
@@ -83,10 +83,10 @@ TEST_F(Jump_Test, JMP_ID)
     processor.Reset(0xFF00);
     processor.ChipModel = CHIP_STANDART;
     
-    memory[0xFF00] = Instruction::JMP_ID;
+    memory[0xFF00] = Set_6502::JMP_ID;
     memory.WriteWord(0xFF01, POSIT_1);
     memory.WriteWord(POSIT_1, POSIT_2);
-    memory[POSIT_2] = Instruction::LDA_IM;
+    memory[POSIT_2] = Set_6502::LDA_IM;
     memory[POSIT_2+1] = VALUE;
 
     // When
@@ -111,11 +111,11 @@ TEST_F(Jump_Test, JMP_ID_StandartChip_PageCross)
     processor.Reset(0xFF00);
     processor.ChipModel = CHIP_STANDART;
 
-    memory[0xFF00] = Instruction::JMP_ID;
+    memory[0xFF00] = Set_6502::JMP_ID;
     memory.WriteWord(0xFF01, POSIT_1);
     memory[POSIT_1] = 0x0020;
     memory[0x1000] = 0x00FF;
-    memory[POSIT_2] = Instruction::LDA_IM;
+    memory[POSIT_2] = Set_6502::LDA_IM;
     memory[POSIT_2+1] = VALUE;
 
     // When
@@ -140,10 +140,10 @@ TEST_F(Jump_Test, JMP_ID_65SC02Chip_PageCross)
     processor.Reset(0xFF00);
     processor.ChipModel = CHIP_65SC02;
 
-    memory[0xFF00] = Instruction::JMP_ID;
+    memory[0xFF00] = Set_6502::JMP_ID;
     memory.WriteWord(0xFF01, POSIT_1);
     memory.WriteWord(POSIT_1, POSIT_2);
-    memory[POSIT_2] = Instruction::LDA_IM;
+    memory[POSIT_2] = Set_6502::LDA_IM;
     memory[POSIT_2+1] = VALUE;
 
     // When

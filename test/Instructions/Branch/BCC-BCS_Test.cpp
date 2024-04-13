@@ -1,6 +1,6 @@
 #include "../CPU_Model.h"
 
-class BCC_BCS_Test : public M6502 {};
+class BCC_BCS_Test : public INS_6502 {};
 
 TEST_F(BCC_BCS_Test, BCC_Pass)
 {
@@ -12,7 +12,7 @@ TEST_F(BCC_BCS_Test, BCC_Pass)
     processor.Reset(BASE_POS - 1);
     processor.Flags.Carry = 1;
 
-    memory[BASE_POS - 1] = Instruction::BCC;
+    memory[BASE_POS - 1] = Set_6502::BCC;
     memory[BASE_POS] = OFFSET;
 
     // When
@@ -33,7 +33,7 @@ TEST_F(BCC_BCS_Test, BCC_Branch)
     processor.Reset(BASE_POS - 1);
     processor.Flags.Carry = 0;
 
-    memory[BASE_POS - 1] = Instruction::BCC;
+    memory[BASE_POS - 1] = Set_6502::BCC;
     memory[BASE_POS] = OFFSET;
 
     // When
@@ -54,7 +54,7 @@ TEST_F(BCC_BCS_Test, BCC_PageCross)
     processor.Reset(BASE_POS - 1);
     processor.Flags.Carry = 0;
 
-    memory[BASE_POS - 1] = Instruction::BCC;
+    memory[BASE_POS - 1] = Set_6502::BCC;
     memory[BASE_POS] = OFFSET;
 
     // When
@@ -75,7 +75,7 @@ TEST_F(BCC_BCS_Test, BCS_Pass)
     processor.Reset(BASE_POS - 1);
     processor.Flags.Carry = 0;
 
-    memory[BASE_POS - 1] = Instruction::BCS;
+    memory[BASE_POS - 1] = Set_6502::BCS;
     memory[BASE_POS] = OFFSET;
 
     // When
@@ -96,7 +96,7 @@ TEST_F(BCC_BCS_Test, BCS_Branch)
     processor.Reset(BASE_POS - 1);
     processor.Flags.Carry = 1;
 
-    memory[BASE_POS - 1] = Instruction::BCS;
+    memory[BASE_POS - 1] = Set_6502::BCS;
     memory[BASE_POS] = OFFSET;
 
     // When
@@ -117,7 +117,7 @@ TEST_F(BCC_BCS_Test, BCS_PageCross)
     processor.Reset(BASE_POS - 1);
     processor.Flags.Carry = 1;
 
-    memory[BASE_POS - 1] = Instruction::BCS;
+    memory[BASE_POS - 1] = Set_6502::BCS;
     memory[BASE_POS] = OFFSET;
 
     // When

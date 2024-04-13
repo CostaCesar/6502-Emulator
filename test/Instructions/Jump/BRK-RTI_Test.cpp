@@ -1,6 +1,6 @@
 #include "../CPU_Model.h"
 
-class BRK_RTI_Test : public M6502 {};
+class BRK_RTI_Test : public INS_6502 {};
 
 TEST_F(BRK_RTI_Test, BRK)
 {
@@ -9,7 +9,7 @@ TEST_F(BRK_RTI_Test, BRK)
     const Word PC_VALUE = 0x8000;
     const Byte PREV_STACK = processor.StackPointer;
     
-    memory[0xFFFC] = Instruction::BRK;
+    memory[0xFFFC] = Set_6502::BRK;
     memory.WriteWord(0xFFFE, PC_VALUE);
 
     // When
@@ -31,7 +31,7 @@ TEST_F(BRK_RTI_Test, BRK_StackValues)
     const Byte PREV_STACK = processor.StackPointer;
     
     processor.FlagStatus = PS_VALUE;
-    memory[0xFFFC] = Instruction::BRK;
+    memory[0xFFFC] = Set_6502::BRK;
     memory.WriteWord(0xFFFE, PC_VALUE);
 
     // When
@@ -61,10 +61,10 @@ TEST_F(BRK_RTI_Test, RTI)
     processor.Reset(CPU_START);
     processor.FlagStatus = PS_VALUE;
 
-    memory[CPU_START] = Instruction::BRK;
+    memory[CPU_START] = Set_6502::BRK;
     memory.WriteWord(0xFFFE, PC_VALUE);
-    memory[PC_VALUE] = Instruction::RTI;
-    memory[CPU_START+2] = Instruction::LDA_IM;
+    memory[PC_VALUE] = Set_6502::RTI;
+    memory[CPU_START+2] = Set_6502::LDA_IM;
     memory[CPU_START+3] = PS_VALUE;
 
     // First

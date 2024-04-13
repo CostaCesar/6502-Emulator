@@ -1,6 +1,6 @@
 #include "../CPU_Model.h"
 
-class CMP_Test : public M6502 {};
+class CMP_Test : public INS_6502 {};
 
 TEST_F(CMP_Test, CMP_Immediate)
 {
@@ -11,7 +11,7 @@ TEST_F(CMP_Test, CMP_Immediate)
 
     processor.RegA = VALUE_1;
 
-    memory[0xFFFC] = Instruction::CMP_IM;
+    memory[0xFFFC] = Set_6502::CMP_IM;
     memory[0xFFFD] = VALUE_2;
 
     // When
@@ -40,7 +40,7 @@ TEST_F(CMP_Test, CMP_ZeroPage)
 
     processor.RegA = VALUE_1;
 
-    memory[0xFFFC] = Instruction::CMP_ZP;
+    memory[0xFFFC] = Set_6502::CMP_ZP;
     memory[0xFFFD] = POSITION;
     memory[POSITION] = VALUE_2;
 
@@ -72,7 +72,7 @@ TEST_F(CMP_Test, CMP_ZeroPage_OffsetX)
     processor.RegA = VALUE_1;
     processor.RegX = OFFSET;
 
-    memory[0xFFFC] = Instruction::CMP_ZPX;
+    memory[0xFFFC] = Set_6502::CMP_ZPX;
     memory[0xFFFD] = POSITION;
     memory[POSITION + OFFSET] = VALUE_2;
 
@@ -104,7 +104,7 @@ TEST_F(CMP_Test, CMP_ZeroPage_OffsetX_Wrapping)
     processor.RegX = OFFSET;
     processor.RegA = VALUE_1;
 
-    memory[0xFFFC] = Instruction::CMP_ZPX;
+    memory[0xFFFC] = Set_6502::CMP_ZPX;
     memory[0xFFFD] = POSITION;
     memory[(Byte) (POSITION + OFFSET)] = VALUE_2;
 
@@ -134,7 +134,7 @@ TEST_F(CMP_Test, CMP_Absolute)
 
     processor.RegA = VALUE_1;
 
-    memory[0xFFFC] = Instruction::CMP_AB;
+    memory[0xFFFC] = Set_6502::CMP_AB;
     memory.WriteWord(0xFFFD, POSITION);
     memory[POSITION] = VALUE_2;
 
@@ -166,7 +166,7 @@ TEST_F(CMP_Test, CMP_Absolute_OffsetX)
     processor.RegX = OFFSET;
     processor.RegA = VALUE_1;
 
-    memory[0xFFFC] = Instruction::CMP_ABX;
+    memory[0xFFFC] = Set_6502::CMP_ABX;
     memory.WriteWord(0xFFFD, POSITION);
     memory[POSITION + OFFSET] = VALUE_2;
 
@@ -198,7 +198,7 @@ TEST_F(CMP_Test, CMP_Absolute_OffsetX_CrossPage)
     processor.RegX = OFFSET;
     processor.RegA = VALUE_1;
 
-    memory[0xFFFC] = Instruction::CMP_ABX;
+    memory[0xFFFC] = Set_6502::CMP_ABX;
     memory.WriteWord(0xFFFD, POSITION);
     memory[POSITION + OFFSET] = VALUE_2;
 
@@ -230,7 +230,7 @@ TEST_F(CMP_Test, CMP_Absolute_OffsetY)
     processor.RegY = OFFSET;
     processor.RegA = VALUE_1;
 
-    memory[0xFFFC] = Instruction::CMP_ABY;
+    memory[0xFFFC] = Set_6502::CMP_ABY;
     memory.WriteWord(0xFFFD, POSITION);
     memory[POSITION + OFFSET] = VALUE_2;
 
@@ -262,7 +262,7 @@ TEST_F(CMP_Test, CMP_Absolute_OffsetY_CrossPage)
     processor.RegY = OFFSET;
     processor.RegA = VALUE_1;
 
-    memory[0xFFFC] = Instruction::CMP_ABY;
+    memory[0xFFFC] = Set_6502::CMP_ABY;
     memory.WriteWord(0xFFFD, POSITION);
     memory[POSITION + OFFSET] = VALUE_2;
 
@@ -295,7 +295,7 @@ TEST_F(CMP_Test, CMP_Indirect_OffsetX)
     processor.RegX = OFFSET;
     processor.RegA = VALUE_1;
 
-    memory[0xFFFC] = Instruction::CMP_IDX;
+    memory[0xFFFC] = Set_6502::CMP_IDX;
     memory[0xFFFD] = POSITION_1;
     memory.WriteWord((Byte) (POSITION_1 + OFFSET), POSITION_2);
     memory[POSITION_2] = VALUE_2;
@@ -329,7 +329,7 @@ TEST_F(CMP_Test, CMP_Indirect_OffsetY)
     processor.RegY = OFFSET;
     processor.RegA = VALUE_1;
 
-    memory[0xFFFC] = Instruction::CMP_IDY;
+    memory[0xFFFC] = Set_6502::CMP_IDY;
     memory[0xFFFD] = POSITION_1;
     memory.WriteWord(POSITION_1, POSITION_2);
     memory[POSITION_2 + OFFSET] = VALUE_2;
@@ -363,7 +363,7 @@ TEST_F(CMP_Test, CMP_Indirect_OffsetY_CrossPage)
     processor.RegY = OFFSET;
     processor.RegA = VALUE_1;
 
-    memory[0xFFFC] = Instruction::CMP_IDY;
+    memory[0xFFFC] = Set_6502::CMP_IDY;
     memory[0xFFFD] = POSITION_1;
     memory.WriteWord(POSITION_1, POSITION_2);
     memory[POSITION_2 + OFFSET] = VALUE_2;

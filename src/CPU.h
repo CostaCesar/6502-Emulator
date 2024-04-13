@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include "Base.h"
 #include "Memory.h"
+#include "Instructions.h"
 
 struct CPU_Flags
 {
@@ -29,7 +30,8 @@ struct CPU
         Byte FlagStatus;
         CPU_Flags Flags;
     };
-    
+    InstructionSet Instructions;
+
     CPU(Variant chip_Model, Word start_from);
     
     uint32_t Execute(uint32_t cycles, Memory& memory);
@@ -51,7 +53,7 @@ private:
     Word FetchByte_AsWord(uint32_t &cycles, const Memory &memory);
     Word ReadWord(uint32_t& cycles, Word address, const Memory& memory);
     Word FetchWord(uint32_t& cycles, const Memory& memory);
-    Instruction::Opcode FetchInstruction(uint32_t& cycles, const Memory& memory);
+    Opcode FetchInstruction(uint32_t& cycles, const Memory& memory);
 
     void Check_PageCross(uint32_t& cycles, Word& adrress, Byte offset);
     void Check_PageCross(uint32_t& cycles, Word& adrress, int8_t offset);

@@ -1,6 +1,6 @@
 #include "../CPU_Model.h"
 
-class ASL_Test : public M6502 {};
+class ASL_Test : public INS_6502 {};
 
 TEST_F(ASL_Test, ASL_RegA)
 {
@@ -8,7 +8,7 @@ TEST_F(ASL_Test, ASL_RegA)
     const uint32_t CYCLES = 2;
     const Byte VALUE = 0b00010101;
     processor.RegA = VALUE;
-    memory[0xFFFC] = Instruction::ASL_RGA;
+    memory[0xFFFC] = Set_6502::ASL_RGA;
 
     // When
     uint32_t cycles_executed = processor.Execute(CYCLES, memory);
@@ -28,7 +28,7 @@ TEST_F(ASL_Test, ASL_RegA_NegvFlag)
     const uint32_t CYCLES = 2;
     const Byte VALUE = 0b01010101;
     processor.RegA = VALUE;
-    memory[0xFFFC] = Instruction::ASL_RGA;
+    memory[0xFFFC] = Set_6502::ASL_RGA;
 
     // When
     uint32_t cycles_executed = processor.Execute(CYCLES, memory);
@@ -48,8 +48,8 @@ TEST_F(ASL_Test, ASL_RegA_ZeroFlag)
     const uint32_t CYCLES = 4;
     const Byte VALUE = 0b10000000;
     processor.RegA = VALUE;
-    memory[0xFFFC] = Instruction::ASL_RGA;
-    memory[0xFFFD] = Instruction::ASL_RGA;
+    memory[0xFFFC] = Set_6502::ASL_RGA;
+    memory[0xFFFD] = Set_6502::ASL_RGA;
 
     // When
     uint32_t cycles_executed = processor.Execute(CYCLES, memory);
@@ -69,7 +69,7 @@ TEST_F(ASL_Test, ASL_RegA_CarryFlag)
     const uint32_t CYCLES = 2;
     const Byte VALUE = 0b10100000;
     processor.RegA = VALUE;
-    memory[0xFFFC] = Instruction::ASL_RGA;
+    memory[0xFFFC] = Set_6502::ASL_RGA;
 
     // When
     uint32_t cycles_executed = processor.Execute(CYCLES, memory);
@@ -90,7 +90,7 @@ TEST_F(ASL_Test, ASL_ZeroPage)
     const Byte VALUE = 0b01011010;
     const Word POSITION = 0x43;
 
-    memory[0xFFFC] = Instruction::ASL_ZP;
+    memory[0xFFFC] = Set_6502::ASL_ZP;
     memory[0xFFFD] = POSITION;
     memory[POSITION] = VALUE;
 
@@ -113,7 +113,7 @@ TEST_F(ASL_Test, ASL_ZeroPage_OffsetX)
     const Word POSITION = 0x12;
 
     processor.RegX = 0x32;
-    memory[0xFFFC] = Instruction::ASL_ZPX;
+    memory[0xFFFC] = Set_6502::ASL_ZPX;
     memory[0xFFFD] = POSITION;
     memory[POSITION + processor.RegX] = VALUE;
 
@@ -136,7 +136,7 @@ TEST_F(ASL_Test, ASL_ZeroPage_OffsetX_Wrapping)
     const Word POSITION = 0xF2;
 
     processor.RegX = 0x32;
-    memory[0xFFFC] = Instruction::ASL_ZPX;
+    memory[0xFFFC] = Set_6502::ASL_ZPX;
     memory[0xFFFD] = POSITION;
     memory[(Byte) (POSITION + processor.RegX)] = VALUE;
 
@@ -158,7 +158,7 @@ TEST_F(ASL_Test, ASL_Absolute)
     const Byte VALUE = 0b10000000;
     const Word POSITION = 0x43F1;
 
-    memory[0xFFFC] = Instruction::ASL_AB;
+    memory[0xFFFC] = Set_6502::ASL_AB;
     memory.WriteWord(0xFFFD, POSITION);
     memory[POSITION] = VALUE;
 
@@ -181,7 +181,7 @@ TEST_F(ASL_Test, ASL_Absolute_OffsetX)
     const Word POSITION = 0x43F1;
 
     processor.RegX = 0xF1;
-    memory[0xFFFC] = Instruction::ASL_ABX;
+    memory[0xFFFC] = Set_6502::ASL_ABX;
     memory.WriteWord(0xFFFD, POSITION);
     memory[POSITION + processor.RegX] = VALUE;
 

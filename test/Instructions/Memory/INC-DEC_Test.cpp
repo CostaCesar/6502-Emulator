@@ -1,6 +1,6 @@
 #include "../CPU_Model.h"
 
-class INC_DEC_Test : public M6502 {};
+class INC_DEC_Test : public INS_6502 {};
 
 TEST_F(INC_DEC_Test, DEC_ZeroPage)
 {
@@ -9,7 +9,7 @@ TEST_F(INC_DEC_Test, DEC_ZeroPage)
     const Byte POSITION = 0x32;
     const Byte VALUE = 0x17;
 
-    memory[0xFFFC] = Instruction::DEC_ZP;
+    memory[0xFFFC] = Set_6502::DEC_ZP;
     memory[0xFFFD] = POSITION;
     memory[POSITION] = VALUE;
 
@@ -31,7 +31,7 @@ TEST_F(INC_DEC_Test, DEC_ZeroPage_OffsetX)
 
     processor.RegX = 0xA;
 
-    memory[0xFFFC] = Instruction::DEC_ZPX;
+    memory[0xFFFC] = Set_6502::DEC_ZPX;
     memory[0xFFFD] = POSITION;
     memory[POSITION+processor.RegX] = VALUE;
 
@@ -53,7 +53,7 @@ TEST_F(INC_DEC_Test, DEC_ZeroPage_OffsetX_Wrapping)
 
     processor.RegX = 0xFF;
 
-    memory[0xFFFC] = Instruction::DEC_ZPX;
+    memory[0xFFFC] = Set_6502::DEC_ZPX;
     memory[0xFFFD] = POSITION;
     memory[(Byte) (POSITION + processor.RegX)] = VALUE;
 
@@ -73,7 +73,7 @@ TEST_F(INC_DEC_Test, DEC_Absolute)
     const Byte POSITION = 0x32;
     const Byte VALUE = 0x17;
 
-    memory[0xFFFC] = Instruction::DEC_AB;
+    memory[0xFFFC] = Set_6502::DEC_AB;
     memory.WriteWord(0xFFFD, POSITION);
     memory[POSITION] = VALUE;
 
@@ -95,7 +95,7 @@ TEST_F(INC_DEC_Test, DEC_Absolute_OffsetX)
 
     processor.RegX = 0xA1;
 
-    memory[0xFFFC] = Instruction::DEC_ABX;
+    memory[0xFFFC] = Set_6502::DEC_ABX;
     memory.WriteWord(0xFFFD, POSITION);
     memory[POSITION + processor.RegX] = VALUE;
 
@@ -115,7 +115,7 @@ TEST_F(INC_DEC_Test, INC_ZeroPage)
     const Byte POSITION = 0x10;
     const Byte VALUE = 0xDE;
 
-    memory[0xFFFC] = Instruction::INC_ZP;
+    memory[0xFFFC] = Set_6502::INC_ZP;
     memory[0xFFFD] = POSITION;
     memory[POSITION] = VALUE;
 
@@ -137,7 +137,7 @@ TEST_F(INC_DEC_Test, INC_ZeroPage_OffsetX)
 
     processor.RegX = 0xB;
 
-    memory[0xFFFC] = Instruction::INC_ZPX;
+    memory[0xFFFC] = Set_6502::INC_ZPX;
     memory[0xFFFD] = POSITION;
     memory[POSITION+processor.RegX] = VALUE;
 
@@ -159,7 +159,7 @@ TEST_F(INC_DEC_Test, INC_ZeroPage_OffsetX_Wrapping)
 
     processor.RegX = 0xFF;
 
-    memory[0xFFFC] = Instruction::INC_ZPX;
+    memory[0xFFFC] = Set_6502::INC_ZPX;
     memory[0xFFFD] = POSITION;
     memory[(Byte) (POSITION + processor.RegX)] = VALUE;
 
@@ -179,7 +179,7 @@ TEST_F(INC_DEC_Test, INC_Absolute)
     const Byte POSITION = 0x30;
     const Byte VALUE = 0x01;
 
-    memory[0xFFFC] = Instruction::INC_AB;
+    memory[0xFFFC] = Set_6502::INC_AB;
     memory.WriteWord(0xFFFD, POSITION);
     memory[POSITION] = VALUE;
 
@@ -201,7 +201,7 @@ TEST_F(INC_DEC_Test, INC_Absolute_OffsetX)
 
     processor.RegX = 0xA1;
     
-    memory[0xFFFC] = Instruction::INC_ABX;
+    memory[0xFFFC] = Set_6502::INC_ABX;
     memory.WriteWord(0xFFFD, POSITION);
     memory[POSITION + processor.RegX] = VALUE;
 

@@ -1,6 +1,6 @@
 #include "../CPU_Model.h"
 
-class ADC_Test : public M6502 {};
+class ADC_Test : public INS_6502 {};
 
 TEST_F(ADC_Test, ADC_IM)
 {
@@ -11,7 +11,7 @@ TEST_F(ADC_Test, ADC_IM)
     
     processor.RegA = VALUE_1;
 
-    memory[0xFFFC] = Instruction::ADC_IM;
+    memory[0xFFFC] = Set_6502::ADC_IM;
     memory[0xFFFD] = VALUE_2;
 
     // When
@@ -37,7 +37,7 @@ TEST_F(ADC_Test, ADC_ZP)
     
     processor.RegA = VALUE_1;
 
-    memory[0xFFFC] = Instruction::ADC_ZP;
+    memory[0xFFFC] = Set_6502::ADC_ZP;
     memory[0xFFFD] = POSITION;
     memory[POSITION] = VALUE_2;
 
@@ -65,7 +65,7 @@ TEST_F(ADC_Test, ADC_ZPX)
     processor.RegA = VALUE_1;
     processor.RegX = OFFSET;
 
-    memory[0xFFFC] = Instruction::ADC_ZPX;
+    memory[0xFFFC] = Set_6502::ADC_ZPX;
     memory[0xFFFD] = POSITION;
     memory[POSITION+OFFSET] = VALUE_2;
 
@@ -94,7 +94,7 @@ TEST_F(ADC_Test, ADC_ZPX_Wrapping)
     processor.RegA = VALUE_1;
     processor.RegX = OFFSET;
 
-    memory[0xFFFC] = Instruction::ADC_ZPX;
+    memory[0xFFFC] = Set_6502::ADC_ZPX;
     memory[0xFFFD] = POSITION;
     memory[(POSITION+OFFSET) % 0x100] = VALUE_2;
 
@@ -120,7 +120,7 @@ TEST_F(ADC_Test, ADC_AB)
     
     processor.RegA = VALUE_1;
 
-    memory[0xFFFC] = Instruction::ADC_AB;
+    memory[0xFFFC] = Set_6502::ADC_AB;
     memory.WriteWord(0xFFFD, POSITION);
     memory[POSITION] = VALUE_2;
 
@@ -148,7 +148,7 @@ TEST_F(ADC_Test, ADC_ABX)
     processor.RegA = VALUE_1;
     processor.RegX = OFFSET;
 
-    memory[0xFFFC] = Instruction::ADC_ABX;
+    memory[0xFFFC] = Set_6502::ADC_ABX;
     memory.WriteWord(0xFFFD, POSITION);
     memory[POSITION + OFFSET] = VALUE_2;
 
@@ -176,7 +176,7 @@ TEST_F(ADC_Test, ADC_ABX_PageCross)
     processor.RegA = VALUE_1;
     processor.RegX = OFFSET;
 
-    memory[0xFFFC] = Instruction::ADC_ABX;
+    memory[0xFFFC] = Set_6502::ADC_ABX;
     memory.WriteWord(0xFFFD, POSITION);
     memory[POSITION + OFFSET] = VALUE_2;
 
@@ -204,7 +204,7 @@ TEST_F(ADC_Test, ADC_ABY)
     processor.RegA = VALUE_1;
     processor.RegY = OFFSET;
 
-    memory[0xFFFC] = Instruction::ADC_ABY;
+    memory[0xFFFC] = Set_6502::ADC_ABY;
     memory.WriteWord(0xFFFD, POSITION);
     memory[POSITION + OFFSET] = VALUE_2;
 
@@ -232,7 +232,7 @@ TEST_F(ADC_Test, ADC_ABY_PageCross)
     processor.RegA = VALUE_1;
     processor.RegY = OFFSET;
 
-    memory[0xFFFC] = Instruction::ADC_ABY;
+    memory[0xFFFC] = Set_6502::ADC_ABY;
     memory.WriteWord(0xFFFD, POSITION);
     memory[POSITION + OFFSET] = VALUE_2;
 
@@ -261,7 +261,7 @@ TEST_F(ADC_Test, ADC_IDX)
     processor.RegA = VALUE_1;
     processor.RegX = OFFSET;
 
-    memory[0xFFFC] = Instruction::ADC_IDX;
+    memory[0xFFFC] = Set_6502::ADC_IDX;
     memory[0xFFFD] = POSITION_1;
     memory.WriteWord((Word) POSITION_1 + OFFSET, POSITION_2);
     memory[POSITION_2] = VALUE_2;
@@ -291,7 +291,7 @@ TEST_F(ADC_Test, ADC_IDY)
     processor.RegA = VALUE_1;
     processor.RegY = OFFSET;
 
-    memory[0xFFFC] = Instruction::ADC_IDY;
+    memory[0xFFFC] = Set_6502::ADC_IDY;
     memory[0xFFFD] = POSITION_1;
     memory.WriteWord((Word) POSITION_1, POSITION_2);
     memory[POSITION_2 + OFFSET] = VALUE_2;
@@ -321,7 +321,7 @@ TEST_F(ADC_Test, ADC_IDY_PageCros)
     processor.RegA = VALUE_1;
     processor.RegY = OFFSET;
 
-    memory[0xFFFC] = Instruction::ADC_IDY;
+    memory[0xFFFC] = Set_6502::ADC_IDY;
     memory[0xFFFD] = POSITION_1;
     memory.WriteWord((Word) POSITION_1, POSITION_2);
     memory[POSITION_2 + OFFSET] = VALUE_2;

@@ -1,6 +1,6 @@
 #include "../CPU_Model.h"
 
-class STA_Test : public M6502 {};
+class STA_Test : public INS_6502 {};
 
 TEST_F(STA_Test, STA_ZeroPage)
 {
@@ -11,7 +11,7 @@ TEST_F(STA_Test, STA_ZeroPage)
 
     processor.RegA = VALUE;
 
-    memory[0xFFFC] = Instruction::STA_ZP;
+    memory[0xFFFC] = Set_6502::STA_ZP;
     memory[0xFFFD] = POSIT;
 
     // When
@@ -34,7 +34,7 @@ TEST_F(STA_Test, STA_ZeroPage_OffsetX)
     processor.RegA = VALUE;
     processor.RegX = OFSET;
 
-    memory[0xFFFC] = Instruction::STA_ZPX;
+    memory[0xFFFC] = Set_6502::STA_ZPX;
     memory[0xFFFD] = POSIT;
 
     // When
@@ -57,7 +57,7 @@ TEST_F(STA_Test, STA_ZeroPage_OffsetX_Wrapping)
     processor.RegA = VALUE;
     processor.RegX = OFSET;
 
-    memory[0xFFFC] = Instruction::STA_ZPX;
+    memory[0xFFFC] = Set_6502::STA_ZPX;
     memory[0xFFFD] = POSIT;
     // When
     uint32_t cycles_executed = processor.Execute(CYCLES, memory);
@@ -76,7 +76,7 @@ TEST_F(STA_Test, STA_Absolute)
 
     processor.RegA = VALUE;
 
-    memory[0xFFFC] = Instruction::STA_AB;
+    memory[0xFFFC] = Set_6502::STA_AB;
     memory[0xFFFD] = 0x80;
     memory[0xFFFE] = 0xA1;
 
@@ -99,7 +99,7 @@ TEST_F(STA_Test, STA_Absolute_OffsetX)
     processor.RegX = OFSET;
     processor.RegA = VALUE;
 
-    memory[0xFFFC] = Instruction::STA_ABX;
+    memory[0xFFFC] = Set_6502::STA_ABX;
     memory[0xFFFD] = 0xAA;
     memory[0xFFFE] = 0xBB;
 
@@ -122,7 +122,7 @@ TEST_F(STA_Test, STA_Absolute_OffsetY)
     processor.RegY = OFSET;
     processor.RegA = VALUE;
 
-    memory[0xFFFC] = Instruction::STA_ABY;
+    memory[0xFFFC] = Set_6502::STA_ABY;
     memory[0xFFFD] = 0xAA;
     memory[0xFFFE] = 0xBB;
 
@@ -146,7 +146,7 @@ TEST_F(STA_Test, STA_Indirect_OffsetX)
     processor.RegX = OFSET;
     processor.RegA = VALUE;
 
-    memory[0xFFFC] = Instruction::STA_IDX;
+    memory[0xFFFC] = Set_6502::STA_IDX;
     memory[0xFFFD] = Z_POS - OFSET;
     memory[Z_POS]  = 0xBA;
     memory[Z_POS+1]= 0xDC;
@@ -171,7 +171,7 @@ TEST_F(STA_Test, STA_Indirect_OffsetY)
     processor.RegY = OFSET;
     processor.RegA = VALUE;
 
-    memory[0xFFFC] = Instruction::STA_IDY;
+    memory[0xFFFC] = Set_6502::STA_IDY;
     memory[0xFFFD] = Z_POS;
     memory[Z_POS]  = 0xBA;
     memory[Z_POS+1]= 0xDC;

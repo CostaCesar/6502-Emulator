@@ -1,6 +1,6 @@
 #include "../CPU_Model.h"
 
-class CPY_Test : public M6502 {};
+class CPY_Test : public INS_6502 {};
 
 TEST_F(CPY_Test, CPY_Immediate)
 {
@@ -11,7 +11,7 @@ TEST_F(CPY_Test, CPY_Immediate)
 
     processor.RegY = VALUE_1;
 
-    memory[0xFFFC] = Instruction::CPY_IM;
+    memory[0xFFFC] = Set_6502::CPY_IM;
     memory[0xFFFD] = VALUE_2;
 
     // When
@@ -40,7 +40,7 @@ TEST_F(CPY_Test, CPY_ZeroPage)
 
     processor.RegY = VALUE_1;
 
-    memory[0xFFFC] = Instruction::CPY_ZP;
+    memory[0xFFFC] = Set_6502::CPY_ZP;
     memory[0xFFFD] = POSITION;
     memory[POSITION] = VALUE_2;
 
@@ -70,7 +70,7 @@ TEST_F(CPY_Test, CPY_Absolute)
 
     processor.RegY = VALUE_1;
 
-    memory[0xFFFC] = Instruction::CPY_AB;
+    memory[0xFFFC] = Set_6502::CPY_AB;
     memory.WriteWord(0xFFFD, POSITION);
     memory[POSITION] = VALUE_2;
 

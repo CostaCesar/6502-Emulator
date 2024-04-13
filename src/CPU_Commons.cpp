@@ -1,5 +1,4 @@
 #include "CPU.h"
-using namespace Instruction;
 
 CPU::CPU(Variant chip_Model, Word start_from)
 {

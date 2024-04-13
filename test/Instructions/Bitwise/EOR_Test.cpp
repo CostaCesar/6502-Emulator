@@ -1,6 +1,6 @@
 #include "../CPU_Model.h"
 
-class EOR_Test : public M6502 {};
+class EOR_Test : public INS_6502 {};
 
 TEST_F(EOR_Test, EOR_Imediatate)
 {
@@ -9,7 +9,7 @@ TEST_F(EOR_Test, EOR_Imediatate)
 
     processor.RegA = 0b00101010;
 
-    memory[0xFFFC] = Instruction::EOR_IM;
+    memory[0xFFFC] = Set_6502::EOR_IM;
     memory[0xFFFD] = 0b01010101;
 
     // When
@@ -29,7 +29,7 @@ TEST_F(EOR_Test, EOR_Imediatate_ZeroFlag)
 
     processor.RegA = 0x00;
 
-    memory[0xFFFC] = Instruction::EOR_IM;
+    memory[0xFFFC] = Set_6502::EOR_IM;
     memory[0xFFFD] = 0x00;
 
     // When
@@ -49,7 +49,7 @@ TEST_F(EOR_Test, EOR_Imediatate_NegativeFlag)
 
     processor.RegA = 0b01000000;
 
-    memory[0xFFFC] = Instruction::EOR_IM;
+    memory[0xFFFC] = Set_6502::EOR_IM;
     memory[0xFFFD] = 0b10000000;
 
     // When
@@ -70,7 +70,7 @@ TEST_F(EOR_Test, EOR_ZeroPage)
 
     processor.RegA = 0b01110000;
 
-    memory[0xFFFC] = Instruction::EOR_ZP;
+    memory[0xFFFC] = Set_6502::EOR_ZP;
     memory[0xFFFD] = 0x10;
     memory[0x0010] = 0b00011100;
 
@@ -95,7 +95,7 @@ TEST_F(EOR_Test, EOR_ZeroPage_OffsetX)
     processor.RegX = OFFSET;
     processor.RegA = 0b10111100;
 
-    memory[0xFFFC] = Instruction::EOR_ZPX;
+    memory[0xFFFC] = Set_6502::EOR_ZPX;
     memory[0xFFFD] = POSITION;
     memory[POSITION + OFFSET] = 0b01100110;
 
@@ -120,7 +120,7 @@ TEST_F(EOR_Test, EOR_ZeroPage_OffsetX_Wrapping)
     processor.RegX = OFFSET;
     processor.RegA = 0b00111100;
 
-    memory[0xFFFC] = Instruction::EOR_ZPX;
+    memory[0xFFFC] = Set_6502::EOR_ZPX;
     memory[0xFFFD] = POSITION;
     memory[(Byte) (POSITION + OFFSET)] = 0b01100110;
 
@@ -142,7 +142,7 @@ TEST_F(EOR_Test, EOR_Absolute)
     const Word POSITION = 0x3264;
 
     processor.RegA = 0b01011000;
-    memory[0xFFFC] = Instruction::EOR_AB;
+    memory[0xFFFC] = Set_6502::EOR_AB;
     memory.WriteWord(0xFFFD, POSITION);
     memory[0x3264] = 0b01000010;
 
@@ -167,7 +167,7 @@ TEST_F(EOR_Test, EOR_Absolute_OffsetX)
     processor.RegX = OFFSET;
     processor.RegA = 0b00111100;
 
-    memory[0xFFFC] = Instruction::EOR_ABX;
+    memory[0xFFFC] = Set_6502::EOR_ABX;
     memory.WriteWord(0xFFFD, POSITION);
     memory[POSITION + OFFSET] = 0b10010010;
 
@@ -192,7 +192,7 @@ TEST_F(EOR_Test, EOR_Absolute_OffsetX_CrossPage)
     processor.RegX = OFFSET;
     processor.RegA = 0b00111100;
 
-    memory[0xFFFC] = Instruction::EOR_ABX;
+    memory[0xFFFC] = Set_6502::EOR_ABX;
     memory.WriteWord(0xFFFD, POSITION);
     memory[POSITION + OFFSET] = 0b00010010;
 
@@ -217,7 +217,7 @@ TEST_F(EOR_Test, EOR_Absolute_OffsetY)
     processor.RegY = OFFSET;
     processor.RegA = 0b01000010;
 
-    memory[0xFFFC] = Instruction::EOR_ABY;
+    memory[0xFFFC] = Set_6502::EOR_ABY;
     memory.WriteWord(0xFFFD, POSITION);
     memory[POSITION + OFFSET] = 0b01011000;
 
@@ -242,7 +242,7 @@ TEST_F(EOR_Test, EOR_Absolute_OffsetY_CrossPage)
     processor.RegY = OFFSET;
     processor.RegA = 0b10111100;
 
-    memory[0xFFFC] = Instruction::EOR_ABY;
+    memory[0xFFFC] = Set_6502::EOR_ABY;
     memory.WriteWord(0xFFFD, POSITION);
     memory[POSITION + OFFSET] = 0b00010010;
 
@@ -268,7 +268,7 @@ TEST_F(EOR_Test, EOR_Indirect_OffsetX)
     processor.RegA = 0b01000001;
     processor.RegX = OFFSET;
 
-    memory[0xFFFC] = Instruction::EOR_IDX;
+    memory[0xFFFC] = Set_6502::EOR_IDX;
     memory[0xFFFD] = POSITION_1;
     memory.WriteWord(POSITION_1 + OFFSET, POSITION_2);
     memory[POSITION_2] = 0b01000001;
@@ -295,7 +295,7 @@ TEST_F(EOR_Test, EOR_Indirect_OffsetY)
     processor.RegA = 0b01000001;
     processor.RegY = OFFSET;
 
-    memory[0xFFFC] = Instruction::EOR_IDY;
+    memory[0xFFFC] = Set_6502::EOR_IDY;
     memory[0xFFFD] = POSITION_1;
     memory.WriteWord(POSITION_1, POSITION_2);
     memory[POSITION_2 + OFFSET] = 0b10010010;
@@ -322,7 +322,7 @@ TEST_F(EOR_Test, EOR_Indirect_OffsetY_CrossPage)
     processor.RegA = 0b11111111;
     processor.RegY = OFFSET;
 
-    memory[0xFFFC] = Instruction::EOR_IDY;
+    memory[0xFFFC] = Set_6502::EOR_IDY;
     memory[0xFFFD] = POSITION_1;
     memory.WriteWord(POSITION_1, POSITION_2);
     memory[POSITION_2 + OFFSET] = 0b01111111;

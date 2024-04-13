@@ -1,6 +1,6 @@
 #include "../CPU_Model.h"
 
-class Flag_Test : public M6502 {};
+class Flag_Test : public INS_6502 {};
 
 TEST_F(Flag_Test, CLC)
 {
@@ -8,7 +8,7 @@ TEST_F(Flag_Test, CLC)
     const uint32_t CYCLES = 2;
     
     processor.Flags.Carry = 1;
-    memory[0xFFFC] = Instruction::CLC;
+    memory[0xFFFC] = Set_6502::CLC;
 
     // When
     uint32_t cycles_executed = processor.Execute(CYCLES, memory);
@@ -24,7 +24,7 @@ TEST_F(Flag_Test, SEC)
     const uint32_t CYCLES = 2;
     
     processor.Flags.Carry = 0;
-    memory[0xFFFC] = Instruction::SEC;
+    memory[0xFFFC] = Set_6502::SEC;
 
     // When
     uint32_t cycles_executed = processor.Execute(CYCLES, memory);
@@ -39,7 +39,7 @@ TEST_F(Flag_Test, CLD)
     const uint32_t CYCLES = 2;
     
     processor.Flags.Decimal = 1;
-    memory[0xFFFC] = Instruction::CLD;
+    memory[0xFFFC] = Set_6502::CLD;
 
     // When
     uint32_t cycles_executed = processor.Execute(CYCLES, memory);
@@ -55,7 +55,7 @@ TEST_F(Flag_Test, SED)
     const uint32_t CYCLES = 2;
     
     processor.Flags.Decimal = 0;
-    memory[0xFFFC] = Instruction::SED;
+    memory[0xFFFC] = Set_6502::SED;
 
     // When
     uint32_t cycles_executed = processor.Execute(CYCLES, memory);
@@ -70,7 +70,7 @@ TEST_F(Flag_Test, CLI)
     const uint32_t CYCLES = 2;
     
     processor.Flags.Carry = 1;
-    memory[0xFFFC] = Instruction::CLI;
+    memory[0xFFFC] = Set_6502::CLI;
 
     // When
     uint32_t cycles_executed = processor.Execute(CYCLES, memory);
@@ -86,7 +86,7 @@ TEST_F(Flag_Test, SEI)
     const uint32_t CYCLES = 2;
     
     processor.Flags.Carry = 0;
-    memory[0xFFFC] = Instruction::SEI;
+    memory[0xFFFC] = Set_6502::SEI;
 
     // When
     uint32_t cycles_executed = processor.Execute(CYCLES, memory);
@@ -103,9 +103,9 @@ TEST_F(Flag_Test, CLV)
     const uint32_t CYCLES_2 = 2;
     
     processor.RegA = 0x70;
-    memory[0xFFFC] = Instruction::ADC_IM;
+    memory[0xFFFC] = Set_6502::ADC_IM;
     memory[0xFFFD] = 0x30;
-    memory[0xFFFE] = Instruction::CLV;
+    memory[0xFFFE] = Set_6502::CLV;
 
     // First
     uint32_t cycles_executed = processor.Execute(CYCLES_1, memory);

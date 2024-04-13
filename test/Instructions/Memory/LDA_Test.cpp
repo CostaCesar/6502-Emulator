@@ -1,6 +1,6 @@
 #include "../CPU_Model.h"
 
-class LDA_Test : public M6502 {};
+class LDA_Test : public INS_6502 {};
 
 TEST_F(LDA_Test, LDA_Imediatate)
 {
@@ -8,7 +8,7 @@ TEST_F(LDA_Test, LDA_Imediatate)
     const uint32_t CYCLES = 2;
     const Byte VALUE = 0xA;
 
-    memory[0xFFFC] = Instruction::LDA_IM;
+    memory[0xFFFC] = Set_6502::LDA_IM;
     memory[0xFFFD] = VALUE;
 
     // When
@@ -29,7 +29,7 @@ TEST_F(LDA_Test, LDA_ZeroPage)
     const Byte VALUE = 0xA;
     const Byte POSITION = 0x10;
 
-    memory[0xFFFC] = Instruction::LDA_ZP;
+    memory[0xFFFC] = Set_6502::LDA_ZP;
     memory[0xFFFD] = POSITION;
     memory[POSITION] = VALUE;
 
@@ -54,7 +54,7 @@ TEST_F(LDA_Test, LDA_ZeroPage_OffsetX)
 
     processor.RegX = 0x5;
 
-    memory[0xFFFC] = Instruction::LDA_ZPX;
+    memory[0xFFFC] = Set_6502::LDA_ZPX;
     memory[0xFFFD] = POSITION;
     memory[POSITION + OFFSET] = VALUE;
 
@@ -79,7 +79,7 @@ TEST_F(LDA_Test, LDA_ZeroPage_OffsetX_Wrapping)
 
     processor.RegX = OFFSET;
 
-    memory[0xFFFC] = Instruction::LDA_ZPX;
+    memory[0xFFFC] = Set_6502::LDA_ZPX;
     memory[0xFFFD] = POSITION;
     memory[(Byte) (POSITION + OFFSET)] = VALUE;
 
@@ -101,7 +101,7 @@ TEST_F(LDA_Test, LDA_Absolute)
     const Byte VALUE = 0x32;
     const Word POSITION = 0x200F;
 
-    memory[0xFFFC] = Instruction::LDA_AB;
+    memory[0xFFFC] = Set_6502::LDA_AB;
     memory.WriteWord(0xFFFD, POSITION);
     memory[POSITION] = VALUE;
 
@@ -126,7 +126,7 @@ TEST_F(LDA_Test, LDA_Absolute_OffsetX)
 
     processor.RegX = OFFSET;
 
-    memory[0xFFFC] = Instruction::LDA_ABX;
+    memory[0xFFFC] = Set_6502::LDA_ABX;
     memory.WriteWord(0xFFFD, POSITION);
     memory[POSITION + OFFSET] = VALUE;
 
@@ -151,7 +151,7 @@ TEST_F(LDA_Test, LDA_Absolute_OffsetX_CrossPage)
 
     processor.RegX = OFFSET;
 
-    memory[0xFFFC] = Instruction::LDA_ABX;
+    memory[0xFFFC] = Set_6502::LDA_ABX;
     memory.WriteWord(0xFFFD, POSITION);
     memory[POSITION + OFFSET] = VALUE;
 
@@ -176,7 +176,7 @@ TEST_F(LDA_Test, LDA_Absolute_OffsetY)
 
     processor.RegY = OFFSET;
     
-    memory[0xFFFC] = Instruction::LDA_ABY;
+    memory[0xFFFC] = Set_6502::LDA_ABY;
     memory.WriteWord(0xFFFD, POSITION);
     memory[POSITION + OFFSET] = VALUE;
 
@@ -201,7 +201,7 @@ TEST_F(LDA_Test, LDA_Absolute_OffsetY_CrossPage)
 
     processor.RegY = OFFSET;
     
-    memory[0xFFFC] = Instruction::LDA_ABY;
+    memory[0xFFFC] = Set_6502::LDA_ABY;
     memory.WriteWord(0xFFFD, POSITION);
     memory[POSITION + OFFSET] = VALUE;
 
@@ -227,7 +227,7 @@ TEST_F(LDA_Test, LDA_Indirect_OffsetX)
 
     processor.RegX = OFFSET;
     
-    memory[0xFFFC] = Instruction::LDA_IDX;
+    memory[0xFFFC] = Set_6502::LDA_IDX;
     memory[0xFFFD] = POSITION_1;
     memory.WriteWord((Byte) POSITION_1 + OFFSET, POSITION_2);
     memory[POSITION_2] = VALUE;
@@ -254,7 +254,7 @@ TEST_F(LDA_Test, LDA_Indirect_OffsetY)
 
     processor.RegY = OFFSET;
     
-    memory[0xFFFC] = Instruction::LDA_IDY;
+    memory[0xFFFC] = Set_6502::LDA_IDY;
     memory[0xFFFD] = POSITION_1;
     memory.WriteWord(POSITION_1, POSITION_2);
     memory[POSITION_2 + OFFSET] = VALUE;
@@ -281,7 +281,7 @@ TEST_F(LDA_Test, LDA_Indirect_OffsetY_CrossPage)
     
     processor.RegY = OFFSET;
 
-    memory[0xFFFC] = Instruction::LDA_IDY;
+    memory[0xFFFC] = Set_6502::LDA_IDY;
     memory[0xFFFD] = POSITION_1;
     memory.WriteWord(POSITION_1, POSITION_2);
     memory[POSITION_2 + OFFSET] = VALUE;

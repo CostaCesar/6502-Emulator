@@ -1,6 +1,6 @@
 #include "../CPU_Model.h"
 
-class BIT_Test : public M6502 {};
+class BIT_Test : public INS_6502 {};
 
 TEST_F(BIT_Test, BIT_ZeroPage)
 {
@@ -12,7 +12,7 @@ TEST_F(BIT_Test, BIT_ZeroPage)
 
     processor.RegA = VALUE_1;
 
-    memory[0xFFFC] = Instruction::BIT_ZP;
+    memory[0xFFFC] = Set_6502::BIT_ZP;
     memory[0xFFFD] = POSITION;
     memory[POSITION] = VALUE_2;
 
@@ -40,7 +40,7 @@ TEST_F(BIT_Test, BIT_ZeroPage_ZeroFlag)
 
     processor.RegA = VALUE_1;
 
-    memory[0xFFFC] = Instruction::BIT_ZP;
+    memory[0xFFFC] = Set_6502::BIT_ZP;
     memory[0xFFFD] = POSITION;
     memory[POSITION] = VALUE_2;
 
@@ -68,7 +68,7 @@ TEST_F(BIT_Test, BIT_ZeroPage_NegativeFlag)
 
     processor.RegA = VALUE_1;
 
-    memory[0xFFFC] = Instruction::BIT_ZP;
+    memory[0xFFFC] = Set_6502::BIT_ZP;
     memory[0xFFFD] = POSITION;
     memory[POSITION] = VALUE_2;
 
@@ -96,7 +96,7 @@ TEST_F(BIT_Test, BIT_ZeroPage_OverflowFlag)
 
     processor.RegA = VALUE_1;
 
-    memory[0xFFFC] = Instruction::BIT_ZP;
+    memory[0xFFFC] = Set_6502::BIT_ZP;
     memory[0xFFFD] = POSITION;
     memory[POSITION] = VALUE_2;
 
@@ -124,7 +124,7 @@ TEST_F(BIT_Test, BIT_Absolute)
 
     processor.RegA = VALUE_1;
 
-    memory[0xFFFC] = Instruction::BIT_AB;
+    memory[0xFFFC] = Set_6502::BIT_AB;
     memory.WriteWord(0XFFFD, POSITION);
     memory[POSITION] = VALUE_2;
 
@@ -151,7 +151,7 @@ TEST_F(BIT_Test, BIT_Absolute_ZeroFlag)
     const Word POSITION = 0xCDBA;
 
     processor.RegA = VALUE_1;
-    memory[0xFFFC] = Instruction::BIT_AB;
+    memory[0xFFFC] = Set_6502::BIT_AB;
     memory.WriteWord(0xFFFD, POSITION);
     memory[POSITION] = VALUE_2;
 
@@ -179,7 +179,7 @@ TEST_F(BIT_Test, BIT_Absolute_NegativeFlag)
 
     processor.RegA = VALUE_1;
 
-    memory[0xFFFC] = Instruction::BIT_AB;
+    memory[0xFFFC] = Set_6502::BIT_AB;
     memory.WriteWord(0xFFFD, POSITION);
     memory[POSITION] = VALUE_2;
 
@@ -207,7 +207,7 @@ TEST_F(BIT_Test, BIT_Absolute_OverflowFlag)
 
     processor.RegA = VALUE_1;
 
-    memory[0xFFFC] = Instruction::BIT_AB;
+    memory[0xFFFC] = Set_6502::BIT_AB;
     memory.WriteWord(0xFFFD, POSITION);
     memory[POSITION] = VALUE_2;
 

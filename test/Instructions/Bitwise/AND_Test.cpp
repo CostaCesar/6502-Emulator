@@ -1,6 +1,6 @@
 #include "../CPU_Model.h"
 
-class AND_Test : public M6502 {};
+class AND_Test : public INS_6502 {};
 
 TEST_F(AND_Test, AND_Imediatate)
 {
@@ -9,7 +9,7 @@ TEST_F(AND_Test, AND_Imediatate)
 
     processor.RegA = 0b01010101;
 
-    memory[0xFFFC] = Instruction::AND_IM;
+    memory[0xFFFC] = Set_6502::AND_IM;
     memory[0xFFFD] = 0b01000001;
 
     // When
@@ -29,7 +29,7 @@ TEST_F(AND_Test, AND_Imediatate_ZeroFlag)
 
     processor.RegA = 0b10101010;
 
-    memory[0xFFFC] = Instruction::AND_IM;
+    memory[0xFFFC] = Set_6502::AND_IM;
     memory[0xFFFD] = 0b01010101;
 
     // When
@@ -49,7 +49,7 @@ TEST_F(AND_Test, AND_Imediatate_NegativeFlag)
 
     processor.RegA = 0b11000000;
 
-    memory[0xFFFC] = Instruction::AND_IM;
+    memory[0xFFFC] = Set_6502::AND_IM;
     memory[0xFFFD] = 0b10000001;
 
     // When
@@ -70,7 +70,7 @@ TEST_F(AND_Test, AND_ZeroPage)
 
     processor.RegA = 0b01110000;
 
-    memory[0xFFFC] = Instruction::AND_ZP;
+    memory[0xFFFC] = Set_6502::AND_ZP;
     memory[0xFFFD] = 0x10;
     memory[0x0010] = 0b00011100;
 
@@ -93,7 +93,7 @@ TEST_F(AND_Test, AND_ZeroPage_OffsetX)
     processor.RegX = 0x05;
     processor.RegA = 0b10111100;
 
-    memory[0xFFFC] = Instruction::AND_ZPX;
+    memory[0xFFFC] = Set_6502::AND_ZPX;
     memory[0xFFFD] = 0x10;
     memory[0x0015] = 0b11100110;
 
@@ -116,7 +116,7 @@ TEST_F(AND_Test, AND_ZeroPage_OffsetX_Wrapping)
     processor.RegX = 0xFF;
     processor.RegA = 0b00111100;
 
-    memory[0xFFFC] = Instruction::AND_ZPX;
+    memory[0xFFFC] = Set_6502::AND_ZPX;
     memory[0xFFFD] = 0x80;
     memory[0x007F] = 0b01100110;
 
@@ -139,7 +139,7 @@ TEST_F(AND_Test, AND_Absolute)
 
     processor.RegA = 0b01011000;
 
-    memory[0xFFFC] = Instruction::AND_AB;
+    memory[0xFFFC] = Set_6502::AND_AB;
     memory.WriteWord(0xFFFD, POSITION);
     memory[POSITION] = 0b01000010;
 
@@ -164,7 +164,7 @@ TEST_F(AND_Test, AND_Absolute_OffsetX)
     processor.RegX = OFFSET;
     processor.RegA = 0b10111100;
 
-    memory[0xFFFC] = Instruction::AND_ABX;
+    memory[0xFFFC] = Set_6502::AND_ABX;
     memory.WriteWord(0xFFFD, POSITION);
     memory[POSITION + OFFSET] = 0b10010010;
 
@@ -189,7 +189,7 @@ TEST_F(AND_Test, AND_Absolute_OffsetX_CrossPage)
     processor.RegX = OFFSET;
     processor.RegA = 0b00111100;
 
-    memory[0xFFFC] = Instruction::AND_ABX;
+    memory[0xFFFC] = Set_6502::AND_ABX;
     memory.WriteWord(0xFFFD, POSITION);
     memory[POSITION + OFFSET] = 0b00010010;
 
@@ -214,7 +214,7 @@ TEST_F(AND_Test, AND_Absolute_OffsetY)
     processor.RegY = OFFSET;
     processor.RegA = 0b01000010;
 
-    memory[0xFFFC] = Instruction::AND_ABY;
+    memory[0xFFFC] = Set_6502::AND_ABY;
     memory.WriteWord(0xFFFD, POSITION);
     memory[POSITION + OFFSET] = 0b01011000;
 
@@ -239,7 +239,7 @@ TEST_F(AND_Test, AND_Absolute_OffsetY_CrossPage)
     processor.RegY = OFFSET;
     processor.RegA = 0b10111100;
 
-    memory[0xFFFC] = Instruction::AND_ABY;
+    memory[0xFFFC] = Set_6502::AND_ABY;
     memory.WriteWord(0xFFFD, POSITION);
     memory[POSITION + OFFSET] = 0b10010010;
 
@@ -265,7 +265,7 @@ TEST_F(AND_Test, AND_Indirect_OffsetX)
     processor.RegA = 0b01000001;
     processor.RegX = OFFSET;
 
-    memory[0xFFFC] = Instruction::AND_IDX;
+    memory[0xFFFC] = Set_6502::AND_IDX;
     memory[0xFFFD] = POSITION_1;
     memory.WriteWord(POSITION_1 + OFFSET, POSITION_2);
     memory[POSITION_2] = 0b01000001;
@@ -292,7 +292,7 @@ TEST_F(AND_Test, AND_Indirect_OffsetY)
     processor.RegA = 0b01000001;
     processor.RegY = OFFSET;
 
-    memory[0xFFFC] = Instruction::AND_IDY;
+    memory[0xFFFC] = Set_6502::AND_IDY;
     memory[0xFFFD] = POSITION_1;
     memory.WriteWord(POSITION_1, POSITION_2);
     memory[POSITION_2 + OFFSET] = 0b10010010;
@@ -319,7 +319,7 @@ TEST_F(AND_Test, AND_Indirect_OffsetY_CrossPage)
     processor.RegA = 0b00000000;
     processor.RegY = OFFSET;
     
-    memory[0xFFFC] = Instruction::AND_IDY;
+    memory[0xFFFC] = Set_6502::AND_IDY;
     memory[0xFFFD] = POSITION_1;
     memory.WriteWord(POSITION_1, POSITION_2);
     memory[POSITION_2 + OFFSET] = 0b11111111;

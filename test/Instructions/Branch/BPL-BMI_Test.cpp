@@ -1,6 +1,6 @@
 #include "../CPU_Model.h"
 
-class BPL_BMI_Test : public M6502 {};
+class BPL_BMI_Test : public INS_6502 {};
 
 TEST_F(BPL_BMI_Test, BPL_Pass)
 {
@@ -12,7 +12,7 @@ TEST_F(BPL_BMI_Test, BPL_Pass)
     processor.Reset(BASE_POS - 1);
     processor.Flags.Negative = 1;
 
-    memory[BASE_POS - 1] = Instruction::BPL;
+    memory[BASE_POS - 1] = Set_6502::BPL;
     memory[BASE_POS] = OFFSET;
 
     // When
@@ -33,7 +33,7 @@ TEST_F(BPL_BMI_Test, BPL_Branch)
     processor.Reset(BASE_POS - 1);
     processor.Flags.Negative = 0;
 
-    memory[BASE_POS - 1] = Instruction::BPL;
+    memory[BASE_POS - 1] = Set_6502::BPL;
     memory[BASE_POS] = OFFSET;
 
     // When
@@ -54,7 +54,7 @@ TEST_F(BPL_BMI_Test, BPL_PageCross)
     processor.Reset(BASE_POS - 1);
     processor.Flags.Negative = 0;
 
-    memory[BASE_POS - 1] = Instruction::BPL;
+    memory[BASE_POS - 1] = Set_6502::BPL;
     memory[BASE_POS] = OFFSET;
 
     // When
@@ -75,7 +75,7 @@ TEST_F(BPL_BMI_Test, BMI_Pass)
     processor.Reset(BASE_POS - 1);
     processor.Flags.Negative = 0;
 
-    memory[BASE_POS - 1] = Instruction::BMI;
+    memory[BASE_POS - 1] = Set_6502::BMI;
     memory[BASE_POS] = OFFSET;
 
     // When
@@ -96,7 +96,7 @@ TEST_F(BPL_BMI_Test, BMI_Branch)
     processor.Reset(BASE_POS - 1);
     processor.Flags.Negative = 1;
 
-    memory[BASE_POS - 1] = Instruction::BMI;
+    memory[BASE_POS - 1] = Set_6502::BMI;
     memory[BASE_POS] = OFFSET;
 
     // When
@@ -117,7 +117,7 @@ TEST_F(BPL_BMI_Test, BMI_PageCross)
     processor.Reset(BASE_POS - 1);
     processor.Flags.Negative = 1;
 
-    memory[BASE_POS - 1] = Instruction::BMI;
+    memory[BASE_POS - 1] = Set_6502::BMI;
     memory[BASE_POS] = OFFSET;
 
     // When

@@ -1,6 +1,6 @@
 #include "../CPU_Model.h"
 
-class BVC_BVS_Test : public M6502 {};
+class BVC_BVS_Test : public INS_6502 {};
 
 TEST_F(BVC_BVS_Test, BVC_Pass)
 {
@@ -12,7 +12,7 @@ TEST_F(BVC_BVS_Test, BVC_Pass)
     processor.Reset(BASE_POS - 1);
     processor.Flags.OverFlow = 1;
 
-    memory[BASE_POS - 1] = Instruction::BVC;
+    memory[BASE_POS - 1] = Set_6502::BVC;
     memory[BASE_POS] = OFFSET;
 
     // When
@@ -33,7 +33,7 @@ TEST_F(BVC_BVS_Test, BVC_Branch)
     processor.Reset(BASE_POS - 1);
     processor.Flags.OverFlow = 0;
 
-    memory[BASE_POS - 1] = Instruction::BVC;
+    memory[BASE_POS - 1] = Set_6502::BVC;
     memory[BASE_POS] = OFFSET;
 
     // When
@@ -54,7 +54,7 @@ TEST_F(BVC_BVS_Test, BVC_PageCross)
     processor.Reset(BASE_POS - 1);
     processor.Flags.OverFlow = 0;
 
-    memory[BASE_POS - 1] = Instruction::BVC;
+    memory[BASE_POS - 1] = Set_6502::BVC;
     memory[BASE_POS] = OFFSET;
 
     // When
@@ -75,7 +75,7 @@ TEST_F(BVC_BVS_Test, BVS_Pass)
     processor.Reset(BASE_POS - 1);
     processor.Flags.OverFlow = 0;
 
-    memory[BASE_POS - 1] = Instruction::BVS;
+    memory[BASE_POS - 1] = Set_6502::BVS;
     memory[BASE_POS] = OFFSET;
 
     // When
@@ -96,7 +96,7 @@ TEST_F(BVC_BVS_Test, BVS_Branch)
     processor.Reset(BASE_POS - 1);
     processor.Flags.OverFlow = 1;
 
-    memory[BASE_POS - 1] = Instruction::BVS;
+    memory[BASE_POS - 1] = Set_6502::BVS;
     memory[BASE_POS] = OFFSET;
 
     // When
@@ -117,7 +117,7 @@ TEST_F(BVC_BVS_Test, BVS_PageCross)
     processor.Reset(BASE_POS - 1);
     processor.Flags.OverFlow = 1;
 
-    memory[BASE_POS - 1] = Instruction::BVS;
+    memory[BASE_POS - 1] = Set_6502::BVS;
     memory[BASE_POS] = OFFSET;
 
     // When

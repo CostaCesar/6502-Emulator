@@ -8,6 +8,8 @@
                 "-fdiagnostics-color=always",
                 "-g",
                 "Assembler.cpp",
+                "Instructions.cpp",
+                "Assembler_Class.cpp",
                 "-o",
                 "${fileDirname}\\..\\build\\Assembler.exe",
                 "-Wall"
@@ -32,6 +34,7 @@
                 "Memory.cpp",
                 "CPU_Commons.cpp",
                 "CPU_Execution.cpp",
+                "Instructions.cpp",
                 "-o",
                 "${fileDirname}\\..\\build\\Emulator.exe",
                 "-Wall"

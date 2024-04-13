@@ -1,6 +1,6 @@
 #include "../CPU_Model.h"
 
-class ORA_Test : public M6502 {};
+class ORA_Test : public INS_6502 {};
 
 TEST_F(ORA_Test, ORA_Imediatate)
 {
@@ -9,7 +9,7 @@ TEST_F(ORA_Test, ORA_Imediatate)
 
     processor.RegA = 0b00101010;
 
-    memory[0xFFFC] = Instruction::ORA_IM;
+    memory[0xFFFC] = Set_6502::ORA_IM;
     memory[0xFFFD] = 0b01010101;
 
     // When
@@ -29,7 +29,7 @@ TEST_F(ORA_Test, ORA_Imediatate_ZeroFlag)
 
     processor.RegA = 0x00;
 
-    memory[0xFFFC] = Instruction::ORA_IM;
+    memory[0xFFFC] = Set_6502::ORA_IM;
     memory[0xFFFD] = 0x00;
 
     // When
@@ -49,7 +49,7 @@ TEST_F(ORA_Test, ORA_Imediatate_NegativeFlag)
 
     processor.RegA = 0b01000000;
 
-    memory[0xFFFC] = Instruction::ORA_IM;
+    memory[0xFFFC] = Set_6502::ORA_IM;
     memory[0xFFFD] = 0b10000000;
 
     // When
@@ -71,7 +71,7 @@ TEST_F(ORA_Test, ORA_ZeroPage)
 
     processor.RegA = 0b01110000;
 
-    memory[0xFFFC] = Instruction::ORA_ZP;
+    memory[0xFFFC] = Set_6502::ORA_ZP;
     memory[0xFFFD] = POSITION;
     memory[POSITION] = 0b00011100;
 
@@ -96,7 +96,7 @@ TEST_F(ORA_Test, ORA_ZeroPage_OffsetX)
     processor.RegX = OFFSET;
     processor.RegA = 0b10111100;
 
-    memory[0xFFFC] = Instruction::ORA_ZPX;
+    memory[0xFFFC] = Set_6502::ORA_ZPX;
     memory[0xFFFD] = POSITION;
     memory[POSITION + OFFSET] = 0b01100110;
 
@@ -121,7 +121,7 @@ TEST_F(ORA_Test, ORA_ZeroPage_OffsetX_Wrapping)
     processor.RegX = OFFSET;
     processor.RegA = 0b00111100;
 
-    memory[0xFFFC] = Instruction::ORA_ZPX;
+    memory[0xFFFC] = Set_6502::ORA_ZPX;
     memory[0xFFFD] = POSITION;
     memory[(Byte) (POSITION + OFFSET)] = 0b01100110;
 
@@ -144,7 +144,7 @@ TEST_F(ORA_Test, ORA_Absolute)
 
     processor.RegA = 0b01011000;
 
-    memory[0xFFFC] = Instruction::ORA_AB;
+    memory[0xFFFC] = Set_6502::ORA_AB;
     memory.WriteWord(0xFFFD, POSITION);
     memory[POSITION] = 0b01000010;
 
@@ -169,7 +169,7 @@ TEST_F(ORA_Test, ORA_Absolute_OffsetX)
     processor.RegX = OFFSET;
     processor.RegA = 0b00111100;
 
-    memory[0xFFFC] = Instruction::ORA_ABX;
+    memory[0xFFFC] = Set_6502::ORA_ABX;
     memory.WriteWord(0xFFFD, POSITION);
     memory[POSITION + OFFSET] = 0b10010010;
 
@@ -194,7 +194,7 @@ TEST_F(ORA_Test, ORA_Absolute_OffsetX_CrossPage)
     processor.RegX = OFFSET;
     processor.RegA = 0b00111100;
 
-    memory[0xFFFC] = Instruction::ORA_ABX;
+    memory[0xFFFC] = Set_6502::ORA_ABX;
     memory.WriteWord(0xFFFD, POSITION);
     memory[POSITION + OFFSET] = 0b00010010;
 
@@ -219,7 +219,7 @@ TEST_F(ORA_Test, ORA_Absolute_OffsetY)
     processor.RegY = OFFSET;
     processor.RegA = 0b01000010;
 
-    memory[0xFFFC] = Instruction::ORA_ABY;
+    memory[0xFFFC] = Set_6502::ORA_ABY;
     memory.WriteWord(0xFFFD, POSITION);
     memory[POSITION + OFFSET] = 0b01011000;
 
@@ -244,7 +244,7 @@ TEST_F(ORA_Test, ORA_Absolute_OffsetY_CrossPage)
     processor.RegY = OFFSET;
     processor.RegA = 0b10111100;
 
-    memory[0xFFFC] = Instruction::ORA_ABY;
+    memory[0xFFFC] = Set_6502::ORA_ABY;
     memory.WriteWord(0xFFFD, POSITION);
     memory[POSITION + OFFSET] = 0b10010010;
 
@@ -270,7 +270,7 @@ TEST_F(ORA_Test, ORA_Indirect_OffsetX)
     processor.RegA = 0b01000001;
     processor.RegX = OFFSET;
 
-    memory[0xFFFC] = Instruction::ORA_IDX;
+    memory[0xFFFC] = Set_6502::ORA_IDX;
     memory[0xFFFD] = POSITION_1;
     memory.WriteWord((Byte) POSITION_1 + OFFSET, POSITION_2);
     memory[POSITION_2] = 0b00000001;
@@ -297,7 +297,7 @@ TEST_F(ORA_Test, ORA_Indirect_OffsetY)
     processor.RegA = 0b01000001;
     processor.RegY = OFFSET;
 
-    memory[0xFFFC] = Instruction::ORA_IDY;
+    memory[0xFFFC] = Set_6502::ORA_IDY;
     memory[0xFFFD] = POSITION_1;
     memory.WriteWord(POSITION_1, POSITION_2);
     memory[POSITION_2 + OFFSET] = 0b10010010;
@@ -324,7 +324,7 @@ TEST_F(ORA_Test, ORA_Indirect_OffsetY_CrossPage)
     processor.RegA = 0b00000000;
     processor.RegY = OFFSET;
 
-    memory[0xFFFC] = Instruction::ORA_IDY;
+    memory[0xFFFC] = Set_6502::ORA_IDY;
     memory[0xFFFD] = POSITION_1;
     memory.WriteWord(POSITION_1, POSITION_2);
     memory[POSITION_2 + OFFSET] = 0b11111111;

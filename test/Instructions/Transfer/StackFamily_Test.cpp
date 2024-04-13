@@ -1,6 +1,6 @@
 #include "../CPU_Model.h"
 
-class Stack_Test : public M6502 {};
+class Stack_Test : public INS_6502 {};
 
 TEST_F(Stack_Test, TSX_Basic)
 {
@@ -13,7 +13,7 @@ TEST_F(Stack_Test, TSX_Basic)
     processor.StackPointer = VALUE;
     processor.Flags.Zero = processor.Flags.Negative = true;
 
-    memory[0xFFFC] = Instruction::TSX;
+    memory[0xFFFC] = Set_6502::TSX;
 
     // When
     uint32_t cycles_executed = processor.Execute(CYCLES, memory);
@@ -37,7 +37,7 @@ TEST_F(Stack_Test, TSX_ZeroFlag)
     processor.StackPointer = VALUE;
     processor.Flags.Zero = processor.Flags.Negative = false;
     
-    memory[0xFFFC] = Instruction::TSX;
+    memory[0xFFFC] = Set_6502::TSX;
 
     // When
     uint32_t cycles_executed = processor.Execute(CYCLES, memory);
@@ -61,7 +61,7 @@ TEST_F(Stack_Test, TSX_NegativeFlag)
     processor.StackPointer = VALUE;
     processor.Flags.Zero = processor.Flags.Negative = false;
     
-    memory[0xFFFC] = Instruction::TSX;
+    memory[0xFFFC] = Set_6502::TSX;
 
     // When
     uint32_t cycles_executed = processor.Execute(CYCLES, memory);
@@ -83,7 +83,7 @@ TEST_F(Stack_Test, TXS)
     processor.Reset();
     processor.RegX = VALUE;
 
-    memory[0xFFFC] = Instruction::TXS;
+    memory[0xFFFC] = Set_6502::TXS;
 
     // When
     uint32_t cycles_executed = processor.Execute(CYCLES, memory);
@@ -103,7 +103,7 @@ TEST_F(Stack_Test, PHA)
     processor.Reset();
     processor.RegA = VALUE;
 
-    memory[0xFFFC] = Instruction::PHA;
+    memory[0xFFFC] = Set_6502::PHA;
 
     // When
     uint32_t cycles_executed = processor.Execute(CYCLES, memory);
@@ -123,7 +123,7 @@ TEST_F(Stack_Test, PHP) // Oh no, PHP is invading the system!
     processor.Reset();
     processor.FlagStatus = VALUE;
 
-    memory[0xFFFC] = Instruction::PHP;
+    memory[0xFFFC] = Set_6502::PHP;
 
     // When
     uint32_t cycles_executed = processor.Execute(CYCLES, memory);
@@ -142,7 +142,7 @@ TEST_F(Stack_Test, PLA)
     processor.Reset();
 
     memory[processor.Stack_AsWord()] = VALUE;
-    memory[0xFFFC] = Instruction::PLA;
+    memory[0xFFFC] = Set_6502::PLA;
     processor.StackPointer--;
 
     // When
@@ -164,7 +164,7 @@ TEST_F(Stack_Test, PLA_ZeroFlag)
     processor.Reset();
     
     memory[processor.Stack_AsWord()] = VALUE;
-    memory[0xFFFC] = Instruction::PLA;
+    memory[0xFFFC] = Set_6502::PLA;
     processor.StackPointer--;
 
     // When
@@ -188,7 +188,7 @@ TEST_F(Stack_Test, PLA_NegativeFlag)
     processor.Reset();
 
     memory[processor.Stack_AsWord()] = VALUE;
-    memory[0xFFFC] = Instruction::PLA;
+    memory[0xFFFC] = Set_6502::PLA;
     processor.StackPointer--;
 
     // When
@@ -213,7 +213,7 @@ TEST_F(Stack_Test, PLP)
     processor.Reset();
 
     memory[processor.Stack_AsWord()] = VALUE;
-    memory[0xFFFC] = Instruction::PLP;
+    memory[0xFFFC] = Set_6502::PLP;
     processor.StackPointer--;
 
     // When

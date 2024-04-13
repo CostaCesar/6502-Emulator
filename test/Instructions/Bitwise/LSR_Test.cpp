@@ -1,6 +1,6 @@
 #include "../CPU_Model.h"
 
-class LSR_Test : public M6502 {};
+class LSR_Test : public INS_6502 {};
 
 TEST_F(LSR_Test, LSR_RegA)
 {
@@ -8,7 +8,7 @@ TEST_F(LSR_Test, LSR_RegA)
     const uint32_t CYCLES = 2;
     const Byte VALUE = 0b00010101;
     processor.RegA = VALUE;
-    memory[0xFFFC] = Instruction::LSR_RGA;
+    memory[0xFFFC] = Set_6502::LSR_RGA;
 
     // When
     uint32_t cycles_executed = processor.Execute(CYCLES, memory);
@@ -27,8 +27,8 @@ TEST_F(LSR_Test, LSR_RegA_ZeroFlag)
     const uint32_t CYCLES = 4;
     const Byte VALUE = 0b00000001;
     processor.RegA = VALUE;
-    memory[0xFFFC] = Instruction::LSR_RGA;
-    memory[0xFFFD] = Instruction::LSR_RGA;
+    memory[0xFFFC] = Set_6502::LSR_RGA;
+    memory[0xFFFD] = Set_6502::LSR_RGA;
 
     // When
     uint32_t cycles_executed = processor.Execute(CYCLES, memory);
@@ -48,7 +48,7 @@ TEST_F(LSR_Test, LSR_RegA_CarryFlag)
     const uint32_t CYCLES = 2;
     const Byte VALUE = 0b10100001;
     processor.RegA = VALUE;
-    memory[0xFFFC] = Instruction::LSR_RGA;
+    memory[0xFFFC] = Set_6502::LSR_RGA;
 
     // When
     uint32_t cycles_executed = processor.Execute(CYCLES, memory);
@@ -69,7 +69,7 @@ TEST_F(LSR_Test, LSR_ZeroPage)
     const Byte VALUE = 0b01011010;
     const Word POSITION = 0x43;
 
-    memory[0xFFFC] = Instruction::LSR_ZP;
+    memory[0xFFFC] = Set_6502::LSR_ZP;
     memory[0xFFFD] = POSITION;
     memory[POSITION] = VALUE;
 
@@ -92,7 +92,7 @@ TEST_F(LSR_Test, LSR_ZeroPage_OffsetX)
     const Word POSITION = 0x12;
 
     processor.RegX = 0x32;
-    memory[0xFFFC] = Instruction::LSR_ZPX;
+    memory[0xFFFC] = Set_6502::LSR_ZPX;
     memory[0xFFFD] = POSITION;
     memory[POSITION + processor.RegX] = VALUE;
 
@@ -115,7 +115,7 @@ TEST_F(LSR_Test, LSR_ZeroPage_OffsetX_Wrapping)
     const Word POSITION = 0xF2;
 
     processor.RegX = 0x32;
-    memory[0xFFFC] = Instruction::LSR_ZPX;
+    memory[0xFFFC] = Set_6502::LSR_ZPX;
     memory[0xFFFD] = POSITION;
     memory[(Byte) (POSITION + processor.RegX)] = VALUE;
 
@@ -137,7 +137,7 @@ TEST_F(LSR_Test, LSR_Absolute)
     const Byte VALUE = 0b00000001;
     const Word POSITION = 0x43F1;
 
-    memory[0xFFFC] = Instruction::LSR_AB;
+    memory[0xFFFC] = Set_6502::LSR_AB;
     memory.WriteWord(0xFFFD, POSITION);
     memory[POSITION] = VALUE;
 
@@ -160,7 +160,7 @@ TEST_F(LSR_Test, LSR_Absolute_OffsetX)
     const Word POSITION = 0x43F1;
 
     processor.RegX = 0xF1;
-    memory[0xFFFC] = Instruction::LSR_ABX;
+    memory[0xFFFC] = Set_6502::LSR_ABX;
     memory.WriteWord(0xFFFD, POSITION);
     memory[POSITION + processor.RegX] = VALUE;
 

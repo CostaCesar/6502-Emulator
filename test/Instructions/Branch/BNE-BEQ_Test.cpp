@@ -1,6 +1,6 @@
 #include "../CPU_Model.h"
 
-class BNE_BEQ_Test : public M6502 {};
+class BNE_BEQ_Test : public INS_6502 {};
 
 TEST_F(BNE_BEQ_Test, BNE_Pass)
 {
@@ -12,7 +12,7 @@ TEST_F(BNE_BEQ_Test, BNE_Pass)
     processor.Reset(BASE_POS - 1);
     processor.Flags.Zero = 1;
 
-    memory[BASE_POS - 1] = Instruction::BNE;
+    memory[BASE_POS - 1] = Set_6502::BNE;
     memory[BASE_POS] = OFFSET;
 
     // When
@@ -33,7 +33,7 @@ TEST_F(BNE_BEQ_Test, BNE_Branch)
     processor.Reset(BASE_POS - 1);
     processor.Flags.Zero = 0;
 
-    memory[BASE_POS - 1] = Instruction::BNE;
+    memory[BASE_POS - 1] = Set_6502::BNE;
     memory[BASE_POS] = OFFSET;
 
     // When
@@ -54,7 +54,7 @@ TEST_F(BNE_BEQ_Test, BNE_PageCross)
     processor.Reset(BASE_POS - 1);
     processor.Flags.Zero = 0;
 
-    memory[BASE_POS - 1] = Instruction::BNE;
+    memory[BASE_POS - 1] = Set_6502::BNE;
     memory[BASE_POS] = OFFSET;
 
     // When
@@ -75,7 +75,7 @@ TEST_F(BNE_BEQ_Test, BEQ_Pass)
     processor.Reset(BASE_POS - 1);
     processor.Flags.Zero = 0;
 
-    memory[BASE_POS - 1] = Instruction::BEQ;
+    memory[BASE_POS - 1] = Set_6502::BEQ;
     memory[BASE_POS] = OFFSET;
 
     // When
@@ -96,7 +96,7 @@ TEST_F(BNE_BEQ_Test, BEQ_Branch)
     processor.Reset(BASE_POS - 1);
     processor.Flags.Zero = 1;
 
-    memory[BASE_POS - 1] = Instruction::BEQ;
+    memory[BASE_POS - 1] = Set_6502::BEQ;
     memory[BASE_POS] = OFFSET;
 
     // When
@@ -117,7 +117,7 @@ TEST_F(BNE_BEQ_Test, BEQ_PageCross)
     processor.Reset(BASE_POS - 1);
     processor.Flags.Zero = 1;
 
-    memory[BASE_POS - 1] = Instruction::BEQ;
+    memory[BASE_POS - 1] = Set_6502::BEQ;
     memory[BASE_POS] = OFFSET;
 
     // When

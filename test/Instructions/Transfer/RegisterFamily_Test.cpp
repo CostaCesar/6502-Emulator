@@ -1,6 +1,6 @@
 #include "../CPU_Model.h"
 
-class Register_Test : public M6502 {};
+class Register_Test : public INS_6502 {};
 
 TEST_F(Register_Test, TAX)
 {
@@ -11,7 +11,7 @@ TEST_F(Register_Test, TAX)
     processor.Reset();
     processor.RegA = VALUE;
 
-    memory[0xFFFC] = Instruction::TAX;
+    memory[0xFFFC] = Set_6502::TAX;
 
     // When
     uint32_t cycles_executed = processor.Execute(2, memory);
@@ -32,7 +32,7 @@ TEST_F(Register_Test, TAY)
     processor.Reset();
     processor.RegA = VALUE;
 
-    memory[0xFFFC] = Instruction::TAY;
+    memory[0xFFFC] = Set_6502::TAY;
 
     // When
     uint32_t cycles_executed = processor.Execute(2, memory);
@@ -53,7 +53,7 @@ TEST_F(Register_Test, TXA)
     processor.Reset();
     processor.RegX = VALUE;
 
-    memory[0xFFFC] = Instruction::TXA;
+    memory[0xFFFC] = Set_6502::TXA;
 
     // When
     uint32_t cycles_executed = processor.Execute(2, memory);
@@ -75,7 +75,7 @@ TEST_F(Register_Test, TYA)
     processor.RegA = 0x10;
     processor.RegY = VALUE;
 
-    memory[0xFFFC] = Instruction::TYA;
+    memory[0xFFFC] = Set_6502::TYA;
 
     // When
     uint32_t cycles_executed = processor.Execute(2, memory);
@@ -96,7 +96,7 @@ TEST_F(Register_Test, DEX)
     processor.Reset();
     processor.RegX = VALUE;
 
-    memory[0xFFFC] = Instruction::DEX;
+    memory[0xFFFC] = Set_6502::DEX;
 
     // When
     uint32_t cycles_executed = processor.Execute(2, memory);
@@ -117,7 +117,7 @@ TEST_F(Register_Test, DEY)
     processor.Reset();
     processor.RegY = VALUE;
 
-    memory[0xFFFC] = Instruction::DEY;
+    memory[0xFFFC] = Set_6502::DEY;
 
     // When
     uint32_t cycles_executed = processor.Execute(2, memory);
@@ -138,7 +138,7 @@ TEST_F(Register_Test, INX)
     processor.Reset();
     processor.RegX = VALUE;
 
-    memory[0xFFFC] = Instruction::INX;
+    memory[0xFFFC] = Set_6502::INX;
 
     // When
     uint32_t cycles_executed = processor.Execute(2, memory);
@@ -159,7 +159,7 @@ TEST_F(Register_Test, INY)
     processor.Reset();
     processor.RegY = VALUE;
     
-    memory[0xFFFC] = Instruction::INY;
+    memory[0xFFFC] = Set_6502::INY;
 
     // When
     uint32_t cycles_executed = processor.Execute(2, memory);
