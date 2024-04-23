@@ -3,7 +3,7 @@
 
 #include "Base.h"
 #include <string>
-#include <map>
+#include <unordered_map>
 
 typedef Byte Opcode;
 
@@ -23,14 +23,14 @@ namespace Set_6502
         LDA_IDY = 0xB1, // 5 cycles: (+1 if cross boundary): Load to RegA value from position ZP-memory + offset from RegY
 
         // > LDX
-        LDX_IM = 0xA0,  // 2 cycles: Load to RegX imediate value
+        LDX_IM = 0xA2,  // 2 cycles: Load to RegX imediate value
         LDX_ZP = 0xA4,  // 3 cycles: Load to RegX value from ZP-memory (0x0000 -> 0x00FF)
         LDX_ZPY = 0xB4, // 4 cycles: Load to RegX value from ZP-memory + offset from RegY
         LDX_AB = 0xAC,  // 4 cycles: Load to RegX value from memory
         LDX_ABY = 0xBC, // 4 cycles: (+1 if cross boundary): Load to RegX value from memory + offset from RegY
 
         // > LDY
-        LDY_IM = 0xA2,  // 2 cycles: Load to RegY imediate value
+        LDY_IM = 0xA0,  // 2 cycles: Load to RegY imediate value
         LDY_ZP = 0xA6,  // 3 cycles: Load to RegY value from ZP-memory (0x0000 -> 0x00FF)
         LDY_ZPX = 0xB6, // 4 cycles: Load to RegY value from ZP-memory + offset from RegX
         LDY_AB = 0xAE,  // 4 cycles: Load to RegY value from memory
@@ -233,7 +233,7 @@ namespace Set_6502
 
 class InstructionSet
 {
-    std::map<std::string, Opcode> Set = 
+    std::unordered_map<std::string, Opcode> Set = 
     {
         { "LDA_IM",  Set_6502::LDA_IM  }, 
         { "LDA_ZP",  Set_6502::LDA_ZP  }, 
@@ -389,12 +389,12 @@ class InstructionSet
     };
 
 public:
-    bool found = false;
     Opcode operator[] (std::string value);
     std::string operator[] (Opcode value);
     
-    std::map<std::string, Opcode>::iterator find(std::string value);
-    std::map<std::string, Opcode>::iterator end();
+    std::unordered_map<std::string, Opcode>::iterator find(std::string value);
+    std::unordered_map<std::string, Opcode>::iterator end();
+    bool exists(std::string value);
 };
 
 #endif
