@@ -15,14 +15,20 @@ int main(int argc, char ** argv)
     }
     
     InstructionSet opcodes;
-    std::unordered_map<AddressMode, std::regex> addressTable = LoadAddressRegex();
+    uMap_ModeToRegex addressTable = LoadAddressRegex();
+    uMap_LabelToPos labelTable;
+    uMap_PosToLabel labelReferences;
 
-    for(size_t line_count = 1; getline(inFile, line); line_count++)
+    for(Word line_count = 1, memoryPos = 0; getline(inFile, line); line_count++)
     {
         AddressMode mode = AddressMode::Default;
         Word value = 0;
         
-        RemoveComment(line);
+        if(RemoveComment(line) != 0)
+            continue;
+        
+        if(GetLabel(line, command) == true)
+            labelTable[command] = memoryPos;
         if(GetCommand(line, command) != 0)
             continue;
 
@@ -31,14 +37,18 @@ int main(int argc, char ** argv)
             std::cout << "Line " << std::to_string(line_count) << std::endl;
             std::cout << "ERROR: Invalid command!" << std::endl;
             CloseFiles(inFile, outFile);
+            DeleteFile(argv[2]);
             return 2;
         }
 
-        if(EvalueParam(line, value, mode, addressTable) != 0)
+        mode = GetMode_Label(command);
+        if(EvalueLabel(line, memoryPos, labelReferences, mode != AddressMode::Relative) == 0);
+        else if(EvalueParam(line, value, mode, addressTable) != 0)
         {
             std::cout << "Line " << std::to_string(line_count) << std::endl;
             std::cout << "ERROR: Invalid argumuments!" << std::endl;
             CloseFiles(inFile, outFile);
+            DeleteFile(argv[2]);
             return 2;
         };
 
@@ -47,17 +57,34 @@ int main(int argc, char ** argv)
             std::cout << "Line " << std::to_string(line_count) << std::endl;
             std::cout << "ERROR: Invalid format for the command \"" << command << "\"" << std::endl;
             CloseFiles(inFile, outFile);
+            DeleteFile(argv[2]);
             return 2;
         }
 
         Byte command_opcode = opcodes[command];
 
         outFile.write((char*) &command_opcode, sizeof(Byte));
+        memoryPos++;
+        if(mode == AddressMode::Default) continue;
+
         if(value > 255 || ModeUsesWord(mode) == true)
+        {   // Write word
             outFile.write((char*) &value, sizeof(Word));
-        else
+            memoryPos += 2;
+        }
+        else 
+        {   // Write byte
             outFile.write((char*) &value, sizeof(Byte));
-        
+            memoryPos++;
+        } 
+    }
+
+    if(ReplaceLabels(labelReferences, labelTable, outFile) != 0)
+    {
+        std::cout << "ERROR: Non-declared label found!" << std::endl;
+        CloseFiles(inFile, outFile);
+        DeleteFile(argv[2]);
+        return 2;
     }
 
     CloseFiles(inFile, outFile);

@@ -3,14 +3,17 @@
 
 #define BYTE_PATTERN "\\$([0-9a-fA-F]{1,2})|%([01]{1,8})|(?:(25[0-5]|2[0-4][0-9]|[0-1][0-9]{2}|[0-9]{2}|[0-9]))"
 #define WORD_PATTERN "\\$([0-9a-fA-F]{1,4})|%([01]{1,16})|(?:(6553[0-5]|655[0-2][0-9]|65[0-4][0-9]{2}|6[0-4][0-9]{3}|[1-5][0-9]{4}|[0-9]{1,4}))"
+#define LABEL_PATTERN "^([A-Za-z]{1}[A-Za-z0-9_]*): *$"
+#define LABEL_REF_PATTERN "([A-Za-z]{1}[A-Za-z0-9_]*) *$"
+#define INSTRUCTION_PATTERN "^ *([A-Za-z]{3,3})( +|$)"
 
 using std::string;
-typedef std::unordered_map<AddressMode, std::regex> AddressMap;
+typedef uMap_ModeToRegex AddressMap;
 
 bool ModeUsesWord(AddressMode mode)
 {
     return (mode == AddressMode::Absolute || mode == AddressMode::AbsoluteX 
-        || mode == AddressMode::AbsoluteY);
+        || mode == AddressMode::AbsoluteY || mode == AddressMode::Label);
 }
 AddressMap LoadAddressRegex()
 {
@@ -28,6 +31,13 @@ AddressMap LoadAddressRegex()
         {AddressMode::Acumulator, std::regex(" ([Aa]) *$")},
         {AddressMode::Default, std::regex("[A-Za-z]{3} *$")}
     };
+}
+AddressMode GetMode_Label(string instruction)
+{
+    if(instruction == "BPL" || instruction == "BMI" || instruction == "BVC" || instruction == "BVS" 
+    || instruction == "BCC" || instruction == "BCS" || instruction == "BNE" || instruction == "BEQ")
+        return AddressMode::Relative;
+    else return AddressMode::Label;
 }
 
 Word ConvertFromBase(string value, Byte base)
@@ -88,6 +98,12 @@ void CloseFiles(std::ifstream &inFile, std::ofstream &outFile)
         outFile.close();
     return;
 }
+void DeleteFile(const char *filePath)
+{
+    if(std::filesystem::exists(filePath))
+        std::remove(filePath);
+    return;
+}
 
 uint8_t GetArgs(int argc, char** argv, std::string &outFilePath)
 {
@@ -103,10 +119,10 @@ uint8_t GetArgs(int argc, char** argv, std::string &outFilePath)
     return 0;
 }
 
-void RemoveComment(std::string &line)
+bool RemoveComment(std::string &line)
 {
     line = line.substr(0, line.find(';'));
-    return;
+    return line.empty();
 }
 
 uint8_t GetCommand(const std::string &line, std::string &command)
@@ -114,12 +130,14 @@ uint8_t GetCommand(const std::string &line, std::string &command)
     if(line.empty())
         return 1;
         
-    std::regex command_pattern("([A-Za-z]{3}) ");
+    std::regex command_pattern(INSTRUCTION_PATTERN);
     std::smatch result;
     
     std::regex_search(line, result, command_pattern);
+    if(result[0].matched == false)
+        return 2;
+    
     command = result[1].str();
-
     return 0;
 }
 uint8_t ApplyMode(std::string &command, AddressMode mode, InstructionSet& opcodes)
@@ -156,6 +174,10 @@ uint8_t ApplyMode(std::string &command, AddressMode mode, InstructionSet& opcode
     case AddressMode::Acumulator:
         command.append("_RGA");
         break;
+    case AddressMode::Default:
+    case AddressMode::Relative:
+    case AddressMode::Label:
+        break;
     default:
         return 1;
     }
@@ -176,7 +198,7 @@ uint8_t EvalueParam(const std::string &line, Word &value, AddressMode &mode, con
         // Result 1 return the value and, if included, the base operand
         // Result 2 return the value only
         if(result[0].matched)
-        {
+        {   
             mode = pattern.first;
             switch (result[1].str()[0])
             {
@@ -194,4 +216,55 @@ uint8_t EvalueParam(const std::string &line, Word &value, AddressMode &mode, con
     }
     
     return 1;
+}
+
+bool GetLabel(const std::string &line, std::string &label)
+{
+    if(line.empty())
+        return false;
+
+    std::regex label_pattern(LABEL_PATTERN);
+    std::smatch result;
+    std::regex_search(line, result, label_pattern);
+    
+    if(result[0].matched == false)
+        return false;
+
+    label = result[1].str();
+    return true;
+}
+uint8_t EvalueLabel(const string &line, Word memoryPos, uMap_PosToLabel &labelReferences, bool isWord)
+{
+    std::smatch result;
+    std::regex_search(line, result, std::regex(INSTRUCTION_PATTERN " *" LABEL_REF_PATTERN));
+
+    if(result[0].matched)
+    {
+        labelReferences[memoryPos+1] = pair_LabelMode(result[3].str(), isWord);
+        return 0;
+    }
+    return 1;
+}
+
+uint8_t ReplaceLabels(const uMap_PosToLabel &locations, uMap_LabelToPos &labels, std::ofstream &binaryData)
+{
+    for (auto &&position : locations)
+    {
+        if(labels.find(position.second.first) == labels.end())
+            return 1;
+
+        Word replacePos = labels[position.second.first];
+        binaryData.seekp(position.first);
+
+        if(position.second.second == true)
+            binaryData.write((char*) &replacePos, sizeof(Word));
+        else
+        {
+            replacePos -= position.first + 1;
+            binaryData.write((char*) &replacePos, sizeof(Byte));
+        }
+    }
+
+    binaryData.seekp(0, binaryData.end);
+    return 0;
 }
