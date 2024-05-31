@@ -1,4 +1,4 @@
-add_library(Emulator
+add_library(Instruction
     Memory.cpp
     CPU_Commons.cpp
     CPU_Execution.cpp
@@ -6,5 +6,13 @@ add_library(Emulator
 )
 
 add_library(Assembler
-    Assembler_Class.cpp
+    Instructions.cpp
+    Assembler.cpp
+)
+
+add_executable(Assembler_Program
+    main_Assembler.cpp
+)
+target_link_libraries(Assembler_Program
+  Assembler
 )

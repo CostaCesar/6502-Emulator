@@ -1,0 +1,8 @@
+{
+    "cmake.debugConfig": {
+        "type": "gdb",
+        "terminal": "internal",
+        "name": "C/C++ Launch (GDB)",
+        "miDebuggerPath": "/usr/bin/gdb",
+    }
+}
