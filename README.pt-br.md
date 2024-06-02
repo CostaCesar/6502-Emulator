@@ -2,7 +2,7 @@
 
 [![en](https://img.shields.io/badge/See_in_english-red)](https://github.com/CostaCesar/6502-Emulator/blob/main/README.md)
 
-![Static Badge](https://img.shields.io/badge/Estado-Pre%20Alfa-yellow)
+![Static Badge](https://img.shields.io/badge/Estado-Beta-purple)
 ![Static Badge](https://img.shields.io/badge/Feito_em-C%2B%2B-blue)
 ![Static Badge](https://img.shields.io/badge/Testes-GoogleTest-orange)
 ![Static Badge](https://img.shields.io/badge/Build-CMake-red)
@@ -50,7 +50,7 @@ Está planejado para o projeto:
   ```
   **opcional (será assumido o chip 6502 base). Veja mais no arquivo "Base.h"*
 
-Em resumo, o projeto está um um estágio pré-incial, com quase todas as instruções completas, e uma interface básica para os programas
+Em resumo, o projeto está um um estágio beta, com todas as instruções feitas, um assembler funcional e um emulador básico. Ainda falta uma cobertura ampla de testes e um ambiente de emulação mais útil.
 
 ## Créditos
 Excluindo a biblioteca GoogleTest (é claro), todo o código neste projeto foi feito por mim, CostaCesar. Ainda assim, como deixei claro na sessão [sobre](#sobre), a ideia para esse
