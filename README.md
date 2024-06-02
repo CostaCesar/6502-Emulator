@@ -2,7 +2,7 @@
 
 [![pt](https://img.shields.io/badge/Ver_em_portugu%C3%AAs-green)](https://github.com/CostaCesar/6502-Emulator/blob/main/README.pt-br.md)
 
-![Static Badge](https://img.shields.io/badge/Status-Pre%20Alpha-yellow)
+![Static Badge](https://img.shields.io/badge/Status-Beta-purple)
 ![Static Badge](https://img.shields.io/badge/Made_with-C%2B%2B-blue)
 ![Static Badge](https://img.shields.io/badge/Tests-GoogleTest-orange)
 ![Static Badge](https://img.shields.io/badge/Build-CMake-red)
@@ -50,7 +50,7 @@ It's planned to have:
   ```
   **optional (will assum base 6502 chip). See more in the "Base.h" file*
 
-In summary, the project is in pre alhpa stage, with almost all instructions completed, and a basic interface to run programs
+In summary, the project is in beta, with all instructions completed, a working assembler and a basic runner app to use teh CPU. It still lacks a full test coverage and a more useful emulator program.
 
 ## Credits
 Excluding the GoogleTest library (obviously), all of the code in this project was written by me, CostaCesar. That said, as I made clear in the [about](#about) section, the idea for this
