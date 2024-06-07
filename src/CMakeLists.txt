@@ -16,3 +16,11 @@ add_executable(Assembler_Program
 target_link_libraries(Assembler_Program
   Assembler
 )
+add_executable(Emulator_Program
+    main_Emulator.cpp
+)
+target_link_libraries(Emulator_Program
+  Instruction
+)
+set_target_properties(Emulator_Program PROPERTIES
+  VS_DEBUGGER_COMMAND_ARGUMENTS "teste.bin")
