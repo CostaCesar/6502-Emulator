@@ -1,8 +1,9 @@
 {
     "cmake.debugConfig": {
-        "type": "gdb",
-        "terminal": "internal",
+        "type": "cppdbg",
+        "externalConsole": true,
         "name": "C/C++ Launch (GDB)",
-        "miDebuggerPath": "/usr/bin/gdb",
+        "cwd": "${workspaceFolder}/build",
+        //"args": ["teste.bin"]
     }
 }
