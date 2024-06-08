@@ -2,33 +2,42 @@
 #include <iostream>
 #include <chrono>
 #include <thread>
+#include <mutex>
+#include <condition_variable>
+#include <atomic>
+
 #include "Base.h"
 #include "CPU.h"
 #include "Memory.h"
 
 #ifdef _WIN32
 #include <Windows.h>
-#define RESET_CURSOR() SetConsoleCursorPosition( GetStdHandle(STD_OUTPUT_HANDLE), (COORD ){0, 1})
+#define RESET_CURSOR(x, y) SetConsoleCursorPosition( GetStdHandle(STD_OUTPUT_HANDLE), (COORD ){x, y})
 #elif __unix
 #include <unistd.h>
-#define RESET_CURSOR() printf("\033[0;1H")
+#define RESET_CURSOR(x, y) printf("\033[%d;%dH", x, y)
 #endif
 
 struct EmulatorStatus
 {
     bool autoRun = false; 
     bool quit = false; 
-    bool stoped = true; 
-    uint32_t clock = 1000;
-};
+    bool running = false;
 
-void Thread_CPU(CPU &Processor, Memory &Ram, EmulatorStatus& state)
+    uint32_t clock = 1000;
+
+    std::mutex mutex;
+    std::condition_variable signal;
+} G_state;
+
+
+void Thread_CPU(CPU &Processor, Memory &Ram)
 {
-    while (!state.quit)
+    while (!G_state.quit)
     {
-        RESET_CURSOR();
+        RESET_CURSOR(0, 1);
             
-        printf("%c Stack Pointer: %#02x \n", (state.autoRun ? '*' : ' '), Processor.StackPointer);
+        printf("%c Stack Pointer: %#02x \n", (G_state.autoRun ? '*' : ' '), Processor.StackPointer);
         printf("Address Pointer: %#04x \n", Processor.ProgramCounter);
         printf("Flags:    (Negativ=%d) (Overflow=%d) (Break=%d) \n",
                 Processor.Flags.Negative, Processor.Flags.OverFlow, Processor.Flags.Break);
@@ -38,13 +47,17 @@ void Thread_CPU(CPU &Processor, Memory &Ram, EmulatorStatus& state)
         printf("==================================================\n");
         printf("[V] View Memory [S] View Stack [Z] View Zero Page \n");
         printf("[ENTER] Execute [Q] Exit       [X] Toggle Autorun \n");
+        printf("==================================================\n");
+        printf("[User@Emulator]$                                    ");
            
-        if(!state.autoRun) // Wait for I/O Mode
-            while (state.stoped)
-                { if(state.quit) return; }
+        RESET_CURSOR(17, 10);
+
+        std::unique_lock<std::mutex> lock(G_state.mutex);
+        if(!G_state.autoRun) // Wait for I/O Mode 
+            { G_state.signal.wait(lock, []{ return G_state.running; }); }
         else // Autorun Mode
-            { std::this_thread::sleep_for(std::chrono::milliseconds(state.clock)); }
-        state.stoped = true;
+            { std::this_thread::sleep_for(std::chrono::milliseconds(G_state.clock)); }
+        G_state.running = false;
 
         Processor.Execute(1, Ram);
     }
@@ -75,7 +88,6 @@ int main(int argc, char **argv)
 
     Ram.Initialise();
     CPU Processor(Chip, Address);
-    EmulatorStatus state;
 
     for(; inFile.peek() != EOF; Address++)
     {
@@ -83,36 +95,44 @@ int main(int argc, char **argv)
     }
     inFile.close();
 
-    std::thread emulation(Thread_CPU, std::ref(Processor), std::ref(Ram), std::ref(state));
+    std::thread emulation(Thread_CPU, std::ref(Processor), std::ref(Ram));
     
     uint8_t userInput = 0;
     while (true)
     {
-        userInput = std::getchar();
-        switch (userInput)
-        {
-        case 13: // ENTER
-        case 10: // New-line
-            if(state.autoRun) continue;
-            break;
-        case 'x':
-        case 'X':
-            state.autoRun = !state.autoRun;
-            break;
-        case 'q':
-        case 'Q':
-            state.quit = true;
-            break;
-        default:
-            continue;
-        }
-        state.stoped = false;
-        
-        if(state.quit)
+        if(G_state.quit)
         {
             emulation.join();
             return 0;
         }
+
+        userInput = std::getchar();
+        // Remove leftorver '\n'
+        if(userInput != 13 && userInput != 10)
+            std::getchar();
+
+        switch (userInput)
+        {
+        case 13: // ENTER
+        case 10: // New-line
+            if(G_state.autoRun) continue;
+            break;
+        case 'x':
+        case 'X':
+            G_state.autoRun = !G_state.autoRun;
+            break;
+        case 'q':
+        case 'Q':
+            G_state.quit = true;
+            break;
+        default:
+            continue;
+        }
+        
+        // Singal emulator to execute command
+        std::lock_guard<std::mutex> lock(G_state.mutex);
+        G_state.running = true;
+        G_state.signal.notify_all();
     }
 
     emulation.join(); 
