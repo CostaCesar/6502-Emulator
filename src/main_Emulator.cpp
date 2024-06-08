@@ -34,14 +34,16 @@ void Thread_CPU(CPU &Processor, Memory &Ram, EmulatorStatus& state)
                 Processor.Flags.Negative, Processor.Flags.OverFlow, Processor.Flags.Break);
         printf("(Zero=%d) (Decimal=%d) (Interupt=%d) (Carry=%d) \n",
                 Processor.Flags.Zero, Processor.Flags.Decimal, Processor.Flags.Interupt, Processor.Flags.Carry);
-        printf("Next Instruction: %s", Processor.Instructions[Ram[Processor.ProgramCounter]]);
+        printf("Current Instruction: %s \n", Processor.Instructions[Ram[Processor.ProgramCounter]].c_str());
         printf("==================================================\n");
         printf("[V] View Memory [S] View Stack [Z] View Zero Page \n");
         printf("[ENTER] Execute [Q] Exit       [X] Toggle Autorun \n");
            
-        if(!state.autoRun) // Wait for I/O
-            while (state.stoped);
-        else std::this_thread::sleep_for(std::chrono::milliseconds(state.clock));
+        if(!state.autoRun) // Wait for I/O Mode
+            while (state.stoped)
+                { if(state.quit) return; }
+        else // Autorun Mode
+            { std::this_thread::sleep_for(std::chrono::milliseconds(state.clock)); }
         state.stoped = true;
 
         Processor.Execute(1, Ram);
@@ -100,12 +102,17 @@ int main(int argc, char **argv)
         case 'q':
         case 'Q':
             state.quit = true;
-            emulation.join();
-            return 0;
-        default:
             break;
+        default:
+            continue;
         }
         state.stoped = false;
+        
+        if(state.quit)
+        {
+            emulation.join();
+            return 0;
+        }
     }
 
     emulation.join(); 
