@@ -32,28 +32,53 @@ struct EmulatorStatus
     std::condition_variable signal;
 } G_state;
 
+void printCPU(CPU &Processor, const Memory &Ram)
+{
+    RESET_CURSOR(0, 1);
+
+    printf("%c Stack Pointer: %#02x \n", (G_state.autoRun ? '*' : ' '), Processor.StackPointer);
+    printf("Address Pointer: %#04x \n", Processor.ProgramCounter);
+    printf("Flags:    (Negativ=%d) (Overflow=%d) (Break=%d) \n",
+           Processor.Flags.Negative, Processor.Flags.OverFlow, Processor.Flags.Break);
+    printf("(Zero=%d) (Decimal=%d) (Interupt=%d) (Carry=%d) \n",
+           Processor.Flags.Zero, Processor.Flags.Decimal, Processor.Flags.Interupt, Processor.Flags.Carry);
+    printf("Current Instruction: %s \n", Processor.Instructions[Ram[Processor.ProgramCounter]].c_str());
+    printf("==================================================\n");
+    printf("[V] View Memory [S] View Stack [Z] View Zero Page \n");
+    printf("[ENTER] Execute [Q] Exit       [X] Toggle Autorun \n");
+    printf("==================================================\n");
+    printf("[User@Emulator]$                                    ");
+
+    RESET_CURSOR(17, 10);
+    std::flush(std::cout);
+    return;
+}
+void printMemory(const Memory& ram, Word startPos = 0, Word endPos = 0xFFFF)
+{
+    RESET_CURSOR(0, 0);
+
+    for(Word i = startPos; i <= endPos; i+=0x10)
+    {
+        printf("0x%04x", i);
+        for(Byte j = 0; j < 0x10; j++)
+        {
+            printf(" %02x", ram[i+j]);
+        }
+        printf("\n");
+    }
+    std::flush(std::cout);
+
+    std::cout << "Press ENTER to continue" << std::endl;
+    std::getchar();
+
+    return;
+}
 
 void Thread_CPU(CPU &Processor, Memory &Ram)
 {
     while (!G_state.quit)
     {
-        RESET_CURSOR(0, 1);
-
-        printf("%c Stack Pointer: %#02x \n", (G_state.autoRun ? '*' : ' '), Processor.StackPointer);
-        printf("Address Pointer: %#04x \n", Processor.ProgramCounter);
-        printf("Flags:    (Negativ=%d) (Overflow=%d) (Break=%d) \n",
-                Processor.Flags.Negative, Processor.Flags.OverFlow, Processor.Flags.Break);
-        printf("(Zero=%d) (Decimal=%d) (Interupt=%d) (Carry=%d) \n",
-                Processor.Flags.Zero, Processor.Flags.Decimal, Processor.Flags.Interupt, Processor.Flags.Carry);
-        printf("Current Instruction: %s \n", Processor.Instructions[Ram[Processor.ProgramCounter]].c_str());
-        printf("==================================================\n");
-        printf("[V] View Memory [S] View Stack [Z] View Zero Page \n");
-        printf("[ENTER] Execute [Q] Exit       [X] Toggle Autorun \n");
-        printf("==================================================\n");
-        printf("[User@Emulator]$                                    ");
-        
-        RESET_CURSOR(17, 10);
-        std::flush(std::cout);
+        printCPU(Processor, Ram);
         
         std::unique_lock<std::mutex> lock(G_state.mutex_emulator);
         if(!G_state.autoRun) // Wait for I/O Mode 
@@ -67,6 +92,7 @@ void Thread_CPU(CPU &Processor, Memory &Ram)
     CLEAR_SCREEN;
     return;
 }
+
 
 int main(int argc, char **argv)
 {
@@ -128,6 +154,13 @@ int main(int argc, char **argv)
         case 'X':
             G_state.autoRun = !G_state.autoRun;
             break;
+        case 'z':
+        case 'Z':
+            CLEAR_SCREEN;
+            printMemory(Ram, 0, 0xFF);
+            CLEAR_SCREEN;
+            printCPU(Processor, Ram);
+            continue;
         case 'q':
         case 'Q':
             G_state.quit = true;
