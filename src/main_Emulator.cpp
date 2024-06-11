@@ -25,6 +25,7 @@ struct EmulatorStatus
     bool autoRun = false; 
     bool quit = false; 
     bool running = false;
+    bool viewing = false;
 
     uint32_t clock = 1000;
 
@@ -55,6 +56,7 @@ void printCPU(CPU &Processor, const Memory &Ram)
 }
 void printMemory(const Memory& ram, Word startPos = 0, Word endPos = 0xFFFF)
 {
+    CLEAR_SCREEN;
     RESET_CURSOR(0, 0);
 
     for(Word i = startPos; i <= endPos; i+=0x10)
@@ -71,6 +73,7 @@ void printMemory(const Memory& ram, Word startPos = 0, Word endPos = 0xFFFF)
     std::cout << "Press ENTER to continue" << std::endl;
     std::getchar();
 
+    CLEAR_SCREEN;
     return;
 }
 
@@ -84,7 +87,10 @@ void Thread_CPU(CPU &Processor, Memory &Ram)
         if(!G_state.autoRun) // Wait for I/O Mode 
             { G_state.signal.wait(lock, []{ return G_state.running; }); }
         else // Autorun Mode
-            { std::this_thread::sleep_for(std::chrono::milliseconds(G_state.clock)); }
+        { 
+            std::this_thread::sleep_for(std::chrono::milliseconds(G_state.clock));
+            G_state.signal.wait(lock, []{ return !G_state.viewing; }); 
+        }
         G_state.running = false;
 
         Processor.Execute(1, Ram);
@@ -109,7 +115,7 @@ int main(int argc, char **argv)
         return 1;
     }
 
-
+    CLEAR_SCREEN;
     Variant Chip = CHIP_STANDART;
     if(argc < 3) std::cout << "WARNING: No chip variant specified! Assuming base chip [6502]" << std::endl;
     else Chip = (Variant) (argv[2][0] - '0');
@@ -125,7 +131,6 @@ int main(int argc, char **argv)
         inFile.read((char *) &Ram[Address], sizeof(Byte));
     }
     inFile.close();
-    CLEAR_SCREEN;
 
     std::thread emulation(Thread_CPU, std::ref(Processor), std::ref(Ram));
     
@@ -156,16 +161,19 @@ int main(int argc, char **argv)
             break;
         case 'z':
         case 'Z':
-            CLEAR_SCREEN;
+            G_state.viewing = true;
             printMemory(Ram, 0, 0xFF);
-            CLEAR_SCREEN;
             printCPU(Processor, Ram);
+            std::this_thread::sleep_for(std::chrono::milliseconds(G_state.clock));
+            G_state.viewing = false;
+            G_state.signal.notify_all();
             continue;
         case 'q':
         case 'Q':
             G_state.quit = true;
             break;
         default:
+            RESET_CURSOR(17, 10);
             continue;
         }
         
