@@ -12,10 +12,12 @@
 
 #ifdef _WIN32
 #include <Windows.h>
+#define CLEAR_SCREEN system("cls")
 #define RESET_CURSOR(x, y) SetConsoleCursorPosition( GetStdHandle(STD_OUTPUT_HANDLE), (COORD ){x, y})
 #elif __unix
 #include <unistd.h>
-#define RESET_CURSOR(x, y) printf("\033[%d;%dH", x, y)
+#define CLEAR_SCREEN system("clear")
+#define RESET_CURSOR(x, y) printf("\033[%d;%dH", y, x)
 #endif
 
 struct EmulatorStatus
@@ -26,7 +28,7 @@ struct EmulatorStatus
 
     uint32_t clock = 1000;
 
-    std::mutex mutex;
+    std::mutex mutex_emulator;
     std::condition_variable signal;
 } G_state;
 
@@ -36,7 +38,7 @@ void Thread_CPU(CPU &Processor, Memory &Ram)
     while (!G_state.quit)
     {
         RESET_CURSOR(0, 1);
-            
+
         printf("%c Stack Pointer: %#02x \n", (G_state.autoRun ? '*' : ' '), Processor.StackPointer);
         printf("Address Pointer: %#04x \n", Processor.ProgramCounter);
         printf("Flags:    (Negativ=%d) (Overflow=%d) (Break=%d) \n",
@@ -49,10 +51,11 @@ void Thread_CPU(CPU &Processor, Memory &Ram)
         printf("[ENTER] Execute [Q] Exit       [X] Toggle Autorun \n");
         printf("==================================================\n");
         printf("[User@Emulator]$                                    ");
-           
+        
         RESET_CURSOR(17, 10);
-
-        std::unique_lock<std::mutex> lock(G_state.mutex);
+        std::flush(std::cout);
+        
+        std::unique_lock<std::mutex> lock(G_state.mutex_emulator);
         if(!G_state.autoRun) // Wait for I/O Mode 
             { G_state.signal.wait(lock, []{ return G_state.running; }); }
         else // Autorun Mode
@@ -61,6 +64,7 @@ void Thread_CPU(CPU &Processor, Memory &Ram)
 
         Processor.Execute(1, Ram);
     }
+    CLEAR_SCREEN;
     return;
 }
 
@@ -79,6 +83,7 @@ int main(int argc, char **argv)
         return 1;
     }
 
+
     Variant Chip = CHIP_STANDART;
     if(argc < 3) std::cout << "WARNING: No chip variant specified! Assuming base chip [6502]" << std::endl;
     else Chip = (Variant) (argv[2][0] - '0');
@@ -94,6 +99,7 @@ int main(int argc, char **argv)
         inFile.read((char *) &Ram[Address], sizeof(Byte));
     }
     inFile.close();
+    CLEAR_SCREEN;
 
     std::thread emulation(Thread_CPU, std::ref(Processor), std::ref(Ram));
     
@@ -103,6 +109,7 @@ int main(int argc, char **argv)
         if(G_state.quit)
         {
             emulation.join();
+            CLEAR_SCREEN;
             return 0;
         }
 
@@ -130,7 +137,7 @@ int main(int argc, char **argv)
         }
         
         // Singal emulator to execute command
-        std::lock_guard<std::mutex> lock(G_state.mutex);
+        std::lock_guard<std::mutex> lock(G_state.mutex_emulator);
         G_state.running = true;
         G_state.signal.notify_all();
     }
